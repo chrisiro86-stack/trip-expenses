@@ -32,140 +32,104 @@
       --gray-bg:#444441;--gray-txt:#D3D1C7;
     }
   }
-  body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:var(--bg3);color:var(--text);min-height:100vh;font-size:15px}
+  body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:var(--bg3);color:var(--text);min-height:100vh;font-size:15px}
   .app{max-width:700px;margin:0 auto;background:var(--bg);min-height:100vh;display:flex;flex-direction:column;box-shadow:0 0 0 0.5px var(--border)}
-
-  /* TOPBAR */
   .topbar{display:flex;align-items:center;justify-content:space-between;padding:14px 18px;border-bottom:0.5px solid var(--border);background:var(--bg);position:sticky;top:0;z-index:10;gap:10px;flex-wrap:wrap}
   .trip-name{font-size:16px;font-weight:600}
   .trip-sub{font-size:12px;color:var(--text2);margin-top:1px}
   .topbar-actions{display:flex;gap:6px;flex-wrap:wrap}
-
-  /* NAV */
   .nav{display:flex;gap:3px;padding:10px 14px;border-bottom:0.5px solid var(--border);background:var(--bg2);overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none}
   .nav::-webkit-scrollbar{display:none}
   .nav-btn{padding:6px 12px;border-radius:var(--radius);font-size:13px;border:0.5px solid transparent;cursor:pointer;background:transparent;color:var(--text2);white-space:nowrap;display:flex;align-items:center;gap:5px}
   .nav-btn.active{background:var(--bg);border-color:var(--border2);color:var(--text);font-weight:500}
   .nav-btn i{font-size:15px}
-
-  /* CONTENT */
   .content{flex:1;padding:18px;overflow-y:auto}
   .page{display:none}.page.active{display:block}
   .section-title{font-size:15px;font-weight:600;margin-bottom:14px}
-
-  /* CARDS */
   .card{background:var(--bg);border:0.5px solid var(--border);border-radius:var(--radius-lg);padding:15px 17px;margin-bottom:11px}
-  .card-clickable{cursor:pointer;transition:background 0.15s}
-  .card-clickable:hover{background:var(--bg2)}
-
-  /* METRICS */
+  .card-clickable{cursor:pointer;transition:background 0.15s}.card-clickable:hover{background:var(--bg2)}
   .metric-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-bottom:20px}
   @media(min-width:480px){.metric-grid{grid-template-columns:repeat(4,1fr)}}
   .metric{background:var(--bg2);border-radius:var(--radius);padding:12px 14px}
   .metric-label{font-size:12px;color:var(--text2);margin-bottom:4px}
   .metric-val{font-size:21px;font-weight:600}
   .metric-val.green{color:var(--green)}.metric-val.amber{color:var(--amber)}.metric-val.red{color:var(--red)}
-
-  /* BUTTONS */
-  .btn{padding:8px 15px;border-radius:var(--radius);font-size:13px;border:0.5px solid var(--border2);cursor:pointer;background:transparent;color:var(--text);display:inline-flex;align-items:center;gap:6px;font-family:inherit;transition:background 0.15s}
+  .btn{padding:8px 15px;border-radius:var(--radius);font-size:13px;border:0.5px solid var(--border2);cursor:pointer;background:transparent;color:var(--text);display:inline-flex;align-items:center;gap:6px;font-family:inherit;transition:background 0.15s;text-decoration:none}
   .btn:hover{background:var(--bg2)}
   .btn.primary{background:var(--blue);color:#fff;border-color:var(--blue)}.btn.primary:hover{opacity:0.9}
   .btn.success{background:var(--green);color:#fff;border-color:var(--green)}.btn.success:hover{opacity:0.9}
   .btn.danger{color:var(--red);border-color:var(--red)}
   .btn.sm{padding:5px 10px;font-size:12px}
   .btn.wide{width:100%;justify-content:center}
-
-  /* FORM */
   .form-group{margin-bottom:14px}
   label{font-size:13px;color:var(--text2);display:block;margin-bottom:5px}
   input,select,textarea{width:100%;padding:9px 11px;border:0.5px solid var(--border2);border-radius:var(--radius);font-size:14px;background:var(--bg);color:var(--text);font-family:inherit;outline:none;transition:border-color 0.15s}
   input:focus,select:focus,textarea:focus{border-color:var(--blue)}
   textarea{resize:vertical;min-height:64px}
   .row2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-  .form-row{display:flex;align-items:center;gap:10px}
-
-  /* BADGES */
+  .form-row{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
   .badge{display:inline-flex;align-items:center;padding:3px 9px;border-radius:20px;font-size:11px;font-weight:600}
   .badge.green{background:var(--green-bg);color:var(--green-txt)}
   .badge.red{background:var(--red-bg);color:var(--red-txt)}
   .badge.amber{background:var(--amber-bg);color:var(--amber-txt)}
   .badge.blue{background:var(--blue-bg);color:var(--blue-txt)}
   .badge.gray{background:var(--gray-bg);color:var(--gray-txt)}
-
-  /* AVATAR */
   .avatar{border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:600;flex-shrink:0}
-
-  /* DIVIDER */
   hr{border:none;border-top:0.5px solid var(--border);margin:14px 0}
-
-  /* EMPTY */
   .empty{text-align:center;padding:48px 20px;color:var(--text2);font-size:14px;line-height:1.8}
   .empty i{font-size:36px;display:block;margin-bottom:10px;opacity:0.4}
-
-  /* PROGRESS */
   .progress-bar{height:5px;background:var(--bg3);border-radius:3px;overflow:hidden;margin-top:5px}
   .progress-fill{height:100%;background:var(--green);border-radius:3px}
-
-  /* SPLIT ITEMS */
   .split-item{display:flex;align-items:center;justify-content:space-between;padding:8px 0;font-size:13px;border-bottom:0.5px solid var(--border)}
   .split-item:last-child{border-bottom:none}
-
-  /* CHECKBOX */
   .checkbox-row{display:flex;align-items:center;gap:9px;padding:7px 0;border-bottom:0.5px solid var(--border)}
   .checkbox-row:last-child{border-bottom:none}
   .checkbox-row input[type=checkbox]{width:16px;height:16px;accent-color:var(--blue);flex-shrink:0;cursor:pointer}
   .checkbox-row label{margin:0;font-size:14px;color:var(--text);cursor:pointer}
-
-  /* CATEGORY ICON BOX */
-  .cat-icon{width:48px;height:48px;border-radius:var(--radius);background:var(--bg2);border:0.5px solid var(--border);display:flex;align-items:center;justify-content:center;color:var(--text2);font-size:20px;flex-shrink:0}
-
-  /* AGG ROW */
+  .cat-icon{width:48px;height:48px;border-radius:var(--radius);background:var(--bg2);border:0.5px solid var(--border);display:flex;align-items:center;justify-content:center;color:var(--text2);font-size:20px;flex-shrink:0;overflow:hidden}
   .agg-row{display:flex;align-items:center;justify-content:space-between;padding:9px 0;border-bottom:0.5px solid var(--border);font-size:13px}
   .agg-row:last-child{border-bottom:none}
-
-  /* TABS */
   .tab-row{display:flex;gap:4px;margin-bottom:16px;flex-wrap:wrap}
   .tab{padding:6px 13px;border-radius:var(--radius);font-size:13px;border:0.5px solid var(--border);cursor:pointer;background:transparent;color:var(--text2);font-family:inherit}
   .tab.active{background:var(--bg);color:var(--text);border-color:var(--border2);font-weight:500}
-
-  /* MODAL */
   .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.45);display:flex;align-items:flex-end;justify-content:center;z-index:100;padding:0}
   @media(min-width:520px){.modal-overlay{align-items:center;padding:20px}}
   .modal{background:var(--bg);border-radius:var(--radius-lg) var(--radius-lg) 0 0;padding:22px 20px;width:100%;max-width:520px;max-height:90vh;overflow-y:auto}
   @media(min-width:520px){.modal{border-radius:var(--radius-lg)}}
   .modal-handle{width:40px;height:4px;background:var(--border2);border-radius:2px;margin:0 auto 18px}
   .modal-title{font-size:16px;font-weight:600;margin-bottom:18px;display:flex;align-items:center;gap:8px}
-
-  /* CHASE BOX */
-  .chase-box{background:var(--bg2);border-radius:var(--radius);padding:13px;font-size:12px;line-height:1.7;white-space:pre-wrap;font-family:'Courier New',monospace;color:var(--text);border:0.5px solid var(--border)}
-
-  /* TOAST */
+  .chase-box{background:var(--bg2);border-radius:var(--radius);padding:13px;font-size:12px;line-height:1.7;white-space:pre-wrap;font-family:"Courier New",monospace;color:var(--text);border:0.5px solid var(--border)}
   .toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:#1c1c1e;color:#fff;padding:10px 20px;border-radius:var(--radius-lg);font-size:13px;z-index:200;opacity:0;transition:opacity 0.25s;pointer-events:none;white-space:nowrap}
   .toast.show{opacity:1}
-
-  /* RECEIPT IMG */
   .receipt-img{width:100%;max-height:200px;object-fit:cover;border-radius:var(--radius);border:0.5px solid var(--border);margin-bottom:14px}
-
-  /* SETUP */
   .setup-wrap{max-width:440px;margin:0 auto;padding-top:24px}
   .setup-hero{text-align:center;margin-bottom:28px}
   .setup-hero i{font-size:42px;color:var(--blue);display:block;margin-bottom:10px}
-
-  /* ROW BETWEEN */
   .row-between{display:flex;align-items:center;justify-content:space-between;gap:10px}
   .flex-row{display:flex;align-items:center;gap:10px}
-
-  /* MEMBER CARD */
   .member-detail{font-size:12px;color:var(--text2);margin-top:3px;display:flex;gap:12px;flex-wrap:wrap}
   .member-detail span{display:flex;align-items:center;gap:4px}
-
-  /* FILTER ROW */
   .filter-row{display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap}
   .filter-row select{width:auto;font-size:12px;padding:6px 9px}
+  .sync-bar{display:flex;align-items:center;gap:8px;padding:8px 14px;font-size:12px;color:var(--text2);border-bottom:0.5px solid var(--border);background:var(--bg2)}
+  .sync-dot{width:8px;height:8px;border-radius:50%;background:var(--green);flex-shrink:0}
+  .sync-dot.syncing{background:var(--amber);animation:pulse 1s infinite}
+  .sync-dot.error{background:var(--red)}
+  @keyframes pulse{0%,100%{opacity:1}50%{opacity:0.3}}
+  .loader{display:flex;align-items:center;justify-content:center;padding:60px 20px;flex-direction:column;gap:14px;color:var(--text2);font-size:14px}
+  .spinner{width:32px;height:32px;border:3px solid var(--border);border-top-color:var(--blue);border-radius:50%;animation:spin 0.8s linear infinite}
+  @keyframes spin{to{transform:rotate(360deg)}}
 </style>
 </head>
 <body>
 <div class="app" id="app">
+
+  <!-- SYNC BAR -->
+  <div class="sync-bar" id="sync-bar" style="display:none">
+    <div class="sync-dot" id="sync-dot"></div>
+    <span id="sync-label">Connected — data syncs live</span>
+    <button class="btn sm" style="margin-left:auto;padding:3px 8px;font-size:11px" onclick="loadCurrentTrip()"><i class="ti ti-refresh"></i> Refresh</button>
+  </div>
 
   <!-- TOPBAR -->
   <div class="topbar" id="topbar" style="display:none">
@@ -174,26 +138,22 @@
       <div class="trip-sub" id="topbar-sub"></div>
     </div>
     <div class="topbar-actions">
-      <button class="btn sm" onclick="openTripsManager()" title="Manage trips"><i class="ti ti-map-2"></i> Trips</button>
-      <button class="btn sm" onclick="openFxModal()" title="Exchange rates"><i class="ti ti-arrows-exchange"></i> Rates</button>
-      <button class="btn sm" onclick="exportData()" title="Export trip as JSON"><i class="ti ti-download"></i> Export</button>
-      <button class="btn sm" onclick="document.getElementById('import-input').click()" title="Import trip JSON"><i class="ti ti-upload"></i> Import</button>
-      <input type="file" id="import-input" accept=".json" style="display:none" onchange="importData(event)">
-      <button class="btn sm" onclick="openModal('trip-settings')"><i class="ti ti-settings"></i></button>
+      <button class="btn sm" onclick="openTripsManager()"><i class="ti ti-map-2"></i> Trips</button>
+      <button class="btn sm" onclick="openFxModal()"><i class="ti ti-arrows-exchange"></i> Rates</button>
+      <button class="btn sm" onclick="openModal("trip-settings")"><i class="ti ti-settings"></i></button>
     </div>
   </div>
 
   <!-- NAV -->
   <nav class="nav" id="main-nav" style="display:none">
-    <button class="nav-btn active" onclick="showPage('dashboard')"><i class="ti ti-layout-dashboard"></i> Dashboard</button>
-    <button class="nav-btn" onclick="showPage('expenses')"><i class="ti ti-receipt"></i> Expenses</button>
-    <button class="nav-btn" onclick="showPage('balances')"><i class="ti ti-scale"></i> Balances</button>
-    <button class="nav-btn" onclick="showPage('members')"><i class="ti ti-users"></i> Members</button>
-    <button class="nav-btn" onclick="showPage('aggregate')"><i class="ti ti-chart-bar"></i> Summary</button>
-    <button class="nav-btn" onclick="showPage('chase')"><i class="ti ti-bell"></i> Chase</button>
+    <button class="nav-btn active" onclick="showPage("dashboard")"><i class="ti ti-layout-dashboard"></i> Dashboard</button>
+    <button class="nav-btn" onclick="showPage("expenses")"><i class="ti ti-receipt"></i> Expenses</button>
+    <button class="nav-btn" onclick="showPage("balances")"><i class="ti ti-scale"></i> Balances</button>
+    <button class="nav-btn" onclick="showPage("members")"><i class="ti ti-users"></i> Members</button>
+    <button class="nav-btn" onclick="showPage("aggregate")"><i class="ti ti-chart-bar"></i> Summary</button>
+    <button class="nav-btn" onclick="showPage("chase")"><i class="ti ti-bell"></i> Chase</button>
   </nav>
 
-  <!-- CONTENT -->
   <div class="content">
 
     <!-- SETUP -->
@@ -202,7 +162,7 @@
         <div class="setup-hero">
           <i class="ti ti-map-pin"></i>
           <div style="font-size:20px;font-weight:600;margin-bottom:6px">Group Trip Expenses</div>
-          <div style="font-size:14px;color:var(--text2)">Set up your trip to get started</div>
+          <div style="font-size:14px;color:var(--text2)">All data syncs live — no file sharing needed</div>
         </div>
         <div class="card">
           <div class="form-group"><label>Trip name</label><input id="s-name" placeholder="e.g. Ibiza Summer 2026"></div>
@@ -211,11 +171,18 @@
             <div class="form-group"><label>End date</label><input type="date" id="s-end"></div>
           </div>
           <div class="form-group"><label>Destination</label><input id="s-dest" placeholder="e.g. Ibiza, Spain"></div>
-          <div class="form-group"><label>Currency</label>
+          <div class="form-group"><label>Base currency (all totals shown in this)</label>
             <select id="s-currency">
-              <option value="GBP">GBP £</option><option value="EUR">EUR €</option><option value="USD">USD $</option>
-              <option value="AED">AED د.إ</option><option value="TRY">TRY ₺</option><option value="THB">THB ฿</option>
-              <option value="ZAR">ZAR R</option><option value="AUD">AUD $</option><option value="CAD">CAD $</option>
+              <option value="GBP">GBP £ — British Pound</option>
+              <option value="EUR">EUR € — Euro</option>
+              <option value="USD">USD $ — US Dollar</option>
+              <option value="COP">COP $ — Colombian Peso</option>
+              <option value="AED">AED — UAE Dirham</option>
+              <option value="ZAR">ZAR R — South African Rand</option>
+              <option value="TRY">TRY ₺ — Turkish Lira</option>
+              <option value="THB">THB ฿ — Thai Baht</option>
+              <option value="AUD">AUD A$ — Australian Dollar</option>
+              <option value="CAD">CAD C$ — Canadian Dollar</option>
             </select>
           </div>
           <hr>
@@ -223,12 +190,19 @@
           <div class="form-group"><label>Full name</label><input id="s-your-name" placeholder="Your name"></div>
           <div class="form-group"><label>Email</label><input type="email" id="s-your-email" placeholder="you@email.com"></div>
           <div class="form-group"><label>WhatsApp number</label><input id="s-your-wa" placeholder="+44 7700 000000"></div>
-          <button class="btn primary wide" onclick="createTrip()" style="margin-top:4px"><i class="ti ti-arrow-right"></i> Create trip</button>
-          <hr>
-          <div style="text-align:center;font-size:13px;color:var(--text2);margin-bottom:10px">Already have a saved trip file?</div>
-          <button class="btn wide" onclick="document.getElementById('import-input').click()"><i class="ti ti-upload"></i> Import trip (.json)</button>
+          <button class="btn primary wide" onclick="createTrip()" style="margin-top:4px"><i class="ti ti-arrow-right"></i> Create trip &amp; sync to cloud</button>
+        </div>
+        <div style="text-align:center;margin-top:16px;font-size:13px;color:var(--text2)">Have a trip code from someone?</div>
+        <div class="flex-row" style="margin-top:8px;gap:8px">
+          <input id="join-code" placeholder="Paste trip ID here..." style="flex:1">
+          <button class="btn primary" onclick="joinByCode()"><i class="ti ti-login"></i> Join</button>
         </div>
       </div>
+    </div>
+
+    <!-- LOADER -->
+    <div class="page" id="page-loader">
+      <div class="loader"><div class="spinner"></div>Loading trip data...</div>
     </div>
 
     <!-- DASHBOARD -->
@@ -236,7 +210,7 @@
       <div class="metric-grid" id="db-metrics"></div>
       <div class="row-between" style="margin-bottom:14px">
         <div class="section-title" style="margin-bottom:0">Recent expenses</div>
-        <button class="btn sm primary" onclick="openModal('add-expense')"><i class="ti ti-plus"></i> Add</button>
+        <button class="btn sm primary" onclick="openModal("add-expense")"><i class="ti ti-plus"></i> Add</button>
       </div>
       <div id="db-recent"></div>
       <div class="section-title" style="margin-top:22px;margin-bottom:14px">Per-person snapshot</div>
@@ -247,7 +221,7 @@
     <div class="page" id="page-expenses">
       <div class="row-between" style="margin-bottom:14px">
         <div class="section-title" style="margin-bottom:0">All expenses</div>
-        <button class="btn sm primary" onclick="openModal('add-expense')"><i class="ti ti-plus"></i> Add</button>
+        <button class="btn sm primary" onclick="openModal("add-expense")"><i class="ti ti-plus"></i> Add</button>
       </div>
       <div class="filter-row">
         <select id="f-cat" onchange="renderExpenses()">
@@ -274,7 +248,7 @@
     <div class="page" id="page-members">
       <div class="row-between" style="margin-bottom:14px">
         <div class="section-title" style="margin-bottom:0">Members</div>
-        <button class="btn sm primary" onclick="openModal('add-member')"><i class="ti ti-plus"></i> Add</button>
+        <button class="btn sm primary" onclick="openModal("add-member")"><i class="ti ti-plus"></i> Add</button>
       </div>
       <div id="members-list"></div>
     </div>
@@ -283,10 +257,10 @@
     <div class="page" id="page-aggregate">
       <div class="section-title">Trip summary</div>
       <div class="tab-row">
-        <button class="tab active" onclick="setAggTab('person')">By person</button>
-        <button class="tab" onclick="setAggTab('category')">By category</button>
-        <button class="tab" onclick="setAggTab('location')">By location</button>
-        <button class="tab" onclick="setAggTab('date')">By date</button>
+        <button class="tab active" onclick="setAggTab("person")">By person</button>
+        <button class="tab" onclick="setAggTab("category")">By category</button>
+        <button class="tab" onclick="setAggTab("location")">By location</button>
+        <button class="tab" onclick="setAggTab("date")">By date</button>
       </div>
       <div id="agg-content"></div>
     </div>
@@ -297,10 +271,10 @@
       <div id="chase-list"></div>
     </div>
 
-  </div><!-- /content -->
-</div><!-- /app -->
+  </div>
+</div>
 
-<!-- ===== MODALS ===== -->
+<!-- MODALS -->
 <div class="modal-overlay" id="modal-overlay" style="display:none" onclick="overlayClick(event)">
 
   <!-- TRIP SETTINGS -->
@@ -315,14 +289,42 @@
     <div class="form-group"><label>Destination</label><input id="ts-dest"></div>
     <div class="form-group"><label>Currency</label>
       <select id="ts-currency">
-        <option value="GBP">GBP £</option><option value="EUR">EUR €</option><option value="USD">USD $</option>
-        <option value="AED">AED د.إ</option><option value="TRY">TRY ₺</option><option value="THB">THB ฿</option>
-        <option value="ZAR">ZAR R</option><option value="AUD">AUD $</option><option value="CAD">CAD $</option>
+        <option value="GBP">GBP £</option><option value="EUR">EUR €</option>
+        <option value="USD">USD $</option><option value="COP">COP $</option>
+        <option value="AED">AED</option><option value="ZAR">ZAR R</option>
+        <option value="TRY">TRY ₺</option><option value="THB">THB ฿</option>
+        <option value="AUD">AUD A$</option><option value="CAD">CAD C$</option>
       </select>
+    </div>
+    <div style="background:var(--blue-bg);color:var(--blue-txt);border-radius:var(--radius);padding:10px 12px;font-size:12px;margin-bottom:14px">
+      <i class="ti ti-share"></i> <strong>Trip ID:</strong> <span id="ts-trip-id" style="font-family:monospace"></span><br>
+      Share this ID with your group so they can join the trip from the setup screen.
     </div>
     <div class="form-row" style="justify-content:flex-end;gap:8px;margin-top:8px">
       <button class="btn" onclick="closeModal()">Cancel</button>
       <button class="btn primary" onclick="saveTripSettings()">Save</button>
+    </div>
+  </div>
+
+  <!-- TRIPS MANAGER -->
+  <div class="modal" id="modal-trips" style="display:none">
+    <div class="modal-handle"></div>
+    <div class="modal-title"><i class="ti ti-map-2"></i> My trips</div>
+    <div id="trips-list-body"></div>
+    <hr style="margin:14px 0">
+    <button class="btn primary wide" onclick="startNewTrip()"><i class="ti ti-plus"></i> Create new trip</button>
+  </div>
+
+  <!-- FX RATES -->
+  <div class="modal" id="modal-fx" style="display:none">
+    <div class="modal-handle"></div>
+    <div class="modal-title"><i class="ti ti-arrows-exchange"></i> Exchange rates</div>
+    <p style="font-size:13px;color:var(--text2);margin-bottom:4px;line-height:1.6">Set how many units of each currency equal 1 <strong id="fx-base-lbl">GBP</strong>. Check Google or XE.com for live rates.</p>
+    <div style="background:var(--amber-bg);color:var(--amber-txt);border-radius:8px;padding:8px 12px;font-size:12px;margin-bottom:14px"><i class="ti ti-bulb"></i> Tip: Google "GBP to COP" — if it shows 5,200 enter 5200.</div>
+    <div id="fx-modal-body"></div>
+    <div style="display:flex;justify-content:flex-end;gap:8px;margin-top:14px">
+      <button class="btn" onclick="closeModal()">Cancel</button>
+      <button class="btn primary" onclick="saveFxRates()">Save rates</button>
     </div>
   </div>
 
@@ -343,7 +345,7 @@
     </div>
   </div>
 
-  <!-- ADD EXPENSE -->
+  <!-- ADD / EDIT EXPENSE -->
   <div class="modal" id="modal-add-expense" style="display:none">
     <div class="modal-handle"></div>
     <div class="modal-title" id="ae-modal-title"><i class="ti ti-receipt"></i> Add expense</div>
@@ -353,31 +355,26 @@
       <div class="form-group"><label>Amount</label><input type="number" id="ae-amount" placeholder="0.00" min="0" step="0.01" oninput="updateFxPreview()"></div>
       <div class="form-group"><label>Currency paid in</label>
         <select id="ae-currency" onchange="updateFxPreview()">
-          <option value="GBP">GBP £</option>
-          <option value="EUR">EUR €</option>
-          <option value="USD">USD $</option>
-          <option value="COP">COP (Colombian Peso)</option>
-          <option value="AED">AED</option>
-          <option value="ZAR">ZAR R</option>
-          <option value="TRY">TRY ₺</option>
-          <option value="THB">THB ฿</option>
-          <option value="AUD">AUD</option>
-          <option value="CAD">CAD</option>
+          <option value="GBP">GBP £</option><option value="EUR">EUR €</option>
+          <option value="USD">USD $</option><option value="COP">COP (Peso)</option>
+          <option value="AED">AED</option><option value="ZAR">ZAR R</option>
+          <option value="TRY">TRY ₺</option><option value="THB">THB ฿</option>
+          <option value="AUD">AUD A$</option><option value="CAD">CAD C$</option>
         </select>
       </div>
     </div>
-    <div id="fx-preview" style="display:none;background:#E6F1FB;color:#0C447C;border-radius:8px;padding:10px 12px;margin-bottom:10px;font-size:13px;align-items:center;gap:8px">
+    <div id="fx-preview" style="display:none;background:var(--blue-bg);color:var(--blue-txt);border-radius:8px;padding:10px 12px;margin-bottom:10px;font-size:13px;align-items:center;gap:8px">
       <i class="ti ti-arrows-exchange"></i><span id="fx-preview-text"></span>
     </div>
     <div class="form-group"><label>Category</label>
-        <select id="ae-cat">
-          <option>Food &amp; drink</option><option>Accommodation</option><option>Transport</option>
-          <option>Activities</option><option>Shopping</option><option>Other</option>
-        </select>
-      </div>
+      <select id="ae-cat">
+        <option>Food &amp; drink</option><option>Accommodation</option><option>Transport</option>
+        <option>Activities</option><option>Shopping</option><option>Other</option>
+      </select>
+    </div>
     <div class="row2">
       <div class="form-group"><label>Date</label><input type="date" id="ae-date"></div>
-      <div class="form-group"><label>Location / venue</label><input id="ae-location" placeholder="e.g. Ushuaïa, Ibiza"></div>
+      <div class="form-group"><label>Location / venue</label><input id="ae-location" placeholder="e.g. Bogota"></div>
     </div>
     <div class="form-group"><label>Paid by</label><select id="ae-paidby"></select></div>
     <div class="form-group">
@@ -396,7 +393,7 @@
     <div class="form-group"><label>Notes</label><textarea id="ae-notes" placeholder="Any extra notes..."></textarea></div>
     <div class="form-row" style="justify-content:flex-end;gap:8px;margin-top:8px">
       <button class="btn" onclick="closeModal()">Cancel</button>
-      <button class="btn primary" onclick="addExpense()">Add expense</button>
+      <button class="btn primary" id="ae-save-btn" onclick="saveExpense()">Add expense</button>
     </div>
   </div>
 
@@ -421,714 +418,738 @@
     </div>
   </div>
 
-
-  <!-- TRIPS MANAGER -->
-  <div class="modal" id="modal-trips" style="display:none">
-    <div class="modal-handle"></div>
-    <div class="modal-title"><i class="ti ti-map-2"></i> My trips</div>
-    <div id="trips-list-body"></div>
-    <hr style="margin:14px 0">
-    <button class="btn primary wide" onclick="startNewTrip()"><i class="ti ti-plus"></i> Create new trip</button>
-  </div>
-
-
-  <!-- FX RATES MODAL -->
-  <div class="modal" id="modal-fx" style="display:none">
-    <div class="modal-handle"></div>
-    <div class="modal-title"><i class="ti ti-arrows-exchange"></i> Exchange rates</div>
-    <p style="font-size:13px;color:var(--text2);margin-bottom:4px;line-height:1.6">Set how many units of each currency equal 1 <strong id="fx-base-lbl">GBP</strong>. All expenses are stored in your base currency. Check Google or XE.com for live rates.</p>
-    <div style="background:var(--amber-bg);color:var(--amber-txt);border-radius:8px;padding:8px 12px;font-size:12px;margin-bottom:14px"><i class="ti ti-bulb"></i> Tip: Google "GBP to COP" — e.g. if it shows 5,200 enter 5200.</div>
-    <div id="fx-modal-body"></div>
-    <div style="display:flex;justify-content:flex-end;gap:8px;margin-top:14px">
-      <button class="btn" onclick="closeModal()">Cancel</button>
-      <button class="btn primary" onclick="saveFxRates()">Save rates</button>
-    </div>
-  </div>
-
 </div>
 <div class="toast" id="toast"></div>
 
 <script>
-// ── state ──────────────────────────────────────────────────────────────────
-const AVATARBG=['#E6F1FB','#E1F5EE','#FAEEDA','#FCEBEB','#EEEDFE','#FBEAF0','#d4f1e4','#F1EFE8'];
-const AVATARTXT=['#0C447C','#085041','#633806','#791F1F','#3C3489','#72243E','#0F6E56','#444441'];
-const CATICON={'Food & drink':'ti-tools-kitchen-2','Accommodation':'ti-building','Transport':'ti-car','Activities':'ti-ticket','Shopping':'ti-shopping-bag','Other':'ti-dots'};
-const SYMS={GBP:'£',EUR:'€',USD:'$',COP:'COP$',AED:'AED',ZAR:'R',TRY:'₺',THB:'฿',AUD:'A$',CAD:'C$'};
+// ── Supabase config ──────────────────────────────────────────────────────────
+const SB_URL = "https://bfwkwvsmrqvnmiolhlqy.supabase.co";
+const SB_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJmd2t3dnNtcnF2bm1pb2xobHF5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODA3NTI2MzAsImV4cCI6MjA5NjMyODYzMH0.O3Jalw7WFxLY_nbZnHZUgKdXBNgrqaGw460xbTlB6-I";
 
+async function sb(method, table, body, params) {
+  let url = SB_URL + "/rest/v1/" + table;
+  if (params) url += "?" + new URLSearchParams(params);
+  const res = await fetch(url, {
+    method,
+    headers: {
+      "apikey": SB_KEY,
+      "Authorization": "Bearer " + SB_KEY,
+      "Content-Type": "application/json",
+      "Prefer": method === "POST" ? "return=representation" : "return=representation"
+    },
+    body: body ? JSON.stringify(body) : undefined
+  });
+  if (!res.ok) {
+    const err = await res.text();
+    throw new Error(err);
+  }
+  const text = await res.text();
+  return text ? JSON.parse(text) : null;
+}
 
-// Default rates: 1 GBP = X of foreign currency (approximate - user should update)
+// Convenience wrappers
+const dbSelect = (table, params) => sb("GET", table, null, params);
+const dbInsert = (table, body) => sb("POST", table, body);
+const dbUpdate = (table, body, params) => sb("PATCH", table, body, params);
+const dbDelete = (table, params) => sb("DELETE", table, null, params);
+const dbUpsert = (table, body) => sb("POST", table, body).catch(() =>
+  sb("PATCH", table, body, {id: "eq." + body.id})
+);
+
+// ── Constants ────────────────────────────────────────────────────────────────
+const AVATARBG=["#E6F1FB","#E1F5EE","#FAEEDA","#FCEBEB","#EEEDFE","#FBEAF0","#d4f1e4","#F1EFE8"];
+const AVATARTXT=["#0C447C","#085041","#633806","#791F1F","#3C3489","#72243E","#0F6E56","#444441"];
+const CATICON={"Food & drink":"ti-tools-kitchen-2","Accommodation":"ti-building","Transport":"ti-car","Activities":"ti-ticket","Shopping":"ti-shopping-bag","Other":"ti-dots"};
+const SYMS={GBP:"£",EUR:"€",USD:"$",COP:"COP$",AED:"AED",ZAR:"R",TRY:"₺",THB:"฿",AUD:"A$",CAD:"C$"};
 const DEFAULT_RATES={GBP:1,EUR:1.17,USD:1.27,COP:5200,AED:4.66,ZAR:23.5,TRY:40.8,THB:44.5,AUD:1.97,CAD:1.74};
-const CURNAMES={GBP:'British Pound',EUR:'Euro',USD:'US Dollar',COP:'Colombian Peso',AED:'UAE Dirham',ZAR:'South African Rand',TRY:'Turkish Lira',THB:'Thai Baht',AUD:'Australian Dollar',CAD:'Canadian Dollar'};
+const CURNAMES={GBP:"British Pound",EUR:"Euro",USD:"US Dollar",COP:"Colombian Peso",AED:"UAE Dirham",ZAR:"South African Rand",TRY:"Turkish Lira",THB:"Thai Baht",AUD:"Australian Dollar",CAD:"Canadian Dollar"};
 
-let S={trip:null,members:[],expenses:[],aggTab:'person',curExpId:null,fxRates:{}};
-let ALL_TRIPS=[];
+// ── State ────────────────────────────────────────────────────────────────────
+let S = { trip: null, members: [], expenses: [], fxRates: {}, aggTab: "person", curExpId: null };
+let ALL_TRIPS = [];
 
-// ── utils ──────────────────────────────────────────────────────────────────
-const $=id=>document.getElementById(id);
-const base=()=>S.trip?.currency||'GBP';
-const sym=(c)=>SYMS[c||base()]||c||'£';
-// Convert foreignCurrency amount to base
-function toBase(amount,foreignCur){
-  if(!foreignCur||foreignCur===base())return amount;
-  const rate=S.fxRates[foreignCur];
-  if(!rate||rate<=0)return amount;
-  return amount/rate;
+// ── Utils ────────────────────────────────────────────────────────────────────
+const $ = id => document.getElementById(id);
+const base = () => S.trip?.currency || "GBP";
+const sym = c => SYMS[c || base()] || c || "£";
+const uid = () => Date.now().toString(36) + Math.random().toString(36).slice(2);
+const initials = n => n.split(" ").map(w => w[0]).join("").toUpperCase().slice(0, 2);
+const getMember = id => S.members.find(m => m.id === id) || { name: "Unknown" };
+const getMemberIdx = id => S.members.findIndex(m => m.id === id);
+
+function toBase(amount, cur) {
+  if (!cur || cur === base()) return amount;
+  const rate = S.fxRates[cur];
+  if (!rate || rate <= 0) return amount;
+  return amount / rate;
 }
-function fmtBase(n){
-  const s=sym(base());
-  if(base()==='COP')return s+' '+Math.round(Number(n)).toLocaleString();
-  return s+Number(n).toFixed(2);
+function fmtBase(n) {
+  const s = sym(base());
+  if (base() === "COP") return s + " " + Math.round(Number(n)).toLocaleString();
+  return s + Number(n).toFixed(2);
 }
-function fmtForeign(n,cur){
-  const s=sym(cur);
-  if(cur==='COP')return s+' '+Math.round(Number(n)).toLocaleString();
-  return s+Number(n).toFixed(2);
+function fmtForeign(n, cur) {
+  const s = sym(cur);
+  if (cur === "COP") return s + " " + Math.round(Number(n)).toLocaleString();
+  return s + Number(n).toFixed(2);
 }
-function initFxRates(){
-  const b=base();
-  Object.keys(SYMS).forEach(c=>{
-    if(c===b){S.fxRates[b]=1;return;}
-    if(S.fxRates[c])return; // keep user-set rates
-    // Convert default GBP rates to base
-    const gbpPerForeign=1/DEFAULT_RATES[c];
-    const gbpPerBase=1/DEFAULT_RATES[b];
-    S.fxRates[c]=parseFloat((DEFAULT_RATES[c]/DEFAULT_RATES[b]).toFixed(4));
+function initFxRates() {
+  const b = base();
+  Object.keys(SYMS).forEach(c => {
+    if (c === b) { S.fxRates[b] = 1; return; }
+    if (S.fxRates[c]) return;
+    S.fxRates[c] = parseFloat((DEFAULT_RATES[c] / DEFAULT_RATES[b]).toFixed(4));
   });
 }
-
-const uid=()=>Date.now().toString(36)+Math.random().toString(36).slice(2);
-const initials=n=>n.split(' ').map(w=>w[0]).join('').toUpperCase().slice(0,2);
-const getMember=id=>S.members.find(m=>m.id===id)||{name:'Unknown',color:7};
-const getMemberIdx=id=>S.members.findIndex(m=>m.id===id);
-
-function avatar(name,idx,size=32){
-  const i=(idx>=0?idx:0)%8;
-  return`<div class="avatar" style="width:${size}px;height:${size}px;min-width:${size}px;background:${AVATARBG[i]};color:${AVATARTXT[i]};font-size:${size>30?13:10}px">${initials(name)}</div>`;
+function avatar(name, idx, size = 32) {
+  const i = (idx >= 0 ? idx : 0) % 8;
+  return `<div class="avatar" style="width:${size}px;height:${size}px;min-width:${size}px;background:${AVATARBG[i]};color:${AVATARTXT[i]};font-size:${size > 30 ? 13 : 10}px">${initials(name)}</div>`;
 }
 
-function toast(msg,dur=2500){
-  const t=$('toast');t.textContent=msg;t.classList.add('show');
-  setTimeout(()=>t.classList.remove('show'),dur);
+// ── Sync status ──────────────────────────────────────────────────────────────
+function setSyncStatus(status, msg) {
+  const dot = $("sync-dot"), lbl = $("sync-label");
+  dot.className = "sync-dot" + (status === "syncing" ? " syncing" : status === "error" ? " error" : "");
+  lbl.textContent = msg || (status === "syncing" ? "Saving..." : status === "error" ? "Sync error — check connection" : "Connected — data syncs live");
 }
 
-// ── persistence ────────────────────────────────────────────────────────────
-function save(){
-  try{
-    const snap={...S,expenses:S.expenses.map(e=>({...e,receiptImg:null}))};
-    // Update or add current trip in ALL_TRIPS
-    const idx=ALL_TRIPS.findIndex(t=>t.trip&&S.trip&&t.trip.id===S.trip.id);
-    if(idx>=0)ALL_TRIPS[idx]=snap; else ALL_TRIPS.push(snap);
-    localStorage.setItem('tripApp_all',JSON.stringify(ALL_TRIPS));
-    localStorage.setItem('tripApp_cur',S.trip?.id||'');
-  }catch(e){}
-}
-function load(){
-  try{
-    const raw=localStorage.getItem('tripApp_all');
-    if(raw){
-      ALL_TRIPS=JSON.parse(raw);
-      const curId=localStorage.getItem('tripApp_cur');
-      const found=ALL_TRIPS.find(t=>t.trip&&t.trip.id===curId)||ALL_TRIPS[0];
-      if(found&&found.trip){S=found;return true;}
-    }
-    // Legacy single-trip migration
-    const old=JSON.parse(localStorage.getItem('tripApp')||'{}');
-    if(old.trip){old.trip.id=old.trip.id||uid();S=old;ALL_TRIPS=[old];save();return true;}
-  }catch(e){}
-  return false;
+function toast(msg, dur = 2500) {
+  const t = $("toast"); t.textContent = msg; t.classList.add("show");
+  setTimeout(() => t.classList.remove("show"), dur);
 }
 
-function exportData(){
-  if(!S.trip){alert('No trip to export.');return;}
-  const d={...S,expenses:S.expenses.map(e=>({...e,receiptImg:null}))};
-  const blob=new Blob([JSON.stringify(d,null,2)],{type:'application/json'});
-  const a=document.createElement('a');
-  a.href=URL.createObjectURL(blob);
-  a.download=(S.trip.name||'trip').replace(/\s+/g,'_')+'_expenses.json';
-  a.click();
-  toast('Exported! Send this file to your group via WhatsApp.');
+// ── Local trip list (just ids+names, for the Trips manager) ─────────────────
+function saveLocalTripList() {
+  const list = ALL_TRIPS.map(t => ({ id: t.id, name: t.name, destination: t.destination, currency: t.currency }));
+  localStorage.setItem("tripApp_list", JSON.stringify(list));
+  localStorage.setItem("tripApp_cur", S.trip?.id || "");
+}
+function loadLocalTripList() {
+  try {
+    ALL_TRIPS = JSON.parse(localStorage.getItem("tripApp_list") || "[]");
+  } catch(e) { ALL_TRIPS = []; }
 }
 
-function importData(e){
-  const f=e.target.files[0];if(!f)return;
-  const r=new FileReader();
-  r.onload=ev=>{
-    try{
-      const d=JSON.parse(ev.target.result);
-      if(!d.trip||!d.members){alert('Invalid trip file.');return;}
-      if(!d.trip.id)d.trip.id=uid();
-      const existing=ALL_TRIPS.findIndex(t=>t.trip&&t.trip.id===d.trip.id);
-      if(existing>=0)ALL_TRIPS[existing]=d; else ALL_TRIPS.push(d);
-      S=d;save();initApp();toast('Trip imported!');
-    }catch(err){alert('Could not read file.');}
+// ── Supabase data operations ─────────────────────────────────────────────────
+async function loadCurrentTrip() {
+  if (!S.trip?.id) return;
+  setSyncStatus("syncing", "Loading...");
+  try {
+    const [members, expenses] = await Promise.all([
+      dbSelect("members", { trip_id: "eq." + S.trip.id, order: "created_at.asc" }),
+      dbSelect("expenses", { trip_id: "eq." + S.trip.id, order: "created_at.desc" })
+    ]);
+    S.members = (members || []).map(dbToMember);
+    S.expenses = (expenses || []).map(dbToExpense);
+    setSyncStatus("ok");
+    renderCurrentPage();
+  } catch(e) {
+    setSyncStatus("error");
+    toast("Could not load data — check connection");
+  }
+}
+
+async function loadTripById(tripId) {
+  setSyncStatus("syncing", "Loading trip...");
+  showPage("loader");
+  try {
+    const trips = await dbSelect("trips", { id: "eq." + tripId });
+    if (!trips || !trips.length) { toast("Trip not found"); showPage("setup"); return; }
+    const t = trips[0];
+    S.trip = { id: t.id, name: t.name, destination: t.destination || "", start: t.start_date || "", end: t.end_date || "", currency: t.currency || "GBP" };
+    S.fxRates = t.fx_rates || {};
+    initFxRates();
+    // Add to local list
+    if (!ALL_TRIPS.find(x => x.id === tripId)) ALL_TRIPS.push({ id: t.id, name: t.name, destination: t.destination, currency: t.currency });
+    saveLocalTripList();
+    await loadCurrentTrip();
+    initApp();
+  } catch(e) {
+    setSyncStatus("error");
+    toast("Failed to load trip");
+    showPage("setup");
+  }
+}
+
+// ── DB row mappers ───────────────────────────────────────────────────────────
+function dbToMember(r) {
+  return { id: r.id, tripId: r.trip_id, name: r.name, email: r.email || "", wa: r.whatsapp || "", role: r.role || "member" };
+}
+function dbToExpense(r) {
+  return {
+    id: r.id, tripId: r.trip_id, desc: r.description, amount: parseFloat(r.amount),
+    originalAmount: parseFloat(r.original_amount || r.amount),
+    originalCurrency: r.original_currency || S.trip?.currency || "GBP",
+    fxRateUsed: parseFloat(r.fx_rate_used || 1),
+    category: r.category || "Other", date: r.date || "", location: r.location || "",
+    paidBy: r.paid_by, splits: r.splits || {}, notes: r.notes || "",
+    createdAt: new Date(r.created_at).getTime()
   };
-  r.readAsText(f);e.target.value='';
 }
 
-// ── setup / init ───────────────────────────────────────────────────────────
-function createTrip(){
-  const name=$('s-name').value.trim();
-  const yourName=$('s-your-name').value.trim();
-  if(!name||!yourName){alert('Please enter a trip name and your name.');return;}
-  S.trip={id:uid(),name,start:$('s-start').value,end:$('s-end').value,destination:$('s-dest').value.trim(),currency:$('s-currency').value};
-  S.members=[{id:uid(),name:yourName,email:$('s-your-email').value.trim(),wa:$('s-your-wa').value.trim(),role:'admin'}];
-  S.expenses=[];S.fxRates={};
+// ── Create trip ──────────────────────────────────────────────────────────────
+async function createTrip() {
+  const name = $("s-name").value.trim();
+  const yourName = $("s-your-name").value.trim();
+  if (!name || !yourName) { alert("Please enter a trip name and your name."); return; }
+  setSyncStatus("syncing", "Creating trip...");
+  const tripId = uid();
+  const fxRates = {};
+  S.trip = { id: tripId, name, start: $("s-start").value, end: $("s-end").value, destination: $("s-dest").value.trim(), currency: $("s-currency").value };
+  S.fxRates = fxRates;
   initFxRates();
-  save();initApp();
-}
-
-function initApp(){
-  if(!S.trip)return;
-  if(!S.fxRates||Object.keys(S.fxRates).length===0)initFxRates();
-  $('topbar').style.display='flex';
-  $('main-nav').style.display='flex';
-  $('topbar-name').textContent=S.trip.name;
-  const parts=[S.trip.destination,[S.trip.start,S.trip.end].filter(Boolean).join(' → ')].filter(Boolean);
-  $('topbar-sub').textContent=parts.join(' · ');
-  $('page-setup').classList.remove('active');
-  showPage('dashboard');
-}
-
-// ── navigation ─────────────────────────────────────────────────────────────
-function showPage(p){
-  document.querySelectorAll('.page').forEach(el=>el.classList.remove('active'));
-  document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));
-  $('page-'+p).classList.add('active');
-  document.querySelectorAll('.nav-btn').forEach(b=>{if((b.getAttribute('onclick')||'').includes("'"+p+"'"))b.classList.add('active');});
-  const renders={dashboard:renderDashboard,expenses:renderExpenses,balances:renderBalances,members:renderMembers,aggregate:renderAggregate,chase:renderChase};
-  if(renders[p])renders[p]();
-}
-
-// ── modals ─────────────────────────────────────────────────────────────────
-function openModal(m){
-  $('modal-overlay').style.display='flex';
-  document.querySelectorAll('.modal').forEach(el=>el.style.display='none');
-  if(m==='trip-settings'){
-    $('ts-name').value=S.trip.name;
-    $('ts-start').value=S.trip.start||'';
-    $('ts-end').value=S.trip.end||'';
-    $('ts-dest').value=S.trip.destination||'';
-    $('ts-currency').value=S.trip.currency||'GBP';
-    $('modal-trip-settings').style.display='block';
-  }
-  if(m==='add-member'){
-    $('member-modal-title').innerHTML='<i class="ti ti-user-plus"></i> Add member';
-    $('am-id').value='';$('am-name').value='';$('am-email').value='';$('am-wa').value='';$('am-role').value='member';
-    $('am-btn').textContent='Add member';
-    $('modal-member').style.display='block';
-  }
-  if(m==='add-expense'){
-    $('ae-date').value=new Date().toISOString().slice(0,10);
-    $('ae-paidby').innerHTML=S.members.map(mb=>`<option value="${mb.id}">${mb.name}</option>`).join('');
-    $('ae-split').innerHTML=S.members.map(mb=>`<div class="checkbox-row"><input type="checkbox" id="sp-${mb.id}" value="${mb.id}"><label for="sp-${mb.id}">${mb.name}</label></div>`).join('');
-    $('ae-id').value='';
-    $('ae-modal-title').innerHTML='<i class="ti ti-receipt"></i> Add expense';
-    ['ae-desc','ae-amount','ae-location','ae-notes'].forEach(id=>$(id).value='');
-    const curSel=document.getElementById('ae-currency');if(curSel)curSel.value=base();
-    document.getElementById('fx-preview').style.display='none';
-    $('ae-receipt-preview').innerHTML='';
-    $('modal-add-expense').style.display='block';
+  try {
+    await dbInsert("trips", {
+      id: tripId, name, destination: S.trip.destination,
+      start_date: S.trip.start, end_date: S.trip.end,
+      currency: S.trip.currency, fx_rates: S.fxRates
+    });
+    const memberId = uid();
+    await dbInsert("members", {
+      id: memberId, trip_id: tripId, name: yourName,
+      email: $("s-your-email").value.trim(),
+      whatsapp: $("s-your-wa").value.trim(),
+      role: "admin"
+    });
+    S.members = [{ id: memberId, name: yourName, email: $("s-your-email").value.trim(), wa: $("s-your-wa").value.trim(), role: "admin" }];
+    S.expenses = [];
+    ALL_TRIPS.unshift({ id: tripId, name, destination: S.trip.destination, currency: S.trip.currency });
+    saveLocalTripList();
+    setSyncStatus("ok");
+    initApp();
+  } catch(e) {
+    setSyncStatus("error");
+    alert("Could not create trip. Check your connection and try again.");
   }
 }
 
-function openEditMember(id){
-  const m=S.members.find(mb=>mb.id===id);if(!m)return;
-  $('member-modal-title').innerHTML='<i class="ti ti-edit"></i> Edit member';
-  $('am-id').value=m.id;$('am-name').value=m.name;$('am-email').value=m.email||'';$('am-wa').value=m.wa||'';$('am-role').value=m.role||'member';
-  $('am-btn').textContent='Save changes';
-  $('modal-overlay').style.display='flex';
-  document.querySelectorAll('.modal').forEach(el=>el.style.display='none');
-  $('modal-member').style.display='block';
+async function joinByCode() {
+  const code = $("join-code").value.trim();
+  if (!code) { alert("Please paste a trip ID."); return; }
+  await loadTripById(code);
 }
 
-function closeModal(){$('modal-overlay').style.display='none';document.querySelectorAll('.modal').forEach(el=>el.style.display='none');}
-function overlayClick(e){if(e.target===$('modal-overlay'))closeModal();}
-
-// ── trip settings ──────────────────────────────────────────────────────────
-function saveTripSettings(){
-  S.trip.name=$('ts-name').value.trim()||S.trip.name;
-  S.trip.start=$('ts-start').value;S.trip.end=$('ts-end').value;
-  S.trip.destination=$('ts-dest').value.trim();S.trip.currency=$('ts-currency').value;
-  $('topbar-name').textContent=S.trip.name;
-  const parts=[S.trip.destination,[S.trip.start,S.trip.end].filter(Boolean).join(' → ')].filter(Boolean);
-  $('topbar-sub').textContent=parts.join(' · ');
-  save();closeModal();renderDashboard();toast('Settings saved.');
+// ── initApp ──────────────────────────────────────────────────────────────────
+function initApp() {
+  if (!S.trip) return;
+  $("sync-bar").style.display = "flex";
+  $("topbar").style.display = "flex";
+  $("main-nav").style.display = "flex";
+  $("topbar-name").textContent = S.trip.name;
+  const parts = [S.trip.destination, [S.trip.start, S.trip.end].filter(Boolean).join(" → ")].filter(Boolean);
+  $("topbar-sub").textContent = parts.join(" · ") + (S.trip.currency ? " · " + S.trip.currency : "");
+  showPage("dashboard");
 }
 
-// ── members ────────────────────────────────────────────────────────────────
-function saveMember(){
-  const editId=$('am-id').value;
-  const name=$('am-name').value.trim();
-  if(!name){alert('Please enter a name.');return;}
-  if(editId){
-    const m=S.members.find(mb=>mb.id===editId);
-    if(m){m.name=name;m.email=$('am-email').value.trim();m.wa=$('am-wa').value.trim();m.role=$('am-role').value;}
-    toast('Member updated.');
-  }else{
-    S.members.push({id:uid(),name,email:$('am-email').value.trim(),wa:$('am-wa').value.trim(),role:$('am-role').value});
-    toast('Member added.');
+// ── Navigation ───────────────────────────────────────────────────────────────
+let currentPage = "dashboard";
+function showPage(p) {
+  document.querySelectorAll(".page").forEach(el => el.classList.remove("active"));
+  document.querySelectorAll(".nav-btn").forEach(b => b.classList.remove("active"));
+  $("page-" + p).classList.add("active");
+  document.querySelectorAll(".nav-btn").forEach(b => { if ((b.getAttribute("onclick") || "").includes(p)) b.classList.add("active"); });
+  currentPage = p;
+  if (p === "dashboard") renderDashboard();
+  if (p === "expenses") renderExpenses();
+  if (p === "balances") renderBalances();
+  if (p === "members") renderMembers();
+  if (p === "aggregate") renderAggregate();
+  if (p === "chase") renderChase();
+}
+function renderCurrentPage() { showPage(currentPage); }
+
+// ── Modals ───────────────────────────────────────────────────────────────────
+function openModal(m) {
+  $("modal-overlay").style.display = "flex";
+  document.querySelectorAll(".modal").forEach(el => el.style.display = "none");
+  if (m === "trip-settings") {
+    $("ts-name").value = S.trip.name; $("ts-start").value = S.trip.start || "";
+    $("ts-end").value = S.trip.end || ""; $("ts-dest").value = S.trip.destination || "";
+    $("ts-currency").value = S.trip.currency || "GBP";
+    $("ts-trip-id").textContent = S.trip.id;
+    $("modal-trip-settings").style.display = "block";
   }
-  save();closeModal();renderMembers();renderDashboard();
+  if (m === "add-member") {
+    $("member-modal-title").innerHTML = "<i class="ti ti-user-plus"></i> Add member";
+    $("am-id").value = ""; $("am-name").value = ""; $("am-email").value = ""; $("am-wa").value = ""; $("am-role").value = "member";
+    $("am-btn").textContent = "Add member";
+    $("modal-member").style.display = "block";
+  }
+  if (m === "add-expense") {
+    $("ae-id").value = ""; $("ae-modal-title").innerHTML = "<i class="ti ti-receipt"></i> Add expense";
+    $("ae-save-btn").textContent = "Add expense";
+    $("ae-date").value = new Date().toISOString().slice(0, 10);
+    $("ae-paidby").innerHTML = S.members.map(mb => `<option value="${mb.id}">${mb.name}</option>`).join("");
+    $("ae-split").innerHTML = S.members.map(mb => `<div class="checkbox-row"><input type="checkbox" id="sp-${mb.id}" value="${mb.id}"><label for="sp-${mb.id}">${mb.name}</label></div>`).join("");
+    ["ae-desc", "ae-amount", "ae-location", "ae-notes"].forEach(id => $(id).value = "");
+    const cs = $("ae-currency"); if (cs) cs.value = base();
+    $("fx-preview").style.display = "none"; $("ae-receipt-preview").innerHTML = "";
+    $("modal-add-expense").style.display = "block";
+  }
+}
+function closeModal() { $("modal-overlay").style.display = "none"; document.querySelectorAll(".modal").forEach(el => el.style.display = "none"); }
+function overlayClick(e) { if (e.target === $("modal-overlay")) closeModal(); }
+
+// ── Trip settings ────────────────────────────────────────────────────────────
+async function saveTripSettings() {
+  S.trip.name = $("ts-name").value.trim() || S.trip.name;
+  S.trip.start = $("ts-start").value; S.trip.end = $("ts-end").value;
+  S.trip.destination = $("ts-dest").value.trim(); S.trip.currency = $("ts-currency").value;
+  setSyncStatus("syncing");
+  try {
+    await dbUpdate("trips", { name: S.trip.name, destination: S.trip.destination, start_date: S.trip.start, end_date: S.trip.end, currency: S.trip.currency }, { id: "eq." + S.trip.id });
+    setSyncStatus("ok"); closeModal(); initApp(); toast("Settings saved.");
+  } catch(e) { setSyncStatus("error"); toast("Save failed"); }
 }
 
-function removeMember(id){
-  if(!confirm('Remove this member?'))return;
-  S.members=S.members.filter(m=>m.id!==id);
-  save();renderMembers();toast('Member removed.');
+// ── FX Rates ─────────────────────────────────────────────────────────────────
+function openFxModal() {
+  const b = base();
+  $("fx-base-lbl").textContent = b;
+  $("fx-modal-body").innerHTML = Object.keys(SYMS).filter(c => c !== b).map(c => `
+    <div style="display:flex;align-items:center;justify-content:space-between;padding:8px 0;border-bottom:0.5px solid var(--border);font-size:13px">
+      <label style="color:var(--text);margin:0">1 ${b} = ? ${c} <span style="color:var(--text2);font-size:11px">(${CURNAMES[c] || c})</span></label>
+      <input type="number" id="fxr-${c}" value="${(S.fxRates[c] || 1).toFixed(2)}" min="0" step="0.01" style="width:110px;text-align:right">
+    </div>`).join("");
+  $("modal-overlay").style.display = "flex";
+  document.querySelectorAll(".modal").forEach(el => el.style.display = "none");
+  $("modal-fx").style.display = "block";
+}
+async function saveFxRates() {
+  const b = base();
+  Object.keys(SYMS).filter(c => c !== b).forEach(c => {
+    const v = parseFloat(document.getElementById("fxr-" + c)?.value);
+    if (!isNaN(v) && v > 0) S.fxRates[c] = v;
+  });
+  setSyncStatus("syncing");
+  try {
+    await dbUpdate("trips", { fx_rates: S.fxRates }, { id: "eq." + S.trip.id });
+    setSyncStatus("ok"); closeModal(); toast("Rates saved!");
+  } catch(e) { setSyncStatus("error"); toast("Save failed"); }
+}
+function updateFxPreview() {
+  const amount = parseFloat($("ae-amount").value);
+  const cur = $("ae-currency").value;
+  const box = $("fx-preview"), txt = $("fx-preview-text");
+  if (!cur || cur === base() || isNaN(amount) || amount <= 0) { box.style.display = "none"; return; }
+  const rate = S.fxRates[cur];
+  if (!rate) { box.style.display = "none"; return; }
+  txt.textContent = fmtForeign(amount, cur) + " = " + fmtBase(toBase(amount, cur)) + " (1 " + base() + " = " + rate.toFixed(2) + " " + cur + ")";
+  box.style.display = "flex";
 }
 
-function renderMembers(){
-  $('members-list').innerHTML=S.members.map((m,i)=>`
+// ── Members ───────────────────────────────────────────────────────────────────
+function openEditMember(id) {
+  const m = S.members.find(mb => mb.id === id); if (!m) return;
+  $("member-modal-title").innerHTML = "<i class="ti ti-edit"></i> Edit member";
+  $("am-id").value = m.id; $("am-name").value = m.name; $("am-email").value = m.email || "";
+  $("am-wa").value = m.wa || ""; $("am-role").value = m.role || "member";
+  $("am-btn").textContent = "Save changes";
+  $("modal-overlay").style.display = "flex";
+  document.querySelectorAll(".modal").forEach(el => el.style.display = "none");
+  $("modal-member").style.display = "block";
+}
+async function saveMember() {
+  const editId = $("am-id").value;
+  const name = $("am-name").value.trim();
+  if (!name) { alert("Please enter a name."); return; }
+  const data = { name, email: $("am-email").value.trim(), whatsapp: $("am-wa").value.trim(), role: $("am-role").value };
+  setSyncStatus("syncing");
+  try {
+    if (editId) {
+      await dbUpdate("members", data, { id: "eq." + editId });
+      const m = S.members.find(mb => mb.id === editId);
+      if (m) { m.name = name; m.email = data.email; m.wa = data.whatsapp; m.role = data.role; }
+      toast("Member updated.");
+    } else {
+      const newId = uid();
+      await dbInsert("members", { id: newId, trip_id: S.trip.id, ...data });
+      S.members.push({ id: newId, ...data, wa: data.whatsapp });
+      toast("Member added.");
+    }
+    setSyncStatus("ok"); closeModal(); renderMembers(); renderDashboard();
+  } catch(e) { setSyncStatus("error"); toast("Save failed"); }
+}
+async function removeMember(id) {
+  if (!confirm("Remove this member?")) return;
+  setSyncStatus("syncing");
+  try {
+    await dbDelete("members", { id: "eq." + id });
+    S.members = S.members.filter(m => m.id !== id);
+    setSyncStatus("ok"); renderMembers(); toast("Member removed.");
+  } catch(e) { setSyncStatus("error"); toast("Delete failed"); }
+}
+function renderMembers() {
+  $("members-list").innerHTML = S.members.map((m, i) => `
     <div class="card">
       <div class="row-between">
-        <div class="flex-row" style="gap:12px">${avatar(m.name,i,42)}
+        <div class="flex-row" style="gap:12px">${avatar(m.name, i, 42)}
           <div>
-            <div style="font-weight:600">${m.name} <span class="badge ${m.role==='admin'?'blue':'gray'}">${m.role}</span></div>
+            <div style="font-weight:600">${m.name} <span class="badge ${m.role === "admin" ? "blue" : "gray"}">${m.role}</span></div>
             <div class="member-detail">
-              <span><i class="ti ti-mail" style="font-size:13px"></i> ${m.email||'<em style="opacity:0.5">no email</em>'}</span>
-              <span><i class="ti ti-brand-whatsapp" style="font-size:13px"></i> ${m.wa||'<em style="opacity:0.5">no WhatsApp</em>'}</span>
+              <span><i class="ti ti-mail" style="font-size:13px"></i> ${m.email || "<em style=opacity:0.5>no email</em>"}</span>
+              <span><i class="ti ti-brand-whatsapp" style="font-size:13px"></i> ${m.wa || "<em style=opacity:0.5>no WhatsApp</em>"}</span>
             </div>
           </div>
         </div>
         <div class="flex-row" style="gap:6px;flex-shrink:0">
           <button class="btn sm" onclick="openEditMember('${m.id}')"><i class="ti ti-edit"></i> Edit</button>
-          ${i>0?`<button class="btn sm danger" onclick="removeMember('${m.id}')"><i class="ti ti-trash"></i></button>`:''}
+          ${i > 0 ? `<button class="btn sm danger" onclick="removeMember('${m.id}')"><i class="ti ti-trash"></i></button>` : ""}
         </div>
       </div>
-    </div>`).join('')||'<div class="empty"><i class="ti ti-users"></i>No members yet</div>';
+    </div>`).join("") || "<div class="empty"><i class="ti ti-users"></i>No members yet</div>";
 }
 
-// ── expenses ───────────────────────────────────────────────────────────────
-function selAll(v){document.querySelectorAll('#ae-split input[type=checkbox]').forEach(c=>c.checked=v);}
-
-function previewReceipt(){
-  const f=$('ae-receipt').files[0];
-  const pv=$('ae-receipt-preview');
-  if(!f){pv.innerHTML='';return;}
-  if(f.type.startsWith('image/')){
-    const r=new FileReader();
-    r.onload=e=>pv.innerHTML=`<img src="${e.target.result}" style="width:80px;height:80px;object-fit:cover;border-radius:var(--radius);border:0.5px solid var(--border)" alt="Receipt">`;
+// ── Expenses ───────────────────────────────────────────────────────────────────
+function selAll(v) { document.querySelectorAll("#ae-split input[type=checkbox]").forEach(c => c.checked = v); }
+function previewReceipt() {
+  const f = $("ae-receipt").files[0]; const pv = $("ae-receipt-preview");
+  if (!f) { pv.innerHTML = ""; return; }
+  if (f.type.startsWith("image/")) {
+    const r = new FileReader();
+    r.onload = e => pv.innerHTML = `<img src="${e.target.result}" style="width:80px;height:80px;object-fit:cover;border-radius:var(--radius);border:0.5px solid var(--border)" alt="Receipt">`;
     r.readAsDataURL(f);
-  }else{pv.innerHTML=`<span class="badge gray"><i class="ti ti-file"></i> ${f.name}</span>`;}
-}
-
-
-function updateFxPreview(){
-  const amount=parseFloat(document.getElementById('ae-amount').value);
-  const cur=document.getElementById('ae-currency').value;
-  const box=document.getElementById('fx-preview');
-  const txt=document.getElementById('fx-preview-text');
-  if(!cur||cur===base()||isNaN(amount)||amount<=0){box.style.display='none';return;}
-  const rate=S.fxRates[cur];
-  if(!rate){box.style.display='none';return;}
-  const converted=toBase(amount,cur);
-  txt.textContent=fmtForeign(amount,cur)+' = '+fmtBase(converted)+' (rate: 1 '+base()+' = '+rate.toFixed(2)+' '+cur+')';
-  box.style.display='flex';
-}
-
-function openFxModal(){
-  const b=base();
-  document.getElementById('modal-overlay').style.display='flex';
-  document.querySelectorAll('.modal').forEach(el=>el.style.display='none');
-  const currencies=Object.keys(SYMS).filter(c=>c!==b);
-  const rows=currencies.map(c=>`
-    <div style="display:flex;align-items:center;justify-content:space-between;padding:8px 0;border-bottom:0.5px solid var(--border);font-size:13px">
-      <label style="color:var(--text);margin:0">1 ${b} = <strong>? ${c}</strong> <span style="color:var(--text2);font-size:11px">(${CURNAMES[c]||c})</span></label>
-      <input type="number" id="fxr-${c}" value="${(S.fxRates[c]||1).toFixed(2)}" min="0" step="0.01" style="width:110px;text-align:right">
-    </div>`).join('');
-  document.getElementById('fx-modal-body').innerHTML=rows;
-  document.getElementById('modal-fx').style.display='block';
-}
-
-function saveFxRates(){
-  const b=base();
-  const currencies=Object.keys(SYMS).filter(c=>c!==b);
-  currencies.forEach(c=>{
-    const v=parseFloat(document.getElementById('fxr-'+c)?.value);
-    if(!isNaN(v)&&v>0)S.fxRates[c]=v;
-  });
-  save();
-  document.getElementById('modal-overlay').style.display='none';
-  document.querySelectorAll('.modal').forEach(el=>el.style.display='none');
-  toast('Exchange rates saved!');renderDashboard();
-}
-
-function addExpense(){
-  const editId=$('ae-id').value;
-  const desc=$('ae-desc').value.trim();
-  const rawAmount=parseFloat($('ae-amount').value);
-  if(!desc||isNaN(rawAmount)||rawAmount<=0){alert('Please enter a description and a valid amount.');return;}
-  const inputCur=document.getElementById('ae-currency')?.value||base();
-  const amountBase=toBase(rawAmount,inputCur);
-  const splitIds=Array.from(document.querySelectorAll('#ae-split input[type=checkbox]:checked')).map(c=>c.value);
-  if(!splitIds.length){alert('Select at least one person to split with.');return;}
-  const paidBy=$('ae-paidby').value;
-  const img=$('ae-receipt-preview').querySelector('img');
-  const newReceiptImg=img?img.src:null;
-
-  if(editId){
-    // Editing existing expense
-    const exp=S.expenses.find(e=>e.id===editId);
-    if(!exp){alert('Expense not found.');return;}
-    const perPerson=amountBase/splitIds.length;
-    // Rebuild splits: preserve paid status for existing members, add new ones
-    const newSplits={};
-    splitIds.forEach(id=>{
-      newSplits[id]={owed:perPerson,paid:exp.splits[id]?.paid||false};
-    });
-    if(newSplits[paidBy])newSplits[paidBy].paid=true;
-    exp.desc=desc;
-    exp.amount=amountBase;
-    exp.originalAmount=rawAmount;
-    exp.originalCurrency=inputCur;
-    exp.fxRateUsed=inputCur===base()?1:(S.fxRates[inputCur]||1);
-    exp.category=$('ae-cat').value;
-    exp.date=$('ae-date').value;
-    exp.location=$('ae-location').value.trim();
-    exp.paidBy=paidBy;
-    exp.splits=newSplits;
-    exp.notes=$('ae-notes').value.trim();
-    if(newReceiptImg)exp.receiptImg=newReceiptImg;
-    save();closeModal();renderDashboard();renderExpenses();toast('Expense updated.');
-  } else {
-    // New expense
-    const per=amountBase/splitIds.length;
-    const splits={};
-    splitIds.forEach(id=>splits[id]={owed:per,paid:false});
-    if(splits[paidBy])splits[paidBy].paid=true;
-    S.expenses.push({id:uid(),desc,amount:amountBase,originalAmount:rawAmount,originalCurrency:inputCur,
-      fxRateUsed:inputCur===base()?1:(S.fxRates[inputCur]||1),
-      category:$('ae-cat').value,date:$('ae-date').value,location:$('ae-location').value.trim(),
-      paidBy,splits,notes:$('ae-notes').value.trim(),receiptImg:newReceiptImg,createdAt:Date.now()});
-    save();closeModal();renderDashboard();renderExpenses();toast('Expense added.');
   }
 }
 
+async function saveExpense() {
+  const editId = $("ae-id").value;
+  const desc = $("ae-desc").value.trim();
+  const rawAmount = parseFloat($("ae-amount").value);
+  if (!desc || isNaN(rawAmount) || rawAmount <= 0) { alert("Please enter a description and valid amount."); return; }
+  const inputCur = $("ae-currency").value || base();
+  const amountBase = toBase(rawAmount, inputCur);
+  const splitIds = Array.from(document.querySelectorAll("#ae-split input[type=checkbox]:checked")).map(c => c.value);
+  if (!splitIds.length) { alert("Select at least one person to split with."); return; }
+  const paidBy = $("ae-paidby").value;
+  const img = $("ae-receipt-preview").querySelector("img");
 
-function openEditExpense(id){
-  const exp=S.expenses.find(e=>e.id===id);if(!exp)return;
+  let splits = {};
+  if (editId) {
+    const existing = S.expenses.find(e => e.id === editId);
+    const per = amountBase / splitIds.length;
+    splitIds.forEach(id => { splits[id] = { owed: per, paid: existing?.splits[id]?.paid || false }; });
+    if (splits[paidBy]) splits[paidBy].paid = true;
+  } else {
+    const per = amountBase / splitIds.length;
+    splitIds.forEach(id => splits[id] = { owed: per, paid: false });
+    if (splits[paidBy]) splits[paidBy].paid = true;
+  }
+
+  const dbRow = {
+    trip_id: S.trip.id, description: desc,
+    amount: amountBase, original_amount: rawAmount,
+    original_currency: inputCur,
+    fx_rate_used: inputCur === base() ? 1 : (S.fxRates[inputCur] || 1),
+    category: $("ae-cat").value, date: $("ae-date").value,
+    location: $("ae-location").value.trim(), paid_by: paidBy,
+    splits, notes: $("ae-notes").value.trim()
+  };
+
+  setSyncStatus("syncing");
+  try {
+    if (editId) {
+      await dbUpdate("expenses", dbRow, { id: "eq." + editId });
+      const idx = S.expenses.findIndex(e => e.id === editId);
+      if (idx >= 0) S.expenses[idx] = { id: editId, ...dbToExpense({ id: editId, ...dbRow, created_at: new Date().toISOString() }) };
+      toast("Expense updated.");
+    } else {
+      const newId = uid();
+      dbRow.id = newId;
+      await dbInsert("expenses", dbRow);
+      S.expenses.unshift(dbToExpense({ ...dbRow, created_at: new Date().toISOString() }));
+      toast("Expense added.");
+    }
+    setSyncStatus("ok"); closeModal(); renderDashboard(); renderExpenses();
+  } catch(e) { setSyncStatus("error"); toast("Save failed: " + e.message); }
+}
+
+function openEditExpense(id) {
+  const exp = S.expenses.find(e => e.id === id); if (!exp) return;
   closeModal();
-  // Populate modal
-  $('modal-overlay').style.display='flex';
-  document.querySelectorAll('.modal').forEach(el=>el.style.display='none');
-  $('ae-modal-title').innerHTML='<i class="ti ti-edit"></i> Edit expense';
-  $('ae-id').value=exp.id;
-  $('ae-desc').value=exp.desc;
-  $('ae-amount').value=exp.originalAmount||exp.amount;
-  $('ae-location').value=exp.location||'';
-  $('ae-notes').value=exp.notes||'';
-  $('ae-cat').value=exp.category||'Food & drink';
-  $('ae-date').value=exp.date||'';
-  const curSel=document.getElementById('ae-currency');
-  if(curSel)curSel.value=exp.originalCurrency||base();
-  $('ae-paidby').innerHTML=S.members.map(mb=>`<option value="${mb.id}">${mb.name}</option>`).join('');
-  $('ae-paidby').value=exp.paidBy;
-  $('ae-split').innerHTML=S.members.map(mb=>`<div class="checkbox-row"><input type="checkbox" id="sp-${mb.id}" value="${mb.id}" ${exp.splits[mb.id]?'checked':''}><label for="sp-${mb.id}">${mb.name}</label></div>`).join('');
-  $('ae-receipt-preview').innerHTML=exp.receiptImg?`<img src="${exp.receiptImg}" style="width:80px;height:80px;object-fit:cover;border-radius:var(--radius);border:0.5px solid var(--border)" alt="Receipt">`:'';
-  document.getElementById('fx-preview').style.display='none';
-  $('modal-add-expense').style.display='block';
+  $("modal-overlay").style.display = "flex";
+  document.querySelectorAll(".modal").forEach(el => el.style.display = "none");
+  $("ae-modal-title").innerHTML = "<i class="ti ti-edit"></i> Edit expense";
+  $("ae-save-btn").textContent = "Save changes";
+  $("ae-id").value = exp.id; $("ae-desc").value = exp.desc;
+  $("ae-amount").value = exp.originalAmount || exp.amount;
+  $("ae-location").value = exp.location || ""; $("ae-notes").value = exp.notes || "";
+  $("ae-cat").value = exp.category || "Food & drink"; $("ae-date").value = exp.date || "";
+  const cs = $("ae-currency"); if (cs) cs.value = exp.originalCurrency || base();
+  $("ae-paidby").innerHTML = S.members.map(mb => `<option value="${mb.id}">${mb.name}</option>`).join("");
+  $("ae-paidby").value = exp.paidBy;
+  $("ae-split").innerHTML = S.members.map(mb => `<div class="checkbox-row"><input type="checkbox" id="sp-${mb.id}" value="${mb.id}" ${exp.splits[mb.id] ? "checked" : ""}><label for="sp-${mb.id}">${mb.name}</label></div>`).join("");
+  $("ae-receipt-preview").innerHTML = "";
+  $("fx-preview").style.display = "none";
+  $("modal-add-expense").style.display = "block";
   updateFxPreview();
 }
 
-function expCard(exp){
-  const payer=getMember(exp.paidBy);
-  const n=Object.keys(exp.splits).length;
-  const unpaid=Object.values(exp.splits).filter(s=>!s.paid&&s.owed>0).length;
-  const done=unpaid===0;
-  return`<div class="card card-clickable" onclick="showExpDetail('${exp.id}')">
+async function deleteExpense() {
+  if (!confirm("Delete this expense?")) return;
+  setSyncStatus("syncing");
+  try {
+    await dbDelete("expenses", { id: "eq." + S.curExpId });
+    S.expenses = S.expenses.filter(e => e.id !== S.curExpId);
+    setSyncStatus("ok"); closeModal(); renderDashboard(); renderExpenses(); toast("Expense deleted.");
+  } catch(e) { setSyncStatus("error"); toast("Delete failed"); }
+}
+
+async function togglePaid(expId, memberId) {
+  const exp = S.expenses.find(e => e.id === expId); if (!exp || !exp.splits[memberId]) return;
+  exp.splits[memberId].paid = !exp.splits[memberId].paid;
+  setSyncStatus("syncing");
+  try {
+    await dbUpdate("expenses", { splits: exp.splits }, { id: "eq." + expId });
+    setSyncStatus("ok"); showExpDetail(expId); renderDashboard(); renderExpenses(); renderChase();
+    toast(exp.splits[memberId].paid ? "Marked as paid." : "Marked as unpaid.");
+  } catch(e) { exp.splits[memberId].paid = !exp.splits[memberId].paid; setSyncStatus("error"); toast("Update failed"); }
+}
+
+function expCard(exp) {
+  const payer = getMember(exp.paidBy);
+  const n = Object.keys(exp.splits).length;
+  const unpaid = Object.values(exp.splits).filter(s => !s.paid && s.owed > 0).length;
+  const done = unpaid === 0;
+  return `<div class="card card-clickable" onclick="showExpDetail('${exp.id}')">
     <div class="row-between">
       <div class="flex-row" style="gap:11px">
-        <div class="cat-icon">${exp.receiptImg?`<img src="${exp.receiptImg}" style="width:48px;height:48px;object-fit:cover;border-radius:var(--radius)" alt="">`:`<i class="ti ${CATICON[exp.category]||'ti-receipt'}"></i>`}</div>
+        <div class="cat-icon"><i class="ti ${CATICON[exp.category] || "ti-receipt"}"></i></div>
         <div>
           <div style="font-weight:600;margin-bottom:2px">${exp.desc}</div>
-          <div style="font-size:12px;color:var(--text2)">${[exp.date,exp.location,exp.category].filter(Boolean).join(' · ')}</div>
-          <div style="font-size:12px;color:var(--text2)">Paid by ${payer.name} · ${n} way${n!==1?'s':''}</div>
-          ${exp.originalCurrency&&exp.originalCurrency!==base()?`<div style='font-size:11px;color:#185FA5;margin-top:2px'><i class='ti ti-arrows-exchange'></i> ${fmtForeign(exp.originalAmount||exp.amount,exp.originalCurrency)} → ${fmtBase(exp.amount)}</div>`:''}
+          <div style="font-size:12px;color:var(--text2)">${[exp.date, exp.location, exp.category].filter(Boolean).join(" · ")}</div>
+          <div style="font-size:12px;color:var(--text2)">Paid by ${payer.name} · ${n} way${n !== 1 ? "s" : ""}</div>
+          ${exp.originalCurrency && exp.originalCurrency !== base() ? `<div style="font-size:11px;color:var(--blue-txt);margin-top:2px"><i class="ti ti-arrows-exchange"></i> ${fmtForeign(exp.originalAmount || exp.amount, exp.originalCurrency)} → ${fmtBase(exp.amount)}</div>` : ""}
         </div>
       </div>
       <div style="text-align:right;flex-shrink:0;margin-left:8px">
         <div style="font-size:16px;font-weight:600">${fmtBase(exp.amount)}</div>
-        <span class="badge ${done?'green':'amber'}">${done?'Settled':unpaid+' pending'}</span>
+        <span class="badge ${done ? "green" : "amber"}">${done ? "Settled" : unpaid + " pending"}</span>
       </div>
     </div>
   </div>`;
 }
 
-function renderExpenses(){
-  const cat=$('f-cat').value;
-  const st=$('f-status').value;
-  let exps=S.expenses.slice().sort((a,b)=>b.createdAt-a.createdAt);
-  if(cat)exps=exps.filter(e=>e.category===cat);
-  if(st==='open')exps=exps.filter(e=>Object.values(e.splits).some(s=>!s.paid));
-  if(st==='settled')exps=exps.filter(e=>Object.values(e.splits).every(s=>s.paid));
-  $('expenses-list').innerHTML=exps.length?exps.map(expCard).join(''):`<div class="empty"><i class="ti ti-receipt"></i>No expenses match your filters</div>`;
+function renderExpenses() {
+  const cat = $("f-cat").value, st = $("f-status").value;
+  let exps = S.expenses.slice();
+  if (cat) exps = exps.filter(e => e.category === cat);
+  if (st === "open") exps = exps.filter(e => Object.values(e.splits).some(s => !s.paid));
+  if (st === "settled") exps = exps.filter(e => Object.values(e.splits).every(s => s.paid));
+  $("expenses-list").innerHTML = exps.length ? exps.map(expCard).join("") : "<div class="empty"><i class="ti ti-receipt"></i>No expenses match your filters</div>";
 }
 
-function showExpDetail(id){
-  S.curExpId=id;
-  const exp=S.expenses.find(e=>e.id===id);if(!exp)return;
-  const payer=getMember(exp.paidBy);
-  const lines=Object.entries(exp.splits).map(([mid,s])=>{
-    const mb=getMember(mid);const isPayer=mid===exp.paidBy;
-    return`<div class="split-item">
-      <div class="flex-row" style="gap:8px">${avatar(mb.name,getMemberIdx(mid))}<span>${mb.name}${isPayer?' <span class="badge gray" style="font-size:10px">payer</span>':''}</span></div>
+function showExpDetail(id) {
+  S.curExpId = id;
+  const exp = S.expenses.find(e => e.id === id); if (!exp) return;
+  const payer = getMember(exp.paidBy);
+  const lines = Object.entries(exp.splits).map(([mid, s]) => {
+    const mb = getMember(mid); const isPayer = mid === exp.paidBy;
+    return `<div class="split-item">
+      <div class="flex-row" style="gap:8px">${avatar(mb.name, getMemberIdx(mid))}<span>${mb.name}${isPayer ? " <span class="badge gray" style="font-size:10px">payer</span>" : ""}</span></div>
       <div class="flex-row" style="gap:8px">
         <span style="font-weight:600">${fmtBase(s.owed)}</span>
-        ${!isPayer?`<button class="btn sm ${s.paid?'':'success'}" onclick="togglePaid('${id}','${mid}')">${s.paid?'<i class="ti ti-x"></i> Unpay':'<i class="ti ti-check"></i> Paid'}</button>`:`<span class="badge blue">Payer</span>`}
+        ${!isPayer ? `<button class="btn sm ${s.paid ? "" : "success"}" onclick="togglePaid('${id}','${mid}')">${s.paid ? "<i class="ti ti-x"></i> Unpay" : "<i class="ti ti-check"></i> Paid"}</button>` : "<span class="badge blue">Payer</span>"}
       </div>
     </div>`;
-  }).join('');
-  $('exp-detail-body').innerHTML=`
+  }).join("");
+  $("exp-detail-body").innerHTML = `
     <div class="modal-title">${exp.desc}</div>
-    ${exp.receiptImg?`<img src="${exp.receiptImg}" class="receipt-img" alt="Receipt">`:''}
     <div class="row-between" style="margin-bottom:14px">
       <div><div style="font-size:24px;font-weight:700">${fmtBase(exp.amount)}</div><div style="font-size:12px;color:var(--text2)">${exp.category}</div></div>
-      <div style="text-align:right"><div style="font-size:13px">Paid by <strong>${payer.name}</strong></div><div style="font-size:12px;color:var(--text2)">${[exp.date,exp.location].filter(Boolean).join(' · ')}</div></div>
+      <div style="text-align:right"><div style="font-size:13px">Paid by <strong>${payer.name}</strong></div><div style="font-size:12px;color:var(--text2)">${[exp.date, exp.location].filter(Boolean).join(" · ")}</div></div>
     </div>
-    ${exp.originalCurrency&&exp.originalCurrency!==base()?`<div style='background:var(--blue-bg);color:var(--blue-txt);border-radius:8px;padding:8px 12px;font-size:12px;margin-bottom:12px;display:flex;align-items:center;gap:8px'><i class='ti ti-arrows-exchange'></i>Originally ${fmtForeign(exp.originalAmount||exp.amount,exp.originalCurrency)} at 1 ${base()} = ${(exp.fxRateUsed||1).toFixed(2)} ${exp.originalCurrency}</div>`:''}
-    ${exp.notes?`<div style="font-size:13px;color:var(--text2);margin-bottom:14px;font-style:italic;padding:10px;background:var(--bg2);border-radius:var(--radius)">${exp.notes}</div>`:''}
-    <div style="font-size:13px;font-weight:600;margin-bottom:6px">Split breakdown</div>
-    ${lines}`;
-  $('modal-overlay').style.display='flex';
-  document.querySelectorAll('.modal').forEach(el=>el.style.display='none');
-  $('modal-expense-detail').style.display='block';
+    ${exp.originalCurrency && exp.originalCurrency !== base() ? `<div style="background:var(--blue-bg);color:var(--blue-txt);border-radius:8px;padding:8px 12px;font-size:12px;margin-bottom:12px;display:flex;align-items:center;gap:8px"><i class="ti ti-arrows-exchange"></i>Originally ${fmtForeign(exp.originalAmount || exp.amount, exp.originalCurrency)} at 1 ${base()} = ${(exp.fxRateUsed || 1).toFixed(2)} ${exp.originalCurrency}</div>` : ""}
+    ${exp.notes ? `<div style="font-size:13px;color:var(--text2);margin-bottom:14px;font-style:italic;padding:10px;background:var(--bg2);border-radius:var(--radius)">${exp.notes}</div>` : ""}
+    <div style="font-size:13px;font-weight:600;margin-bottom:6px">Split breakdown</div>${lines}`;
+  $("modal-overlay").style.display = "flex";
+  document.querySelectorAll(".modal").forEach(el => el.style.display = "none");
+  $("modal-expense-detail").style.display = "block";
 }
 
-function togglePaid(expId,memberId){
-  const exp=S.expenses.find(e=>e.id===expId);if(!exp||!exp.splits[memberId])return;
-  exp.splits[memberId].paid=!exp.splits[memberId].paid;
-  save();showExpDetail(expId);renderDashboard();renderExpenses();renderChase();
-  toast(exp.splits[memberId].paid?'Marked as paid.':'Marked as unpaid.');
-}
-
-function deleteExpense(){
-  if(!confirm('Delete this expense?'))return;
-  S.expenses=S.expenses.filter(e=>e.id!==S.curExpId);
-  save();closeModal();renderDashboard();renderExpenses();toast('Expense deleted.');
-}
-
-// ── totals ─────────────────────────────────────────────────────────────────
-function calcTotals(){
-  let total=0,outstanding=0;
-  const po={};
-  S.members.forEach(m=>{po[m.id]={owed:0,paid:0,expenses:[]};});
-  S.expenses.forEach(exp=>{
-    total+=exp.amount;
-    Object.entries(exp.splits).forEach(([id,s])=>{
-      if(id===exp.paidBy)return;
-      if(!po[id])po[id]={owed:0,paid:0,expenses:[]};
-      po[id].owed+=s.owed;
-      po[id].expenses.push({desc:exp.desc,amount:s.owed,paid:s.paid});
-      if(s.paid)po[id].paid+=s.owed;else outstanding+=s.owed;
+// ── Totals ────────────────────────────────────────────────────────────────────
+function calcTotals() {
+  let total = 0, outstanding = 0;
+  const po = {};
+  S.members.forEach(m => { po[m.id] = { owed: 0, paid: 0, expenses: [] }; });
+  S.expenses.forEach(exp => {
+    total += exp.amount;
+    Object.entries(exp.splits).forEach(([id, s]) => {
+      if (id === exp.paidBy) return;
+      if (!po[id]) po[id] = { owed: 0, paid: 0, expenses: [] };
+      po[id].owed += s.owed;
+      po[id].expenses.push({ desc: exp.desc, amount: s.owed, paid: s.paid });
+      if (s.paid) po[id].paid += s.owed; else outstanding += s.owed;
     });
   });
-  return{total,outstanding,po};
+  return { total, outstanding, po };
 }
 
-// ── dashboard ──────────────────────────────────────────────────────────────
-function renderDashboard(){
-  const{total,outstanding,po}=calcTotals();
-  const pct=total>0?Math.round(((total-outstanding)/total)*100):0;
-  $('db-metrics').innerHTML=`
+// ── Dashboard ─────────────────────────────────────────────────────────────────
+function renderDashboard() {
+  const { total, outstanding, po } = calcTotals();
+  const pct = total > 0 ? Math.round(((total - outstanding) / total) * 100) : 0;
+  $("db-metrics").innerHTML = `
     <div class="metric"><div class="metric-label">Total spent</div><div class="metric-val">${fmtBase(total)}</div></div>
     <div class="metric"><div class="metric-label">Outstanding</div><div class="metric-val red">${fmtBase(outstanding)}</div></div>
-    <div class="metric"><div class="metric-label">Settled</div><div class="metric-val green">${fmtBase(total-outstanding)}</div></div>
-    <div class="metric"><div class="metric-label">% settled</div><div class="metric-val ${pct>=75?'green':pct>=40?'amber':'red'}">${pct}%</div>
+    <div class="metric"><div class="metric-label">Settled</div><div class="metric-val green">${fmtBase(total - outstanding)}</div></div>
+    <div class="metric"><div class="metric-label">% settled</div><div class="metric-val ${pct >= 75 ? "green" : pct >= 40 ? "amber" : "red"}">${pct}%</div>
       <div class="progress-bar"><div class="progress-fill" style="width:${pct}%"></div></div></div>`;
-  const recent=S.expenses.slice().sort((a,b)=>b.createdAt-a.createdAt).slice(0,4);
-  $('db-recent').innerHTML=recent.length?recent.map(expCard).join(''):`<div class="empty"><i class="ti ti-receipt"></i>No expenses yet — tap Add to get started!</div>`;
-  $('db-persons').innerHTML=S.members.map((m,i)=>{
-    const p=po[m.id]||{owed:0,paid:0};const unpaid=p.owed-p.paid;
-    return`<div class="card"><div class="row-between">
-      <div class="flex-row" style="gap:10px">${avatar(m.name,i)}<div><div style="font-weight:600">${m.name}</div><div style="font-size:12px;color:var(--text2)">${m.role==='admin'?'Admin':'Member'}</div></div></div>
-      <div style="text-align:right"><div style="font-weight:600;color:${unpaid>0.005?'var(--red)':'var(--green)'}">${unpaid>0.005?fmtBase(unpaid)+' owed':'All settled'}</div><div style="font-size:12px;color:var(--text2)">${fmtBase(p.owed)} total share</div></div>
+  const recent = S.expenses.slice(0, 4);
+  $("db-recent").innerHTML = recent.length ? recent.map(expCard).join("") : "<div class="empty"><i class="ti ti-receipt"></i>No expenses yet — tap Add!</div>";
+  $("db-persons").innerHTML = S.members.map((m, i) => {
+    const p = po[m.id] || { owed: 0, paid: 0 }; const unpaid = p.owed - p.paid;
+    return `<div class="card"><div class="row-between">
+      <div class="flex-row" style="gap:10px">${avatar(m.name, i)}<div><div style="font-weight:600">${m.name}</div><div style="font-size:12px;color:var(--text2)">${m.role === "admin" ? "Admin" : "Member"}</div></div></div>
+      <div style="text-align:right"><div style="font-weight:600;color:${unpaid > 0.005 ? "var(--red)" : "var(--green)"}">${unpaid > 0.005 ? fmtBase(unpaid) + " owed" : "All settled"}</div><div style="font-size:12px;color:var(--text2)">${fmtBase(p.owed)} total share</div></div>
     </div></div>`;
-  }).join('');
+  }).join("");
 }
 
-// ── balances ───────────────────────────────────────────────────────────────
-function renderBalances(){
-  const{po}=calcTotals();
-  $('balances-list').innerHTML=S.members.map((m,i)=>{
-    const p=po[m.id]||{owed:0,paid:0,expenses:[]};
-    const unpaid=p.owed-p.paid;
-    const items=(p.expenses||[]).filter(e=>!e.paid&&e.amount>0);
-    return`<div class="card">
-      <div class="row-between" style="margin-bottom:${items.length?10:0}px">
-        <div class="flex-row" style="gap:10px">${avatar(m.name,i,38)}<div><div style="font-weight:600">${m.name}</div><div style="font-size:12px;color:var(--text2)">${items.length} outstanding item${items.length!==1?'s':''}</div></div></div>
-        <div style="font-size:20px;font-weight:700;color:${unpaid>0.005?'var(--red)':'var(--green)'}">${unpaid>0.005?fmtBase(unpaid):'Settled'}</div>
+// ── Balances ──────────────────────────────────────────────────────────────────
+function renderBalances() {
+  const { po } = calcTotals();
+  $("balances-list").innerHTML = S.members.map((m, i) => {
+    const p = po[m.id] || { owed: 0, paid: 0, expenses: [] };
+    const unpaid = p.owed - p.paid;
+    const items = (p.expenses || []).filter(e => !e.paid && e.amount > 0);
+    return `<div class="card">
+      <div class="row-between" style="margin-bottom:${items.length ? 10 : 0}px">
+        <div class="flex-row" style="gap:10px">${avatar(m.name, i, 38)}<div><div style="font-weight:600">${m.name}</div><div style="font-size:12px;color:var(--text2)">${items.length} outstanding</div></div></div>
+        <div style="font-size:20px;font-weight:700;color:${unpaid > 0.005 ? "var(--red)" : "var(--green)"}">${unpaid > 0.005 ? fmtBase(unpaid) : "Settled"}</div>
       </div>
-      ${items.length?`<div style="border-top:0.5px solid var(--border);padding-top:8px">${items.map(e=>`<div class="agg-row"><span style="color:var(--text2)">${e.desc}</span><span style="font-weight:600">${fmtBase(e.amount)}</span></div>`).join('')}</div>`:''}
+      ${items.length ? `<div style="border-top:0.5px solid var(--border);padding-top:8px">${items.map(e => `<div class="agg-row"><span style="color:var(--text2)">${e.desc}</span><span style="font-weight:600">${fmtBase(e.amount)}</span></div>`).join("")}</div>` : ""}
     </div>`;
-  }).join('')||'<div class="empty"><i class="ti ti-users"></i>No members yet</div>';
+  }).join("") || "<div class="empty"><i class="ti ti-users"></i>No members yet</div>";
 }
 
-// ── aggregate ──────────────────────────────────────────────────────────────
-function setAggTab(t){
-  S.aggTab=t;
-  document.querySelectorAll('.tab').forEach(b=>b.classList.toggle('active',(b.getAttribute('onclick')||'').includes("'"+t+"'")));
+// ── Aggregate ─────────────────────────────────────────────────────────────────
+function setAggTab(t) {
+  S.aggTab = t;
+  document.querySelectorAll(".tab").forEach(b => b.classList.toggle("active", (b.getAttribute("onclick") || "").includes(t)));
   renderAggregate();
 }
-
-function renderAggregate(){
-  if(!S.expenses.length){$('agg-content').innerHTML='<div class="empty"><i class="ti ti-chart-bar"></i>No expenses to summarise yet</div>';return;}
-  let html='';
-  if(S.aggTab==='person'){
-    const{po}=calcTotals();
-    const byPayer={};
-    S.expenses.forEach(e=>{byPayer[e.paidBy]=(byPayer[e.paidBy]||0)+e.amount;});
-    html=S.members.map((m,i)=>{
-      const spent=byPayer[m.id]||0;const p=po[m.id]||{owed:0,paid:0};const owes=p.owed-p.paid;
-      return`<div class="card"><div class="row-between">
-        <div class="flex-row" style="gap:9px">${avatar(m.name,i)}<span style="font-weight:600">${m.name}</span></div>
-        <div style="text-align:right;font-size:13px"><div>Paid out: <strong>${fmtBase(spent)}</strong></div><div style="color:${owes>0.005?'var(--red)':'var(--green)'}">Owes: <strong>${owes>0.005?fmtBase(owes):'Nothing'}</strong></div></div>
-      </div></div>`;
-    }).join('');
+function renderAggregate() {
+  if (!S.expenses.length) { $("agg-content").innerHTML = "<div class="empty"><i class="ti ti-chart-bar"></i>No expenses yet</div>"; return; }
+  let html = "";
+  if (S.aggTab === "person") {
+    const { po } = calcTotals(); const byPayer = {};
+    S.expenses.forEach(e => { byPayer[e.paidBy] = (byPayer[e.paidBy] || 0) + e.amount; });
+    html = S.members.map((m, i) => {
+      const spent = byPayer[m.id] || 0; const p = po[m.id] || { owed: 0, paid: 0 }; const owes = p.owed - p.paid;
+      return `<div class="card"><div class="row-between"><div class="flex-row" style="gap:9px">${avatar(m.name, i)}<span style="font-weight:600">${m.name}</span></div>
+        <div style="text-align:right;font-size:13px"><div>Paid out: <strong>${fmtBase(spent)}</strong></div><div style="color:${owes > 0.005 ? "var(--red)" : "var(--green)"}">Owes: <strong>${owes > 0.005 ? fmtBase(owes) : "Nothing"}</strong></div></div></div></div>`;
+    }).join("");
   }
-  if(S.aggTab==='category'){
-    const cats={};S.expenses.forEach(e=>{cats[e.category]=(cats[e.category]||0)+e.amount;});
-    const total=Object.values(cats).reduce((a,b)=>a+b,0);
-    html=Object.entries(cats).sort((a,b)=>b[1]-a[1]).map(([cat,amt])=>{
-      const pct=total>0?Math.round((amt/total)*100):0;
-      return`<div class="card"><div class="row-between" style="margin-bottom:6px"><span style="font-weight:600"><i class="ti ${CATICON[cat]||'ti-dots'}" style="margin-right:6px;color:var(--text2)"></i>${cat}</span><span style="font-weight:600">${fmtBase(amt)} <span style="color:var(--text2);font-weight:400">(${pct}%)</span></span></div>
-        <div class="progress-bar"><div class="progress-fill" style="width:${pct}%"></div></div></div>`;
-    }).join('');
+  if (S.aggTab === "category") {
+    const cats = {}; S.expenses.forEach(e => { cats[e.category] = (cats[e.category] || 0) + e.amount; });
+    const total = Object.values(cats).reduce((a, b) => a + b, 0);
+    html = Object.entries(cats).sort((a, b) => b[1] - a[1]).map(([cat, amt]) => {
+      const pct = total > 0 ? Math.round((amt / total) * 100) : 0;
+      return `<div class="card"><div class="row-between" style="margin-bottom:6px"><span style="font-weight:600"><i class="ti ${CATICON[cat] || "ti-dots"}" style="margin-right:6px;color:var(--text2)"></i>${cat}</span><span style="font-weight:600">${fmtBase(amt)} <span style="color:var(--text2);font-weight:400">(${pct}%)</span></span></div><div class="progress-bar"><div class="progress-fill" style="width:${pct}%"></div></div></div>`;
+    }).join("");
   }
-  if(S.aggTab==='location'){
-    const locs={};S.expenses.forEach(e=>{const k=e.location||'Unspecified';locs[k]=(locs[k]||0)+e.amount;});
-    html='<div class="card">'+Object.entries(locs).sort((a,b)=>b[1]-a[1]).map(([loc,amt])=>`
-      <div class="agg-row"><span><i class="ti ti-map-pin" style="color:var(--text2);margin-right:6px"></i>${loc}</span><span style="font-weight:600">${fmtBase(amt)}</span></div>`).join('')+'</div>';
+  if (S.aggTab === "location") {
+    const locs = {}; S.expenses.forEach(e => { const k = e.location || "Unspecified"; locs[k] = (locs[k] || 0) + e.amount; });
+    html = "<div class="card">" + Object.entries(locs).sort((a, b) => b[1] - a[1]).map(([loc, amt]) =>
+      `<div class="agg-row"><span><i class="ti ti-map-pin" style="color:var(--text2);margin-right:6px"></i>${loc}</span><span style="font-weight:600">${fmtBase(amt)}</span></div>`).join("") + "</div>";
   }
-  if(S.aggTab==='date'){
-    const dates={};S.expenses.forEach(e=>{const k=e.date||'No date';dates[k]=(dates[k]||0)+e.amount;});
-    html='<div class="card">'+Object.entries(dates).sort((a,b)=>a[0].localeCompare(b[0])).map(([d,amt])=>`
-      <div class="agg-row"><span><i class="ti ti-calendar" style="color:var(--text2);margin-right:6px"></i>${d}</span><span style="font-weight:600">${fmtBase(amt)}</span></div>`).join('')+'</div>';
+  if (S.aggTab === "date") {
+    const dates = {}; S.expenses.forEach(e => { const k = e.date || "No date"; dates[k] = (dates[k] || 0) + e.amount; });
+    html = "<div class="card">" + Object.entries(dates).sort((a, b) => a[0].localeCompare(b[0])).map(([d, amt]) =>
+      `<div class="agg-row"><span><i class="ti ti-calendar" style="color:var(--text2);margin-right:6px"></i>${d}</span><span style="font-weight:600">${fmtBase(amt)}</span></div>`).join("") + "</div>";
   }
-  $('agg-content').innerHTML=html;
+  $("agg-content").innerHTML = html;
 }
 
-// ── chase ──────────────────────────────────────────────────────────────────
-function renderChase(){
-  const{po}=calcTotals();
-  const debtors=S.members.filter(m=>(po[m.id]?.owed||0)-(po[m.id]?.paid||0)>0.01);
-  if(!debtors.length){
-    $('chase-list').innerHTML='<div class="empty"><i class="ti ti-circle-check" style="color:var(--green)"></i>Everyone is settled up!<br><span style="font-size:12px">Nothing to chase right now 🎉</span></div>';
-    return;
-  }
-  $('chase-list').innerHTML=debtors.map(m=>{
-    const p=po[m.id];const owes=(p.owed-p.paid).toFixed(2);
-    const items=(p.expenses||[]).filter(e=>!e.paid&&e.amount>0);
-    return`<div class="card">
+// ── Chase ──────────────────────────────────────────────────────────────────────
+function renderChase() {
+  const { po } = calcTotals();
+  const debtors = S.members.filter(m => (po[m.id]?.owed || 0) - (po[m.id]?.paid || 0) > 0.01);
+  if (!debtors.length) { $("chase-list").innerHTML = "<div class="empty"><i class="ti ti-circle-check" style="color:var(--green);opacity:1"></i>Everyone is settled up!<br><span style="font-size:12px">Nothing to chase 🎉</span></div>"; return; }
+  $("chase-list").innerHTML = debtors.map(m => {
+    const p = po[m.id]; const owes = p.owed - p.paid;
+    const items = (p.expenses || []).filter(e => !e.paid && e.amount > 0);
+    return `<div class="card">
       <div class="row-between" style="margin-bottom:8px">
-        <div class="flex-row" style="gap:10px">${avatar(m.name,getMemberIdx(m.id))}<div><div style="font-weight:600">${m.name}</div><div style="font-size:12px;color:var(--text2)">${m.email||'no email'} · ${m.wa||'no WhatsApp'}</div></div></div>
+        <div class="flex-row" style="gap:10px">${avatar(m.name, getMemberIdx(m.id))}<div><div style="font-weight:600">${m.name}</div><div style="font-size:12px;color:var(--text2)">${m.email || "no email"} · ${m.wa || "no WhatsApp"}</div></div></div>
         <div style="font-size:18px;font-weight:700;color:var(--red)">${fmtBase(owes)}</div>
       </div>
-      <div style="font-size:12px;color:var(--text2);margin-bottom:12px">${items.map(e=>`${e.desc}: ${fmtBase(e.amount)}`).join(' · ')}</div>
+      <div style="font-size:12px;color:var(--text2);margin-bottom:12px">${items.map(e => e.desc + ": " + fmtBase(e.amount)).join(" · ")}</div>
       <div class="flex-row" style="flex-wrap:wrap;gap:8px">
         <button class="btn sm" onclick="openChase('${m.id}','whatsapp')"><i class="ti ti-brand-whatsapp"></i> WhatsApp</button>
         <button class="btn sm" onclick="openChase('${m.id}','email')"><i class="ti ti-mail"></i> Email</button>
       </div>
     </div>`;
-  }).join('');
+  }).join("");
 }
-
-function openChase(memberId,type){
-  const{po}=calcTotals();
-  const m=getMember(memberId);
-  const p=po[memberId]||{owed:0,paid:0,expenses:[]};
-  const owes=(p.owed-p.paid).toFixed(2);
-  const items=(p.expenses||[]).filter(e=>!e.paid&&e.amount>0);
-  const lines=items.map(e=>`  • ${e.desc}: ${fmtBase(e.amount)}`).join('\n');
-  const trip=S.trip?.name||'our trip';
-  const first=m.name.split(' ')[0];
-  const msg=type==='whatsapp'
-    ?`Hi ${first}! 👋\n\nJust a friendly nudge about ${trip} — you still have the following outstanding:\n\n${lines}\n\nTotal: ${fmtBase(owes)}\n\nJust let me know once you've sent it over. Cheers! 🙏`
-    :`Subject: Payment reminder — ${trip}\n\nHi ${first},\n\nHope you're well! Just following up on some outstanding expenses from ${trip}.\n\nOutstanding items:\n${lines}\n\nTotal due: ${fmtBase(owes)}\n\nPlease do arrange payment when you get a chance — just reply if you have any questions.\n\nMany thanks`;
-  $('chase-msg-title').innerHTML=`<i class="ti ti-${type==='whatsapp'?'brand-whatsapp':'mail'}"></i> ${type==='whatsapp'?'WhatsApp':'Email'} for ${m.name}`;
-  $('chase-msg-body').innerHTML=`
-    <div class="chase-box" id="chase-text">${msg}</div>
+function openChase(memberId, type) {
+  const { po } = calcTotals();
+  const m = getMember(memberId);
+  const p = po[memberId] || { owed: 0, paid: 0, expenses: [] };
+  const owes = p.owed - p.paid;
+  const items = (p.expenses || []).filter(e => !e.paid && e.amount > 0);
+  const lines = items.map(e => "  • " + e.desc + ": " + fmtBase(e.amount)).join("\n");
+  const trip = S.trip?.name || "our trip"; const first = m.name.split(" ")[0];
+  const msg = type === "whatsapp"
+    ? "Hi " + first + "! 👋\n\nJust a friendly nudge about " + trip + " — you still have the following outstanding:\n\n" + lines + "\n\nTotal: " + fmtBase(owes) + "\n\nPlease let me know once you have sent it over. Cheers! 🙏"
+    : "Subject: Payment reminder — " + trip + "\n\nHi " + first + ",\n\nHope you are well! Just following up on outstanding expenses from " + trip + ".\n\nOutstanding:\n" + lines + "\n\nTotal due: " + fmtBase(owes) + "\n\nPlease arrange payment when you can.\n\nMany thanks";
+  $("chase-msg-title").innerHTML = "<i class="ti ti-" + (type === "whatsapp" ? "brand-whatsapp" : "mail") + ""></i> " + (type === "whatsapp" ? "WhatsApp" : "Email") + " for " + m.name;
+  $("chase-msg-body").innerHTML = `<div class="chase-box" id="chase-text">${msg}</div>
     <div class="flex-row" style="flex-wrap:wrap;gap:8px;margin-top:10px">
       <button class="btn sm" onclick="copyChase()"><i class="ti ti-copy"></i> Copy</button>
-      ${type==='whatsapp'&&m.wa?`<a href="https://wa.me/${m.wa.replace(/\D/g,'')}" target="_blank" rel="noopener" class="btn sm"><i class="ti ti-brand-whatsapp"></i> Open WhatsApp</a>`:''}
-      ${type==='email'&&m.email?`<a href="mailto:${m.email}?subject=${encodeURIComponent('Payment reminder — '+trip)}&body=${encodeURIComponent(msg.split('\n').slice(2).join('\n'))}" class="btn sm"><i class="ti ti-mail"></i> Open in mail</a>`:''}
+      ${type === "whatsapp" && m.wa ? `<a href="https://wa.me/${m.wa.replace(/\D/g,"")}" target="_blank" rel="noopener" class="btn sm"><i class="ti ti-brand-whatsapp"></i> Open WhatsApp</a>` : ""}
+      ${type === "email" && m.email ? `<a href="mailto:${m.email}" class="btn sm"><i class="ti ti-mail"></i> Open mail</a>` : ""}
     </div>`;
-  $('modal-overlay').style.display='flex';
-  document.querySelectorAll('.modal').forEach(el=>el.style.display='none');
-  $('modal-chase-msg').style.display='block';
+  $("modal-overlay").style.display = "flex";
+  document.querySelectorAll(".modal").forEach(el => el.style.display = "none");
+  $("modal-chase-msg").style.display = "block";
 }
+function copyChase() { navigator.clipboard.writeText($("chase-text").textContent).then(() => toast("Copied!")); }
 
-function copyChase(){
-  navigator.clipboard.writeText($('chase-text').textContent).then(()=>toast('Copied to clipboard!'));
-}
-
-
-// ── trips manager ───────────────────────────────────────────────────────────
-function openTripsManager(){
-  $('modal-overlay').style.display='flex';
-  document.querySelectorAll('.modal').forEach(el=>el.style.display='none');
-  renderTripsList();
-  $('modal-trips').style.display='block';
-}
-
-function renderTripsList(){
-  if(!ALL_TRIPS.length){
-    $('trips-list-body').innerHTML='<div class="empty" style="padding:20px 0"><i class="ti ti-map-off"></i>No trips yet</div>';
-    return;
-  }
-  $('trips-list-body').innerHTML=ALL_TRIPS.map((t,i)=>{
-    const isCur=S.trip&&t.trip&&t.trip.id===S.trip.id;
-    const expCount=(t.expenses||[]).length;
-    const memCount=(t.members||[]).length;
-    return`<div class="card" style="cursor:pointer;padding:12px 15px;margin-bottom:8px;${isCur?'border-color:var(--blue)':''}">
+// ── Trips manager ─────────────────────────────────────────────────────────────
+function openTripsManager() {
+  $("modal-overlay").style.display = "flex";
+  document.querySelectorAll(".modal").forEach(el => el.style.display = "none");
+  $("trips-list-body").innerHTML = ALL_TRIPS.length ? ALL_TRIPS.map(t => {
+    const isCur = S.trip && t.id === S.trip.id;
+    return `<div class="card card-clickable" style="${isCur ? "border-color:var(--blue)" : ""}" onclick="switchTrip('${t.id}')">
       <div class="row-between">
-        <div onclick="switchTrip('${t.trip.id}')" style="flex:1">
-          <div style="font-weight:600">${t.trip.name} ${isCur?'<span class="badge blue" style="font-size:10px">current</span>':''}</div>
-          <div style="font-size:12px;color:var(--text2);margin-top:2px">${[t.trip.destination,[t.trip.start,t.trip.end].filter(Boolean).join('→')].filter(Boolean).join(' · ')}</div>
-          <div style="font-size:12px;color:var(--text2)">${memCount} member${memCount!==1?'s':''} · ${expCount} expense${expCount!==1?'s':''}</div>
-        </div>
-        <div class="flex-row" style="gap:6px;flex-shrink:0">
-          ${!isCur?`<button class="btn sm danger" onclick="deleteTrip('${t.trip.id}',event)"><i class="ti ti-trash"></i></button>`:''}
-        </div>
+        <div><div style="font-weight:600">${t.name} ${isCur ? "<span class="badge blue" style="font-size:10px">current</span>" : ""}</div>
+          <div style="font-size:12px;color:var(--text2)">${t.destination || ""} · ${t.currency || ""}</div></div>
+        ${!isCur ? `<button class="btn sm danger" onclick="event.stopPropagation();deleteTrip('${t.id}')"><i class="ti ti-trash"></i></button>` : ""}
       </div>
     </div>`;
-  }).join('');
+  }).join("") : "<div class="empty" style="padding:20px 0"><i class="ti ti-map-off"></i>No trips yet</div>";
+  $("modal-trips").style.display = "block";
 }
-
-function switchTrip(tripId){
-  const t=ALL_TRIPS.find(t=>t.trip&&t.trip.id===tripId);
-  if(!t)return;
-  S=t;
-  localStorage.setItem('tripApp_cur',tripId);
+async function switchTrip(tripId) { closeModal(); await loadTripById(tripId); }
+async function deleteTrip(tripId) {
+  const t = ALL_TRIPS.find(x => x.id === tripId);
+  if (!confirm("Delete trip "" + (t?.name || "") + ""? This cannot be undone.")) return;
+  try {
+    await dbDelete("trips", { id: "eq." + tripId });
+    ALL_TRIPS = ALL_TRIPS.filter(x => x.id !== tripId);
+    saveLocalTripList(); openTripsManager(); toast("Trip deleted.");
+  } catch(e) { toast("Delete failed"); }
+}
+function startNewTrip() {
   closeModal();
-  initApp();
-  toast('Switched to '+t.trip.name);
+  S = { trip: null, members: [], expenses: [], fxRates: {}, aggTab: "person", curExpId: null };
+  $("sync-bar").style.display = "none"; $("topbar").style.display = "none"; $("main-nav").style.display = "none";
+  document.querySelectorAll(".page").forEach(el => el.classList.remove("active"));
+  $("page-setup").classList.add("active");
+  ["s-name","s-dest","s-start","s-end","s-your-name","s-your-email","s-your-wa","join-code"].forEach(id => { const el = $(id); if(el) el.value = ""; });
 }
 
-function deleteTrip(tripId,event){
-  event.stopPropagation();
-  const t=ALL_TRIPS.find(t=>t.trip&&t.trip.id===tripId);
-  if(!t)return;
-  if(!confirm('Delete trip "'+t.trip.name+'"? This cannot be undone.'))return;
-  ALL_TRIPS=ALL_TRIPS.filter(t=>t.trip&&t.trip.id!==tripId);
-  localStorage.setItem('tripApp_all',JSON.stringify(ALL_TRIPS));
-  renderTripsList();
-  toast('Trip deleted.');
+// ── Boot ──────────────────────────────────────────────────────────────────────
+loadLocalTripList();
+const savedCurId = localStorage.getItem("tripApp_cur");
+if (savedCurId) {
+  loadTripById(savedCurId);
+} else if (ALL_TRIPS.length) {
+  loadTripById(ALL_TRIPS[0].id);
 }
-
-function startNewTrip(){
-  closeModal();
-  // Clear active state — go to setup page without wiping ALL_TRIPS
-  S={trip:null,members:[],expenses:[],aggTab:'person',curExpId:null,fxRates:{}};
-  $('topbar').style.display='none';
-  $('main-nav').style.display='none';
-  document.querySelectorAll('.page').forEach(el=>el.classList.remove('active'));
-  $('page-setup').classList.add('active');
-  // Clear setup form
-  ['s-name','s-dest','s-start','s-end','s-your-name','s-your-email','s-your-wa'].forEach(id=>$(id).value='');
-}
-
-// ── boot ───────────────────────────────────────────────────────────────────
-if(load())initApp();
 </script>
 </body>
 </html>
