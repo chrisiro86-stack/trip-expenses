@@ -6,1150 +6,1055 @@
 <title>Trip Expenses</title>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/dist/tabler-icons.min.css">
 <style>
-  *{box-sizing:border-box;margin:0;padding:0}
-  :root{
-    --bg:#ffffff;--bg2:#f8f7f4;--bg3:#f2f1ed;
-    --text:#1a1a1a;--text2:#6b6b6b;--text3:#9a9a9a;
-    --border:rgba(0,0,0,0.12);--border2:rgba(0,0,0,0.2);
-    --radius:8px;--radius-lg:12px;
-    --green:#1D9E75;--red:#A32D2D;--amber:#BA7517;--blue:#185FA5;
-    --green-bg:#EAF3DE;--green-txt:#3B6D11;
-    --red-bg:#FCEBEB;--red-txt:#791F1F;
-    --amber-bg:#FAEEDA;--amber-txt:#633806;
-    --blue-bg:#E6F1FB;--blue-txt:#0C447C;
-    --gray-bg:#F1EFE8;--gray-txt:#444441;
-  }
-  @media(prefers-color-scheme:dark){
-    :root{
-      --bg:#1c1c1e;--bg2:#2c2c2e;--bg3:#3a3a3c;
-      --text:#f2f2f7;--text2:#aeaeb2;--text3:#636366;
-      --border:rgba(255,255,255,0.12);--border2:rgba(255,255,255,0.22);
-      --green:#5DCAA5;--red:#F09595;--amber:#FAC775;--blue:#85B7EB;
-      --green-bg:#085041;--green-txt:#9FE1CB;
-      --red-bg:#791F1F;--red-txt:#F7C1C1;
-      --amber-bg:#633806;--amber-txt:#FAC775;
-      --blue-bg:#0C447C;--blue-txt:#B5D4F4;
-      --gray-bg:#444441;--gray-txt:#D3D1C7;
-    }
-  }
-  body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:var(--bg3);color:var(--text);min-height:100vh;font-size:15px}
-  .app{max-width:700px;margin:0 auto;background:var(--bg);min-height:100vh;display:flex;flex-direction:column;box-shadow:0 0 0 0.5px var(--border)}
-  .topbar{display:flex;align-items:center;justify-content:space-between;padding:14px 18px;border-bottom:0.5px solid var(--border);background:var(--bg);position:sticky;top:0;z-index:10;gap:10px;flex-wrap:wrap}
-  .trip-name{font-size:16px;font-weight:600}
-  .trip-sub{font-size:12px;color:var(--text2);margin-top:1px}
-  .topbar-actions{display:flex;gap:6px;flex-wrap:wrap}
-  .nav{display:flex;gap:3px;padding:10px 14px;border-bottom:0.5px solid var(--border);background:var(--bg2);overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none}
-  .nav::-webkit-scrollbar{display:none}
-  .nav-btn{padding:6px 12px;border-radius:var(--radius);font-size:13px;border:0.5px solid transparent;cursor:pointer;background:transparent;color:var(--text2);white-space:nowrap;display:flex;align-items:center;gap:5px}
-  .nav-btn.active{background:var(--bg);border-color:var(--border2);color:var(--text);font-weight:500}
-  .nav-btn i{font-size:15px}
-  .content{flex:1;padding:18px;overflow-y:auto}
-  .page{display:none}.page.active{display:block}
-  .section-title{font-size:15px;font-weight:600;margin-bottom:14px}
-  .card{background:var(--bg);border:0.5px solid var(--border);border-radius:var(--radius-lg);padding:15px 17px;margin-bottom:11px}
-  .card-clickable{cursor:pointer;transition:background 0.15s}.card-clickable:hover{background:var(--bg2)}
-  .metric-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-bottom:20px}
-  @media(min-width:480px){.metric-grid{grid-template-columns:repeat(4,1fr)}}
-  .metric{background:var(--bg2);border-radius:var(--radius);padding:12px 14px}
-  .metric-label{font-size:12px;color:var(--text2);margin-bottom:4px}
-  .metric-val{font-size:21px;font-weight:600}
-  .metric-val.green{color:var(--green)}.metric-val.amber{color:var(--amber)}.metric-val.red{color:var(--red)}
-  .btn{padding:8px 15px;border-radius:var(--radius);font-size:13px;border:0.5px solid var(--border2);cursor:pointer;background:transparent;color:var(--text);display:inline-flex;align-items:center;gap:6px;font-family:inherit;transition:background 0.15s;text-decoration:none}
-  .btn:hover{background:var(--bg2)}
-  .btn.primary{background:var(--blue);color:#fff;border-color:var(--blue)}.btn.primary:hover{opacity:0.9}
-  .btn.success{background:var(--green);color:#fff;border-color:var(--green)}.btn.success:hover{opacity:0.9}
-  .btn.danger{color:var(--red);border-color:var(--red)}
-  .btn.sm{padding:5px 10px;font-size:12px}
-  .btn.wide{width:100%;justify-content:center}
-  .form-group{margin-bottom:14px}
-  label{font-size:13px;color:var(--text2);display:block;margin-bottom:5px}
-  input,select,textarea{width:100%;padding:9px 11px;border:0.5px solid var(--border2);border-radius:var(--radius);font-size:14px;background:var(--bg);color:var(--text);font-family:inherit;outline:none;transition:border-color 0.15s}
-  input:focus,select:focus,textarea:focus{border-color:var(--blue)}
-  textarea{resize:vertical;min-height:64px}
-  .row2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-  .form-row{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
-  .badge{display:inline-flex;align-items:center;padding:3px 9px;border-radius:20px;font-size:11px;font-weight:600}
-  .badge.green{background:var(--green-bg);color:var(--green-txt)}
-  .badge.red{background:var(--red-bg);color:var(--red-txt)}
-  .badge.amber{background:var(--amber-bg);color:var(--amber-txt)}
-  .badge.blue{background:var(--blue-bg);color:var(--blue-txt)}
-  .badge.gray{background:var(--gray-bg);color:var(--gray-txt)}
-  .avatar{border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:600;flex-shrink:0}
-  hr{border:none;border-top:0.5px solid var(--border);margin:14px 0}
-  .empty{text-align:center;padding:48px 20px;color:var(--text2);font-size:14px;line-height:1.8}
-  .empty i{font-size:36px;display:block;margin-bottom:10px;opacity:0.4}
-  .progress-bar{height:5px;background:var(--bg3);border-radius:3px;overflow:hidden;margin-top:5px}
-  .progress-fill{height:100%;background:var(--green);border-radius:3px}
-  .split-item{display:flex;align-items:center;justify-content:space-between;padding:8px 0;font-size:13px;border-bottom:0.5px solid var(--border)}
-  .split-item:last-child{border-bottom:none}
-  .checkbox-row{display:flex;align-items:center;gap:9px;padding:7px 0;border-bottom:0.5px solid var(--border)}
-  .checkbox-row:last-child{border-bottom:none}
-  .checkbox-row input[type=checkbox]{width:16px;height:16px;accent-color:var(--blue);flex-shrink:0;cursor:pointer}
-  .checkbox-row label{margin:0;font-size:14px;color:var(--text);cursor:pointer}
-  .cat-icon{width:48px;height:48px;border-radius:var(--radius);background:var(--bg2);border:0.5px solid var(--border);display:flex;align-items:center;justify-content:center;color:var(--text2);font-size:20px;flex-shrink:0;overflow:hidden}
-  .agg-row{display:flex;align-items:center;justify-content:space-between;padding:9px 0;border-bottom:0.5px solid var(--border);font-size:13px}
-  .agg-row:last-child{border-bottom:none}
-  .tab-row{display:flex;gap:4px;margin-bottom:16px;flex-wrap:wrap}
-  .tab{padding:6px 13px;border-radius:var(--radius);font-size:13px;border:0.5px solid var(--border);cursor:pointer;background:transparent;color:var(--text2);font-family:inherit}
-  .tab.active{background:var(--bg);color:var(--text);border-color:var(--border2);font-weight:500}
-  .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.45);display:flex;align-items:flex-end;justify-content:center;z-index:100;padding:0}
-  @media(min-width:520px){.modal-overlay{align-items:center;padding:20px}}
-  .modal{background:var(--bg);border-radius:var(--radius-lg) var(--radius-lg) 0 0;padding:22px 20px;width:100%;max-width:520px;max-height:90vh;overflow-y:auto}
-  @media(min-width:520px){.modal{border-radius:var(--radius-lg)}}
-  .modal-handle{width:40px;height:4px;background:var(--border2);border-radius:2px;margin:0 auto 18px}
-  .modal-title{font-size:16px;font-weight:600;margin-bottom:18px;display:flex;align-items:center;gap:8px}
-  .chase-box{background:var(--bg2);border-radius:var(--radius);padding:13px;font-size:12px;line-height:1.7;white-space:pre-wrap;font-family:"Courier New",monospace;color:var(--text);border:0.5px solid var(--border)}
-  .toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:#1c1c1e;color:#fff;padding:10px 20px;border-radius:var(--radius-lg);font-size:13px;z-index:200;opacity:0;transition:opacity 0.25s;pointer-events:none;white-space:nowrap}
-  .toast.show{opacity:1}
-  .receipt-img{width:100%;max-height:200px;object-fit:cover;border-radius:var(--radius);border:0.5px solid var(--border);margin-bottom:14px}
-  .setup-wrap{max-width:440px;margin:0 auto;padding-top:24px}
-  .setup-hero{text-align:center;margin-bottom:28px}
-  .setup-hero i{font-size:42px;color:var(--blue);display:block;margin-bottom:10px}
-  .row-between{display:flex;align-items:center;justify-content:space-between;gap:10px}
-  .flex-row{display:flex;align-items:center;gap:10px}
-  .member-detail{font-size:12px;color:var(--text2);margin-top:3px;display:flex;gap:12px;flex-wrap:wrap}
-  .member-detail span{display:flex;align-items:center;gap:4px}
-  .filter-row{display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap}
-  .filter-row select{width:auto;font-size:12px;padding:6px 9px}
-  .sync-bar{display:flex;align-items:center;gap:8px;padding:8px 14px;font-size:12px;color:var(--text2);border-bottom:0.5px solid var(--border);background:var(--bg2)}
-  .sync-dot{width:8px;height:8px;border-radius:50%;background:var(--green);flex-shrink:0}
-  .sync-dot.syncing{background:var(--amber);animation:pulse 1s infinite}
-  .sync-dot.error{background:var(--red)}
-  @keyframes pulse{0%,100%{opacity:1}50%{opacity:0.3}}
-  .loader{display:flex;align-items:center;justify-content:center;padding:60px 20px;flex-direction:column;gap:14px;color:var(--text2);font-size:14px}
-  .spinner{width:32px;height:32px;border:3px solid var(--border);border-top-color:var(--blue);border-radius:50%;animation:spin 0.8s linear infinite}
-  @keyframes spin{to{transform:rotate(360deg)}}
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#ffffff;--bg2:#f8f7f4;--bg3:#f2f1ed;
+  --text:#1a1a1a;--text2:#6b6b6b;
+  --border:rgba(0,0,0,0.12);--border2:rgba(0,0,0,0.2);
+  --radius:8px;--radius-lg:12px;
+  --green:#1D9E75;--red:#A32D2D;--amber:#BA7517;--blue:#185FA5;
+  --green-bg:#EAF3DE;--green-txt:#3B6D11;
+  --red-bg:#FCEBEB;--red-txt:#791F1F;
+  --amber-bg:#FAEEDA;--amber-txt:#633806;
+  --blue-bg:#E6F1FB;--blue-txt:#0C447C;
+  --gray-bg:#F1EFE8;--gray-txt:#444441;
+}
+@media(prefers-color-scheme:dark){:root{
+  --bg:#1c1c1e;--bg2:#2c2c2e;--bg3:#3a3a3c;
+  --text:#f2f2f7;--text2:#aeaeb2;
+  --border:rgba(255,255,255,0.12);--border2:rgba(255,255,255,0.22);
+  --green:#5DCAA5;--red:#F09595;--amber:#FAC775;--blue:#85B7EB;
+  --green-bg:#085041;--green-txt:#9FE1CB;
+  --red-bg:#791F1F;--red-txt:#F7C1C1;
+  --amber-bg:#633806;--amber-txt:#FAC775;
+  --blue-bg:#0C447C;--blue-txt:#B5D4F4;
+  --gray-bg:#444441;--gray-txt:#D3D1C7;
+}}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:var(--bg3);color:var(--text);min-height:100vh;font-size:15px}
+.app{max-width:700px;margin:0 auto;background:var(--bg);min-height:100vh;display:flex;flex-direction:column;box-shadow:0 0 0 0.5px var(--border)}
+.topbar{display:flex;align-items:center;justify-content:space-between;padding:14px 18px;border-bottom:0.5px solid var(--border);background:var(--bg);position:sticky;top:0;z-index:10;gap:10px;flex-wrap:wrap}
+.trip-name{font-size:16px;font-weight:600}
+.trip-sub{font-size:12px;color:var(--text2);margin-top:1px}
+.topbar-actions{display:flex;gap:6px;flex-wrap:wrap}
+.nav{display:flex;gap:3px;padding:10px 14px;border-bottom:0.5px solid var(--border);background:var(--bg2);overflow-x:auto;scrollbar-width:none}
+.nav::-webkit-scrollbar{display:none}
+.nav-btn{padding:6px 12px;border-radius:var(--radius);font-size:13px;border:0.5px solid transparent;cursor:pointer;background:transparent;color:var(--text2);white-space:nowrap;display:flex;align-items:center;gap:5px}
+.nav-btn.active{background:var(--bg);border-color:var(--border2);color:var(--text);font-weight:500}
+.content{flex:1;padding:18px}
+.page{display:none}.page.active{display:block}
+.section-title{font-size:15px;font-weight:600;margin-bottom:14px}
+.card{background:var(--bg);border:0.5px solid var(--border);border-radius:var(--radius-lg);padding:15px 17px;margin-bottom:11px}
+.card-click{cursor:pointer}.card-click:hover{background:var(--bg2)}
+.metric-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-bottom:20px}
+@media(min-width:480px){.metric-grid{grid-template-columns:repeat(4,1fr)}}
+.metric{background:var(--bg2);border-radius:var(--radius);padding:12px 14px}
+.metric-label{font-size:12px;color:var(--text2);margin-bottom:4px}
+.metric-val{font-size:21px;font-weight:600}
+.metric-val.green{color:var(--green)}.metric-val.red{color:var(--red)}.metric-val.amber{color:var(--amber)}
+.btn{padding:8px 15px;border-radius:var(--radius);font-size:13px;border:0.5px solid var(--border2);cursor:pointer;background:transparent;color:var(--text);display:inline-flex;align-items:center;gap:6px;font-family:inherit;text-decoration:none}
+.btn:hover{background:var(--bg2)}
+.btn.primary{background:var(--blue);color:#fff;border-color:var(--blue)}
+.btn.success{background:var(--green);color:#fff;border-color:var(--green)}
+.btn.danger{color:var(--red);border-color:var(--red)}
+.btn.sm{padding:5px 10px;font-size:12px}
+.btn.wide{width:100%;justify-content:center}
+.form-group{margin-bottom:14px}
+label{font-size:13px;color:var(--text2);display:block;margin-bottom:5px}
+input,select,textarea{width:100%;padding:9px 11px;border:0.5px solid var(--border2);border-radius:var(--radius);font-size:14px;background:var(--bg);color:var(--text);font-family:inherit;outline:none}
+input:focus,select:focus,textarea:focus{border-color:var(--blue)}
+textarea{resize:vertical;min-height:64px}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.flex-row{display:flex;align-items:center;gap:10px}
+.row-between{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.badge{display:inline-flex;align-items:center;padding:3px 9px;border-radius:20px;font-size:11px;font-weight:600}
+.badge.green{background:var(--green-bg);color:var(--green-txt)}
+.badge.red{background:var(--red-bg);color:var(--red-txt)}
+.badge.amber{background:var(--amber-bg);color:var(--amber-txt)}
+.badge.blue{background:var(--blue-bg);color:var(--blue-txt)}
+.badge.gray{background:var(--gray-bg);color:var(--gray-txt)}
+.avatar{border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:600;flex-shrink:0}
+hr{border:none;border-top:0.5px solid var(--border);margin:14px 0}
+.empty{text-align:center;padding:48px 20px;color:var(--text2);font-size:14px;line-height:1.8}
+.empty i{font-size:36px;display:block;margin-bottom:10px;opacity:0.4}
+.progress-bar{height:5px;background:var(--bg3);border-radius:3px;overflow:hidden;margin-top:5px}
+.progress-fill{height:100%;background:var(--green);border-radius:3px}
+.split-item{display:flex;align-items:center;justify-content:space-between;padding:8px 0;font-size:13px;border-bottom:0.5px solid var(--border)}
+.split-item:last-child{border-bottom:none}
+.chk-row{display:flex;align-items:center;gap:9px;padding:7px 0;border-bottom:0.5px solid var(--border)}
+.chk-row:last-child{border-bottom:none}
+.chk-row input[type=checkbox]{width:16px;height:16px;accent-color:var(--blue);flex-shrink:0;cursor:pointer}
+.chk-row label{margin:0;font-size:14px;color:var(--text);cursor:pointer}
+.cat-icon{width:48px;height:48px;border-radius:var(--radius);background:var(--bg2);border:0.5px solid var(--border);display:flex;align-items:center;justify-content:center;color:var(--text2);font-size:20px;flex-shrink:0}
+.agg-row{display:flex;align-items:center;justify-content:space-between;padding:9px 0;border-bottom:0.5px solid var(--border);font-size:13px}
+.agg-row:last-child{border-bottom:none}
+.tab-row{display:flex;gap:4px;margin-bottom:16px;flex-wrap:wrap}
+.tab{padding:6px 13px;border-radius:var(--radius);font-size:13px;border:0.5px solid var(--border);cursor:pointer;background:transparent;color:var(--text2);font-family:inherit}
+.tab.active{background:var(--bg);color:var(--text);border-color:var(--border2);font-weight:500}
+.overlay{position:fixed;inset:0;background:rgba(0,0,0,0.45);display:flex;align-items:flex-end;justify-content:center;z-index:100}
+@media(min-width:520px){.overlay{align-items:center;padding:20px}}
+.modal{background:var(--bg);border-radius:var(--radius-lg) var(--radius-lg) 0 0;padding:22px 20px;width:100%;max-width:520px;max-height:90vh;overflow-y:auto}
+@media(min-width:520px){.modal{border-radius:var(--radius-lg)}}
+.modal-handle{width:40px;height:4px;background:var(--border2);border-radius:2px;margin:0 auto 18px}
+.modal-title{font-size:16px;font-weight:600;margin-bottom:18px;display:flex;align-items:center;gap:8px}
+.chase-box{background:var(--bg2);border-radius:var(--radius);padding:13px;font-size:12px;line-height:1.7;white-space:pre-wrap;font-family:'Courier New',monospace;color:var(--text);border:0.5px solid var(--border)}
+.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:#1c1c1e;color:#fff;padding:10px 20px;border-radius:var(--radius-lg);font-size:13px;z-index:200;opacity:0;transition:opacity 0.25s;pointer-events:none}
+.toast.show{opacity:1}
+.sync-bar{display:flex;align-items:center;gap:8px;padding:7px 14px;font-size:12px;color:var(--text2);border-bottom:0.5px solid var(--border);background:var(--bg2)}
+.sync-dot{width:8px;height:8px;border-radius:50%;background:var(--green);flex-shrink:0}
+.sync-dot.busy{background:var(--amber);animation:pulse 1s infinite}
+.sync-dot.err{background:var(--red)}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.3}}
+.spinner-wrap{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:80px 20px;gap:14px;color:var(--text2);font-size:14px}
+.spinner{width:32px;height:32px;border:3px solid var(--border);border-top-color:var(--blue);border-radius:50%;animation:spin 0.8s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.member-meta{font-size:12px;color:var(--text2);margin-top:3px;display:flex;gap:12px;flex-wrap:wrap}
+.info-box{border-radius:var(--radius);padding:10px 12px;font-size:12px;margin-bottom:12px;display:flex;align-items:center;gap:8px}
+.info-box.blue{background:var(--blue-bg);color:var(--blue-txt)}
+.info-box.amber{background:var(--amber-bg);color:var(--amber-txt)}
 </style>
 </head>
 <body>
-<div class="app" id="app">
+<div class="app">
 
-  <!-- SYNC BAR -->
-  <div class="sync-bar" id="sync-bar" style="display:none">
-    <div class="sync-dot" id="sync-dot"></div>
-    <span id="sync-label">Connected — data syncs live</span>
-    <button class="btn sm" style="margin-left:auto;padding:3px 8px;font-size:11px" onclick="loadCurrentTrip()"><i class="ti ti-refresh"></i> Refresh</button>
+<div class="sync-bar" id="syncBar" style="display:none">
+  <div class="sync-dot" id="syncDot"></div>
+  <span id="syncLabel">Connected</span>
+  <button class="btn sm" style="margin-left:auto" onclick="refreshData()"><i class="ti ti-refresh"></i> Refresh</button>
+</div>
+
+<div class="topbar" id="topbar" style="display:none">
+  <div>
+    <div class="trip-name" id="topbarName"></div>
+    <div class="trip-sub" id="topbarSub"></div>
   </div>
-
-  <!-- TOPBAR -->
-  <div class="topbar" id="topbar" style="display:none">
-    <div>
-      <div class="trip-name" id="topbar-name">Trip</div>
-      <div class="trip-sub" id="topbar-sub"></div>
-    </div>
-    <div class="topbar-actions">
-      <button class="btn sm" onclick="openTripsManager()"><i class="ti ti-map-2"></i> Trips</button>
-      <button class="btn sm" onclick="openFxModal()"><i class="ti ti-arrows-exchange"></i> Rates</button>
-      <button class="btn sm" onclick="openModal('trip-settings')"><i class="ti ti-settings"></i></button>
-    </div>
-  </div>
-
-  <!-- NAV -->
-  <nav class="nav" id="main-nav" style="display:none">
-    <button class="nav-btn active" onclick="showPage('dashboard')"><i class="ti ti-layout-dashboard"></i> Dashboard</button>
-    <button class="nav-btn" onclick="showPage('expenses')"><i class="ti ti-receipt"></i> Expenses</button>
-    <button class="nav-btn" onclick="showPage('balances')"><i class="ti ti-scale"></i> Balances</button>
-    <button class="nav-btn" onclick="showPage('members')"><i class="ti ti-users"></i> Members</button>
-    <button class="nav-btn" onclick="showPage('aggregate')"><i class="ti ti-chart-bar"></i> Summary</button>
-    <button class="nav-btn" onclick="showPage('chase')"><i class="ti ti-bell"></i> Chase</button>
-  </nav>
-
-  <div class="content">
-
-    <!-- SETUP -->
-    <div class="page active" id="page-setup">
-      <div class="setup-wrap">
-        <div class="setup-hero">
-          <i class="ti ti-map-pin"></i>
-          <div style="font-size:20px;font-weight:600;margin-bottom:6px">Group Trip Expenses</div>
-          <div style="font-size:14px;color:var(--text2)">All data syncs live — no file sharing needed</div>
-        </div>
-        <div class="card">
-          <div class="form-group"><label>Trip name</label><input id="s-name" placeholder="e.g. Ibiza Summer 2026"></div>
-          <div class="row2">
-            <div class="form-group"><label>Start date</label><input type="date" id="s-start"></div>
-            <div class="form-group"><label>End date</label><input type="date" id="s-end"></div>
-          </div>
-          <div class="form-group"><label>Destination</label><input id="s-dest" placeholder="e.g. Ibiza, Spain"></div>
-          <div class="form-group"><label>Base currency (all totals shown in this)</label>
-            <select id="s-currency">
-              <option value="GBP">GBP £ — British Pound</option>
-              <option value="EUR">EUR € — Euro</option>
-              <option value="USD">USD $ — US Dollar</option>
-              <option value="COP">COP $ — Colombian Peso</option>
-              <option value="AED">AED — UAE Dirham</option>
-              <option value="ZAR">ZAR R — South African Rand</option>
-              <option value="TRY">TRY ₺ — Turkish Lira</option>
-              <option value="THB">THB ฿ — Thai Baht</option>
-              <option value="AUD">AUD A$ — Australian Dollar</option>
-              <option value="CAD">CAD C$ — Canadian Dollar</option>
-            </select>
-          </div>
-          <hr>
-          <div style="font-size:13px;font-weight:600;margin-bottom:12px">Your details (trip creator)</div>
-          <div class="form-group"><label>Full name</label><input id="s-your-name" placeholder="Your name"></div>
-          <div class="form-group"><label>Email</label><input type="email" id="s-your-email" placeholder="you@email.com"></div>
-          <div class="form-group"><label>WhatsApp number</label><input id="s-your-wa" placeholder="+44 7700 000000"></div>
-          <button class="btn primary wide" onclick="createTrip()" style="margin-top:4px"><i class="ti ti-arrow-right"></i> Create trip &amp; sync to cloud</button>
-        </div>
-        <div style="text-align:center;margin-top:16px;font-size:13px;color:var(--text2)">Have a trip code from someone?</div>
-        <div class="flex-row" style="margin-top:8px;gap:8px">
-          <input id="join-code" placeholder="Paste trip ID here..." style="flex:1">
-          <button class="btn primary" onclick="joinByCode()"><i class="ti ti-login"></i> Join</button>
-        </div>
-      </div>
-    </div>
-
-    <!-- LOADER -->
-    <div class="page" id="page-loader">
-      <div class="loader"><div class="spinner"></div>Loading trip data...</div>
-    </div>
-
-    <!-- DASHBOARD -->
-    <div class="page" id="page-dashboard">
-      <div class="metric-grid" id="db-metrics"></div>
-      <div class="row-between" style="margin-bottom:14px">
-        <div class="section-title" style="margin-bottom:0">Recent expenses</div>
-        <button class="btn sm primary" onclick="openModal('add-expense')"><i class="ti ti-plus"></i> Add</button>
-      </div>
-      <div id="db-recent"></div>
-      <div class="section-title" style="margin-top:22px;margin-bottom:14px">Per-person snapshot</div>
-      <div id="db-persons"></div>
-    </div>
-
-    <!-- EXPENSES -->
-    <div class="page" id="page-expenses">
-      <div class="row-between" style="margin-bottom:14px">
-        <div class="section-title" style="margin-bottom:0">All expenses</div>
-        <button class="btn sm primary" onclick="openModal('add-expense')"><i class="ti ti-plus"></i> Add</button>
-      </div>
-      <div class="filter-row">
-        <select id="f-cat" onchange="renderExpenses()">
-          <option value="">All categories</option>
-          <option>Food &amp; drink</option><option>Accommodation</option><option>Transport</option>
-          <option>Activities</option><option>Shopping</option><option>Other</option>
-        </select>
-        <select id="f-status" onchange="renderExpenses()">
-          <option value="">All statuses</option>
-          <option value="open">Has outstanding</option>
-          <option value="settled">Fully settled</option>
-        </select>
-      </div>
-      <div id="expenses-list"></div>
-    </div>
-
-    <!-- BALANCES -->
-    <div class="page" id="page-balances">
-      <div class="section-title">Who owes what</div>
-      <div id="balances-list"></div>
-    </div>
-
-    <!-- MEMBERS -->
-    <div class="page" id="page-members">
-      <div class="row-between" style="margin-bottom:14px">
-        <div class="section-title" style="margin-bottom:0">Members</div>
-        <button class="btn sm primary" onclick="openModal('add-member')"><i class="ti ti-plus"></i> Add</button>
-      </div>
-      <div id="members-list"></div>
-    </div>
-
-    <!-- SUMMARY -->
-    <div class="page" id="page-aggregate">
-      <div class="section-title">Trip summary</div>
-      <div class="tab-row">
-        <button class="tab active" onclick="setAggTab('person')">By person</button>
-        <button class="tab" onclick="setAggTab('category')">By category</button>
-        <button class="tab" onclick="setAggTab('location')">By location</button>
-        <button class="tab" onclick="setAggTab('date')">By date</button>
-      </div>
-      <div id="agg-content"></div>
-    </div>
-
-    <!-- CHASE -->
-    <div class="page" id="page-chase">
-      <div class="section-title">Chase unpaid members</div>
-      <div id="chase-list"></div>
-    </div>
-
+  <div class="topbar-actions">
+    <button class="btn sm" onclick="openTripsModal()"><i class="ti ti-map-2"></i> Trips</button>
+    <button class="btn sm" onclick="openFxModal()"><i class="ti ti-arrows-exchange"></i> Rates</button>
+    <button class="btn sm" onclick="openSettingsModal()"><i class="ti ti-settings"></i></button>
   </div>
 </div>
 
-<!-- MODALS -->
-<div class="modal-overlay" id="modal-overlay" style="display:none" onclick="overlayClick(event)">
+<nav class="nav" id="mainNav" style="display:none">
+  <button class="nav-btn" id="nb-dashboard" onclick="showPage('dashboard')"><i class="ti ti-layout-dashboard"></i> Dashboard</button>
+  <button class="nav-btn" id="nb-expenses" onclick="showPage('expenses')"><i class="ti ti-receipt"></i> Expenses</button>
+  <button class="nav-btn" id="nb-balances" onclick="showPage('balances')"><i class="ti ti-scale"></i> Balances</button>
+  <button class="nav-btn" id="nb-members" onclick="showPage('members')"><i class="ti ti-users"></i> Members</button>
+  <button class="nav-btn" id="nb-summary" onclick="showPage('summary')"><i class="ti ti-chart-bar"></i> Summary</button>
+  <button class="nav-btn" id="nb-chase" onclick="showPage('chase')"><i class="ti ti-bell"></i> Chase</button>
+</nav>
 
-  <!-- TRIP SETTINGS -->
-  <div class="modal" id="modal-trip-settings" style="display:none">
-    <div class="modal-handle"></div>
-    <div class="modal-title"><i class="ti ti-settings"></i> Trip settings</div>
-    <div class="form-group"><label>Trip name</label><input id="ts-name"></div>
-    <div class="row2">
-      <div class="form-group"><label>Start</label><input type="date" id="ts-start"></div>
-      <div class="form-group"><label>End</label><input type="date" id="ts-end"></div>
-    </div>
-    <div class="form-group"><label>Destination</label><input id="ts-dest"></div>
-    <div class="form-group"><label>Currency</label>
-      <select id="ts-currency">
-        <option value="GBP">GBP £</option><option value="EUR">EUR €</option>
-        <option value="USD">USD $</option><option value="COP">COP $</option>
-        <option value="AED">AED</option><option value="ZAR">ZAR R</option>
-        <option value="TRY">TRY ₺</option><option value="THB">THB ฿</option>
-        <option value="AUD">AUD A$</option><option value="CAD">CAD C$</option>
-      </select>
-    </div>
-    <div style="background:var(--blue-bg);color:var(--blue-txt);border-radius:var(--radius);padding:10px 12px;font-size:12px;margin-bottom:14px">
-      <i class="ti ti-share"></i> <strong>Trip ID:</strong> <span id="ts-trip-id" style="font-family:monospace"></span><br>
-      Share this ID with your group so they can join the trip from the setup screen.
-    </div>
-    <div class="form-row" style="justify-content:flex-end;gap:8px;margin-top:8px">
-      <button class="btn" onclick="closeModal()">Cancel</button>
-      <button class="btn primary" onclick="saveTripSettings()">Save</button>
-    </div>
-  </div>
+<div class="content">
 
-  <!-- TRIPS MANAGER -->
-  <div class="modal" id="modal-trips" style="display:none">
-    <div class="modal-handle"></div>
-    <div class="modal-title"><i class="ti ti-map-2"></i> My trips</div>
-    <div id="trips-list-body"></div>
-    <hr style="margin:14px 0">
-    <button class="btn primary wide" onclick="startNewTrip()"><i class="ti ti-plus"></i> Create new trip</button>
-  </div>
-
-  <!-- FX RATES -->
-  <div class="modal" id="modal-fx" style="display:none">
-    <div class="modal-handle"></div>
-    <div class="modal-title"><i class="ti ti-arrows-exchange"></i> Exchange rates</div>
-    <p style="font-size:13px;color:var(--text2);margin-bottom:4px;line-height:1.6">Set how many units of each currency equal 1 <strong id="fx-base-lbl">GBP</strong>. Check Google or XE.com for live rates.</p>
-    <div style="background:var(--amber-bg);color:var(--amber-txt);border-radius:8px;padding:8px 12px;font-size:12px;margin-bottom:14px"><i class="ti ti-bulb"></i> Tip: Google "GBP to COP" — if it shows 5,200 enter 5200.</div>
-    <div id="fx-modal-body"></div>
-    <div style="display:flex;justify-content:flex-end;gap:8px;margin-top:14px">
-      <button class="btn" onclick="closeModal()">Cancel</button>
-      <button class="btn primary" onclick="saveFxRates()">Save rates</button>
+<div class="page" id="page-setup">
+  <div style="max-width:440px;margin:0 auto;padding-top:24px">
+    <div style="text-align:center;margin-bottom:28px">
+      <i class="ti ti-map-pin" style="font-size:42px;color:var(--blue);display:block;margin-bottom:10px"></i>
+      <div style="font-size:20px;font-weight:600;margin-bottom:6px">Group Trip Expenses</div>
+      <div style="font-size:14px;color:var(--text2)">All data syncs live — no file sharing needed</div>
     </div>
-  </div>
-
-  <!-- ADD / EDIT MEMBER -->
-  <div class="modal" id="modal-member" style="display:none">
-    <div class="modal-handle"></div>
-    <div class="modal-title" id="member-modal-title"><i class="ti ti-user-plus"></i> Add member</div>
-    <input type="hidden" id="am-id">
-    <div class="form-group"><label>Full name</label><input id="am-name" placeholder="Full name"></div>
-    <div class="form-group"><label>Email</label><input type="email" id="am-email" placeholder="email@example.com"></div>
-    <div class="form-group"><label>WhatsApp number</label><input id="am-wa" placeholder="+44 7700 000000"></div>
-    <div class="form-group"><label>Role</label>
-      <select id="am-role"><option value="member">Member</option><option value="admin">Admin</option></select>
-    </div>
-    <div class="form-row" style="justify-content:flex-end;gap:8px;margin-top:8px">
-      <button class="btn" onclick="closeModal()">Cancel</button>
-      <button class="btn primary" id="am-btn" onclick="saveMember()">Add member</button>
-    </div>
-  </div>
-
-  <!-- ADD / EDIT EXPENSE -->
-  <div class="modal" id="modal-add-expense" style="display:none">
-    <div class="modal-handle"></div>
-    <div class="modal-title" id="ae-modal-title"><i class="ti ti-receipt"></i> Add expense</div>
-    <input type="hidden" id="ae-id">
-    <div class="form-group"><label>Description</label><input id="ae-desc" placeholder="e.g. Dinner at Nobu"></div>
-    <div class="row2">
-      <div class="form-group"><label>Amount</label><input type="number" id="ae-amount" placeholder="0.00" min="0" step="0.01" oninput="updateFxPreview()"></div>
-      <div class="form-group"><label>Currency paid in</label>
-        <select id="ae-currency" onchange="updateFxPreview()">
-          <option value="GBP">GBP £</option><option value="EUR">EUR €</option>
-          <option value="USD">USD $</option><option value="COP">COP (Peso)</option>
-          <option value="AED">AED</option><option value="ZAR">ZAR R</option>
-          <option value="TRY">TRY ₺</option><option value="THB">THB ฿</option>
-          <option value="AUD">AUD A$</option><option value="CAD">CAD C$</option>
+    <div class="card">
+      <div class="form-group"><label>Trip name</label><input id="sName" placeholder="e.g. Ibiza Summer 2026"></div>
+      <div class="row2">
+        <div class="form-group"><label>Start date</label><input type="date" id="sStart"></div>
+        <div class="form-group"><label>End date</label><input type="date" id="sEnd"></div>
+      </div>
+      <div class="form-group"><label>Destination</label><input id="sDest" placeholder="e.g. Ibiza, Spain"></div>
+      <div class="form-group"><label>Base currency</label>
+        <select id="sCurrency">
+          <option value="GBP">GBP £ — British Pound</option>
+          <option value="EUR">EUR € — Euro</option>
+          <option value="USD">USD $ — US Dollar</option>
+          <option value="COP">COP — Colombian Peso</option>
+          <option value="AED">AED — UAE Dirham</option>
+          <option value="ZAR">ZAR R — South African Rand</option>
+          <option value="TRY">TRY ₺ — Turkish Lira</option>
+          <option value="THB">THB ฿ — Thai Baht</option>
+          <option value="AUD">AUD — Australian Dollar</option>
+          <option value="CAD">CAD — Canadian Dollar</option>
         </select>
       </div>
-    </div>
-    <div id="fx-preview" style="display:none;background:var(--blue-bg);color:var(--blue-txt);border-radius:8px;padding:10px 12px;margin-bottom:10px;font-size:13px;align-items:center;gap:8px">
-      <i class="ti ti-arrows-exchange"></i><span id="fx-preview-text"></span>
-    </div>
-    <div class="form-group"><label>Category</label>
-      <select id="ae-cat">
-        <option>Food &amp; drink</option><option>Accommodation</option><option>Transport</option>
-        <option>Activities</option><option>Shopping</option><option>Other</option>
-      </select>
-    </div>
-    <div class="row2">
-      <div class="form-group"><label>Date</label><input type="date" id="ae-date"></div>
-      <div class="form-group"><label>Location / venue</label><input id="ae-location" placeholder="e.g. Bogota"></div>
-    </div>
-    <div class="form-group"><label>Paid by</label><select id="ae-paidby"></select></div>
-    <div class="form-group">
-      <label>Split between</label>
-      <div id="ae-split" style="border:0.5px solid var(--border2);border-radius:var(--radius);padding:4px 10px;max-height:180px;overflow-y:auto"></div>
-      <div class="form-row" style="margin-top:7px">
-        <button class="btn sm" onclick="selAll(true)">Select all</button>
-        <button class="btn sm" onclick="selAll(false)">Clear all</button>
+      <hr>
+      <div style="font-size:13px;font-weight:600;margin-bottom:12px">Your details (trip creator)</div>
+      <div class="form-group"><label>Full name</label><input id="sYourName" placeholder="Your name"></div>
+      <div class="form-group"><label>Email</label><input type="email" id="sYourEmail" placeholder="you@email.com"></div>
+      <div class="form-group"><label>WhatsApp</label><input id="sYourWa" placeholder="+44 7700 000000"></div>
+      <button class="btn primary wide" onclick="createTrip()"><i class="ti ti-arrow-right"></i> Create trip &amp; sync to cloud</button>
+      <hr>
+      <div style="text-align:center;font-size:13px;color:var(--text2);margin-bottom:10px">Joining an existing trip?</div>
+      <div class="flex-row" style="gap:8px">
+        <input id="joinCode" placeholder="Paste trip ID here..." style="flex:1">
+        <button class="btn primary" onclick="joinByCode()"><i class="ti ti-login"></i> Join</button>
       </div>
     </div>
-    <div class="form-group">
-      <label>Receipt photo (optional)</label>
-      <input type="file" id="ae-receipt" accept="image/*" style="font-size:13px" onchange="previewReceipt()">
-      <div id="ae-receipt-preview" style="margin-top:8px"></div>
-    </div>
-    <div class="form-group"><label>Notes</label><textarea id="ae-notes" placeholder="Any extra notes..."></textarea></div>
-    <div class="form-row" style="justify-content:flex-end;gap:8px;margin-top:8px">
-      <button class="btn" onclick="closeModal()">Cancel</button>
-      <button class="btn primary" id="ae-save-btn" onclick="saveExpense()">Add expense</button>
-    </div>
   </div>
-
-  <!-- EXPENSE DETAIL -->
-  <div class="modal" id="modal-expense-detail" style="display:none">
-    <div class="modal-handle"></div>
-    <div id="exp-detail-body"></div>
-    <div class="form-row" style="justify-content:flex-end;gap:8px;margin-top:12px">
-      <button class="btn danger sm" onclick="deleteExpense()"><i class="ti ti-trash"></i> Delete</button>
-      <button class="btn sm" onclick="openEditExpense(S.curExpId)"><i class="ti ti-edit"></i> Edit</button>
-      <button class="btn sm" onclick="closeModal()">Close</button>
-    </div>
-  </div>
-
-  <!-- CHASE MESSAGE -->
-  <div class="modal" id="modal-chase-msg" style="display:none">
-    <div class="modal-handle"></div>
-    <div class="modal-title" id="chase-msg-title">Chase</div>
-    <div id="chase-msg-body"></div>
-    <div class="form-row" style="justify-content:flex-end;gap:8px;margin-top:14px">
-      <button class="btn" onclick="closeModal()">Close</button>
-    </div>
-  </div>
-
 </div>
+
+<div class="page" id="page-loader">
+  <div class="spinner-wrap"><div class="spinner"></div>Loading trip data...</div>
+</div>
+
+<div class="page" id="page-dashboard">
+  <div class="metric-grid" id="dbMetrics"></div>
+  <div class="row-between" style="margin-bottom:14px">
+    <div class="section-title" style="margin-bottom:0">Recent expenses</div>
+    <button class="btn sm primary" onclick="openExpenseModal(null)"><i class="ti ti-plus"></i> Add</button>
+  </div>
+  <div id="dbRecent"></div>
+  <div class="section-title" style="margin-top:22px;margin-bottom:14px">Per-person snapshot</div>
+  <div id="dbPersons"></div>
+</div>
+
+<div class="page" id="page-expenses">
+  <div class="row-between" style="margin-bottom:14px">
+    <div class="section-title" style="margin-bottom:0">All expenses</div>
+    <button class="btn sm primary" onclick="openExpenseModal(null)"><i class="ti ti-plus"></i> Add</button>
+  </div>
+  <div style="display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap">
+    <select id="fCat" onchange="renderExpenses()" style="width:auto;font-size:12px;padding:6px 9px">
+      <option value="">All categories</option>
+      <option>Food &amp; drink</option><option>Accommodation</option><option>Transport</option>
+      <option>Activities</option><option>Shopping</option><option>Other</option>
+    </select>
+    <select id="fStatus" onchange="renderExpenses()" style="width:auto;font-size:12px;padding:6px 9px">
+      <option value="">All statuses</option>
+      <option value="open">Has outstanding</option>
+      <option value="settled">Fully settled</option>
+    </select>
+  </div>
+  <div id="expensesList"></div>
+</div>
+
+<div class="page" id="page-balances">
+  <div class="section-title">Who owes what</div>
+  <div id="balancesList"></div>
+</div>
+
+<div class="page" id="page-members">
+  <div class="row-between" style="margin-bottom:14px">
+    <div class="section-title" style="margin-bottom:0">Members</div>
+    <button class="btn sm primary" onclick="openMemberModal(null)"><i class="ti ti-plus"></i> Add</button>
+  </div>
+  <div id="membersList"></div>
+</div>
+
+<div class="page" id="page-summary">
+  <div class="section-title">Trip summary</div>
+  <div class="tab-row">
+    <button class="tab active" id="tab-person" onclick="setAggTab('person')">By person</button>
+    <button class="tab" id="tab-category" onclick="setAggTab('category')">By category</button>
+    <button class="tab" id="tab-location" onclick="setAggTab('location')">By location</button>
+    <button class="tab" id="tab-date" onclick="setAggTab('date')">By date</button>
+  </div>
+  <div id="aggContent"></div>
+</div>
+
+<div class="page" id="page-chase">
+  <div class="section-title">Chase unpaid members</div>
+  <div id="chaseList"></div>
+</div>
+
+</div><!-- /content -->
+</div><!-- /app -->
+
+<!-- MODALS (shown/hidden via JS, no onclick in HTML attributes with string args) -->
+<div class="overlay" id="overlay" style="display:none" onclick="overlayClick(event)">
+  <div class="modal" id="modalInner"></div>
+</div>
+
 <div class="toast" id="toast"></div>
-
 <script>
-// ── Supabase config ──────────────────────────────────────────────────────────
-const SB_URL = "https://bfwkwvsmrqvnmiolhlqy.supabase.co";
-const SB_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJmd2t3dnNtcnF2bm1pb2xobHF5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODA3NTI2MzAsImV4cCI6MjA5NjMyODYzMH0.O3Jalw7WFxLY_nbZnHZUgKdXBNgrqaGw460xbTlB6-I";
+// =============================================================================
+// CONFIG
+// =============================================================================
+const SB_URL = 'https://bfwkwvsmrqvnmiolhlqy.supabase.co';
+const SB_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJmd2t3dnNtcnF2bm1pb2xobHF5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODA3NTI2MzAsImV4cCI6MjA5NjMyODYzMH0.O3Jalw7WFxLY_nbZnHZUgKdXBNgrqaGw460xbTlB6-I';
 
-async function sb(method, table, body, params) {
-  let url = SB_URL + "/rest/v1/" + table;
-  if (params) url += "?" + new URLSearchParams(params);
-  const headers = {
-    "apikey": SB_KEY,
-    "Authorization": "Bearer " + SB_KEY,
-    "Content-Type": "application/json"
-  };
-  if (method === "POST") headers["Prefer"] = "return=representation";
-  if (method === "GET") headers["Prefer"] = "return=representation";
-  const res = await fetch(url, {
-    method,
-    headers,
-    body: body ? JSON.stringify(body) : undefined
-  });
-  if (!res.ok) {
-    const errText = await res.text();
-    console.error("Supabase error:", method, table, errText);
-    throw new Error(errText);
-  }
-  const text = await res.text();
-  return text ? JSON.parse(text) : null;
-}
+// =============================================================================
+// CONSTANTS
+// =============================================================================
+const AVATARBG  = ['#E6F1FB','#E1F5EE','#FAEEDA','#FCEBEB','#EEEDFE','#FBEAF0','#d4f1e4','#F1EFE8'];
+const AVATARTXT = ['#0C447C','#085041','#633806','#791F1F','#3C3489','#72243E','#0F6E56','#444441'];
+const CATICON = {'Food & drink':'ti-tools-kitchen-2','Accommodation':'ti-building','Transport':'ti-car','Activities':'ti-ticket','Shopping':'ti-shopping-bag','Other':'ti-dots'};
+const SYMS = {GBP:'£',EUR:'€',USD:'$',COP:'COP$',AED:'AED',ZAR:'R',TRY:'₺',THB:'฿',AUD:'A$',CAD:'C$'};
+const CURNAMES = {GBP:'British Pound',EUR:'Euro',USD:'US Dollar',COP:'Colombian Peso',AED:'UAE Dirham',ZAR:'South African Rand',TRY:'Turkish Lira',THB:'Thai Baht',AUD:'Australian Dollar',CAD:'Canadian Dollar'};
+const DEF_RATES = {GBP:1,EUR:1.17,USD:1.27,COP:5200,AED:4.66,ZAR:23.5,TRY:40.8,THB:44.5,AUD:1.97,CAD:1.74};
+const CURRENCIES = ['GBP','EUR','USD','COP','AED','ZAR','TRY','THB','AUD','CAD'];
 
-// Convenience wrappers
-const dbSelect = (table, params) => sb("GET", table, null, params);
-const dbInsert = (table, body) => sb("POST", table, body);
-const dbUpdate = (table, body, params) => sb("PATCH", table, body, params);
-const dbDelete = (table, params) => sb("DELETE", table, null, params);
-const dbUpsert = (table, body) => sb("POST", table, body);
+// =============================================================================
+// STATE
+// =============================================================================
+let T = null;          // current trip object
+let MEMBERS = [];      // current trip members
+let EXPENSES = [];     // current trip expenses
+let FX = {};           // fx rates: 1 base = X foreign
+let AGG_TAB = 'person';
+let CUR_EXP_ID = null;
+let ALL_TRIPS = [];    // local list [{id,name,destination,currency}]
 
-// ── Constants ────────────────────────────────────────────────────────────────
-const AVATARBG=["#E6F1FB","#E1F5EE","#FAEEDA","#FCEBEB","#EEEDFE","#FBEAF0","#d4f1e4","#F1EFE8"];
-const AVATARTXT=["#0C447C","#085041","#633806","#791F1F","#3C3489","#72243E","#0F6E56","#444441"];
-const CATICON={"Food & drink":"ti-tools-kitchen-2","Accommodation":"ti-building","Transport":"ti-car","Activities":"ti-ticket","Shopping":"ti-shopping-bag","Other":"ti-dots"};
-const SYMS={GBP:"£",EUR:"€",USD:"$",COP:"COP$",AED:"AED",ZAR:"R",TRY:"₺",THB:"฿",AUD:"A$",CAD:"C$"};
-const DEFAULT_RATES={GBP:1,EUR:1.17,USD:1.27,COP:5200,AED:4.66,ZAR:23.5,TRY:40.8,THB:44.5,AUD:1.97,CAD:1.74};
-const CURNAMES={GBP:"British Pound",EUR:"Euro",USD:"US Dollar",COP:"Colombian Peso",AED:"UAE Dirham",ZAR:"South African Rand",TRY:"Turkish Lira",THB:"Thai Baht",AUD:"Australian Dollar",CAD:"Canadian Dollar"};
-
-// ── State ────────────────────────────────────────────────────────────────────
-let S = { trip: null, members: [], expenses: [], fxRates: {}, aggTab: "person", curExpId: null };
-let ALL_TRIPS = [];
-
-// ── Utils ────────────────────────────────────────────────────────────────────
+// =============================================================================
+// UTILS
+// =============================================================================
 const $ = id => document.getElementById(id);
-const base = () => S.trip?.currency || "GBP";
-const sym = c => SYMS[c || base()] || c || "£";
-const uid = () => Date.now().toString(36) + Math.random().toString(36).slice(2);
-const initials = n => n.split(" ").map(w => w[0]).join("").toUpperCase().slice(0, 2);
-const getMember = id => S.members.find(m => m.id === id) || { name: "Unknown" };
-const getMemberIdx = id => S.members.findIndex(m => m.id === id);
+const base = () => T ? T.currency : 'GBP';
+const sym  = c => SYMS[c || base()] || c || '£';
+const uid  = () => Date.now().toString(36) + Math.random().toString(36).slice(2);
+const inits = n => n.trim().split(/\s+/).map(w => w[0]).join('').toUpperCase().slice(0,2);
+const getMember = id => MEMBERS.find(m => m.id === id) || {name:'Unknown'};
+const getMIdx   = id => MEMBERS.findIndex(m => m.id === id);
 
 function toBase(amount, cur) {
   if (!cur || cur === base()) return amount;
-  const rate = S.fxRates[cur];
-  if (!rate || rate <= 0) return amount;
-  return amount / rate;
+  const r = FX[cur];
+  return (r && r > 0) ? amount / r : amount;
 }
 function fmtBase(n) {
-  const s = sym(base());
-  if (base() === "COP") return s + " " + Math.round(Number(n)).toLocaleString();
-  return s + Number(n).toFixed(2);
+  n = Number(n);
+  if (base() === 'COP') return sym() + ' ' + Math.round(n).toLocaleString();
+  return sym() + n.toFixed(2);
 }
-function fmtForeign(n, cur) {
-  const s = sym(cur);
-  if (cur === "COP") return s + " " + Math.round(Number(n)).toLocaleString();
-  return s + Number(n).toFixed(2);
+function fmtFgn(n, cur) {
+  n = Number(n);
+  if (cur === 'COP') return sym(cur) + ' ' + Math.round(n).toLocaleString();
+  return sym(cur) + n.toFixed(2);
 }
-function initFxRates() {
+function initFx() {
   const b = base();
-  Object.keys(SYMS).forEach(c => {
-    if (c === b) { S.fxRates[b] = 1; return; }
-    if (S.fxRates[c]) return;
-    S.fxRates[c] = parseFloat((DEFAULT_RATES[c] / DEFAULT_RATES[b]).toFixed(4));
+  CURRENCIES.forEach(c => {
+    if (c === b) { FX[b] = 1; return; }
+    if (!FX[c]) FX[c] = parseFloat(((DEF_RATES[c] || 1) / (DEF_RATES[b] || 1)).toFixed(4));
   });
 }
-function avatar(name, idx, size = 32) {
-  const i = (idx >= 0 ? idx : 0) % 8;
-  return `<div class="avatar" style="width:${size}px;height:${size}px;min-width:${size}px;background:${AVATARBG[i]};color:${AVATARTXT[i]};font-size:${size > 30 ? 13 : 10}px">${initials(name)}</div>`;
+function avatar(name, idx, size) {
+  size = size || 32;
+  const i = ((idx >= 0 ? idx : 0) % 8);
+  return '<div class="avatar" style="width:' + size + 'px;height:' + size + 'px;min-width:' + size + 'px;background:' + AVATARBG[i] + ';color:' + AVATARTXT[i] + ';font-size:' + (size > 30 ? 13 : 10) + 'px">' + inits(name) + '</div>';
 }
 
-// ── Sync status ──────────────────────────────────────────────────────────────
-function setSyncStatus(status, msg) {
-  const dot = $("sync-dot"), lbl = $("sync-label");
-  dot.className = "sync-dot" + (status === "syncing" ? " syncing" : status === "error" ? " error" : "");
-  lbl.textContent = msg || (status === "syncing" ? "Saving..." : status === "error" ? "Sync error — check connection" : "Connected — data syncs live");
+// =============================================================================
+// TOAST / SYNC
+// =============================================================================
+function toast(msg, dur) {
+  const t = $('toast'); t.textContent = msg; t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), dur || 2500);
+}
+function setSyncing(state, msg) {
+  const dot = $('syncDot'), lbl = $('syncLabel');
+  if (!dot) return;
+  dot.className = 'sync-dot' + (state === 'busy' ? ' busy' : state === 'err' ? ' err' : '');
+  lbl.textContent = msg || (state === 'busy' ? 'Saving...' : state === 'err' ? 'Connection error' : 'Connected — live sync');
 }
 
-function toast(msg, dur = 2500) {
-  const t = $("toast"); t.textContent = msg; t.classList.add("show");
-  setTimeout(() => t.classList.remove("show"), dur);
+// =============================================================================
+// SUPABASE API
+// =============================================================================
+async function sbReq(method, table, body, qs) {
+  let url = SB_URL + '/rest/v1/' + table;
+  if (qs) url += '?' + new URLSearchParams(qs);
+  const headers = {
+    'apikey': SB_KEY,
+    'Authorization': 'Bearer ' + SB_KEY,
+    'Content-Type': 'application/json',
+    'Accept': 'application/json'
+  };
+  if (method === 'POST' || method === 'GET') headers['Prefer'] = 'return=representation';
+  const opts = { method: method, headers: headers };
+  if (body) opts.body = JSON.stringify(body);
+  const res = await fetch(url, opts);
+  const text = await res.text();
+  if (!res.ok) throw new Error(table + ' ' + method + ': ' + text);
+  return text ? JSON.parse(text) : null;
+}
+const dbGet    = (t, qs)   => sbReq('GET',    t, null, qs);
+const dbPost   = (t, body) => sbReq('POST',   t, body);
+const dbPatch  = (t, body, qs) => sbReq('PATCH', t, body, qs);
+const dbDelete = (t, qs)   => sbReq('DELETE', t, null, qs);
+
+// =============================================================================
+// LOCAL STORAGE (just trip list + current id)
+// =============================================================================
+function saveLocal() {
+  localStorage.setItem('te_trips', JSON.stringify(ALL_TRIPS));
+  localStorage.setItem('te_cur',   T ? T.id : '');
+}
+function loadLocal() {
+  try { ALL_TRIPS = JSON.parse(localStorage.getItem('te_trips') || '[]'); } catch(e) { ALL_TRIPS = []; }
 }
 
-// ── Local trip list (just ids+names, for the Trips manager) ─────────────────
-function saveLocalTripList() {
-  const list = ALL_TRIPS.map(t => ({ id: t.id, name: t.name, destination: t.destination, currency: t.currency }));
-  localStorage.setItem("tripApp_list", JSON.stringify(list));
-  localStorage.setItem("tripApp_cur", S.trip?.id || "");
-}
-function loadLocalTripList() {
+// =============================================================================
+// LOAD TRIP FROM SUPABASE
+// =============================================================================
+async function loadTrip(tripId) {
+  showPage('loader');
+  setSyncing('busy', 'Loading trip...');
   try {
-    ALL_TRIPS = JSON.parse(localStorage.getItem("tripApp_list") || "[]");
-  } catch(e) { ALL_TRIPS = []; }
-}
-
-// ── Supabase data operations ─────────────────────────────────────────────────
-async function loadCurrentTrip() {
-  if (!S.trip?.id) return;
-  setSyncStatus("syncing", "Loading...");
-  try {
-    const [members, expenses] = await Promise.all([
-      dbSelect("members", { trip_id: "eq." + S.trip.id, order: "created_at.asc" }),
-      dbSelect("expenses", { trip_id: "eq." + S.trip.id, order: "created_at.desc" })
+    const rows = await dbGet('trips', {id: 'eq.' + tripId});
+    if (!rows || !rows.length) { toast('Trip not found'); showPage('setup'); return; }
+    const r = rows[0];
+    T = { id: r.id, name: r.name, destination: r.destination || '', start: r.start_date || '', end: r.end_date || '', currency: r.currency || 'GBP' };
+    FX = r.fx_rates || {};
+    initFx();
+    const [mRows, eRows] = await Promise.all([
+      dbGet('members', {trip_id: 'eq.' + tripId, order: 'created_at.asc'}),
+      dbGet('expenses', {trip_id: 'eq.' + tripId, order: 'created_at.desc'})
     ]);
-    S.members = (members || []).map(dbToMember);
-    S.expenses = (expenses || []).map(dbToExpense);
-    setSyncStatus("ok");
-    renderCurrentPage();
+    MEMBERS  = (mRows || []).map(rowToMember);
+    EXPENSES = (eRows || []).map(rowToExpense);
+    if (!ALL_TRIPS.find(x => x.id === tripId)) {
+      ALL_TRIPS.unshift({id: T.id, name: T.name, destination: T.destination, currency: T.currency});
+    }
+    saveLocal();
+    setSyncing('ok');
+    initAppUI();
   } catch(e) {
-    setSyncStatus("error");
-    toast("Could not load data — check connection");
+    console.error(e);
+    setSyncing('err');
+    toast('Could not load trip — check connection');
+    showPage('setup');
   }
 }
 
-async function loadTripById(tripId) {
-  setSyncStatus("syncing", "Loading trip...");
-  showPage("loader");
-  try {
-    const trips = await dbSelect("trips", { id: "eq." + tripId });
-    if (!trips || !trips.length) { toast("Trip not found"); showPage("setup"); return; }
-    const t = trips[0];
-    S.trip = { id: t.id, name: t.name, destination: t.destination || "", start: t.start_date || "", end: t.end_date || "", currency: t.currency || "GBP" };
-    S.fxRates = t.fx_rates || {};
-    initFxRates();
-    // Add to local list
-    if (!ALL_TRIPS.find(x => x.id === tripId)) ALL_TRIPS.push({ id: t.id, name: t.name, destination: t.destination, currency: t.currency });
-    saveLocalTripList();
-    await loadCurrentTrip();
-    initApp();
-  } catch(e) {
-    setSyncStatus("error");
-    toast("Failed to load trip");
-    showPage("setup");
-  }
+async function refreshData() {
+  if (T) await loadTrip(T.id);
 }
 
-// ── DB row mappers ───────────────────────────────────────────────────────────
-function dbToMember(r) {
-  return { id: r.id, tripId: r.trip_id, name: r.name, email: r.email || "", wa: r.whatsapp || "", role: r.role || "member" };
+// =============================================================================
+// ROW MAPPERS
+// =============================================================================
+function rowToMember(r) {
+  return {id: r.id, name: r.name, email: r.email || '', wa: r.whatsapp || '', role: r.role || 'member'};
 }
-function dbToExpense(r) {
+function rowToExpense(r) {
   return {
-    id: r.id, tripId: r.trip_id, desc: r.description, amount: parseFloat(r.amount),
-    originalAmount: parseFloat(r.original_amount || r.amount),
-    originalCurrency: r.original_currency || S.trip?.currency || "GBP",
-    fxRateUsed: parseFloat(r.fx_rate_used || 1),
-    category: r.category || "Other", date: r.date || "", location: r.location || "",
-    paidBy: r.paid_by, splits: r.splits || {}, notes: r.notes || "",
+    id: r.id, desc: r.description, amount: +r.amount,
+    origAmount: +(r.original_amount || r.amount),
+    origCur: r.original_currency || base(),
+    fxUsed: +(r.fx_rate_used || 1),
+    category: r.category || 'Other', date: r.date || '',
+    location: r.location || '', paidBy: r.paid_by,
+    splits: r.splits || {}, notes: r.notes || '',
     createdAt: new Date(r.created_at).getTime()
   };
 }
 
-// ── Create trip ──────────────────────────────────────────────────────────────
+// =============================================================================
+// CREATE TRIP
+// =============================================================================
 async function createTrip() {
-  const name = $("s-name").value.trim();
-  const yourName = $("s-your-name").value.trim();
-  if (!name || !yourName) { alert("Please enter a trip name and your name."); return; }
-  setSyncStatus("syncing", "Creating trip...");
+  const name    = $('sName').value.trim();
+  const myName  = $('sYourName').value.trim();
+  if (!name || !myName) { alert('Please enter a trip name and your name.'); return; }
+  setSyncing('busy', 'Creating trip...');
   const tripId = uid();
-  const fxRates = {};
-  S.trip = { id: tripId, name, start: $("s-start").value, end: $("s-end").value, destination: $("s-dest").value.trim(), currency: $("s-currency").value };
-  S.fxRates = fxRates;
-  initFxRates();
+  const memberId = uid();
+  FX = {}; T = { id: tripId, name: name, destination: $('sDest').value.trim(), start: $('sStart').value, end: $('sEnd').value, currency: $('sCurrency').value };
+  initFx();
   try {
-    await dbInsert("trips", {
-      id: tripId, name, destination: S.trip.destination,
-      start_date: S.trip.start, end_date: S.trip.end,
-      currency: S.trip.currency, fx_rates: S.fxRates
-    });
-    const memberId = uid();
-    await dbInsert("members", {
-      id: memberId, trip_id: tripId, name: yourName,
-      email: $("s-your-email").value.trim(),
-      whatsapp: $("s-your-wa").value.trim(),
-      role: "admin"
-    });
-    S.members = [{ id: memberId, name: yourName, email: $("s-your-email").value.trim(), wa: $("s-your-wa").value.trim(), role: "admin" }];
-    S.expenses = [];
-    ALL_TRIPS.unshift({ id: tripId, name, destination: S.trip.destination, currency: S.trip.currency });
-    saveLocalTripList();
-    setSyncStatus("ok");
-    initApp();
+    await dbPost('trips', {id: tripId, name: name, destination: T.destination, start_date: T.start, end_date: T.end, currency: T.currency, fx_rates: FX});
+    await dbPost('members', {id: memberId, trip_id: tripId, name: myName, email: $('sYourEmail').value.trim(), whatsapp: $('sYourWa').value.trim(), role: 'admin'});
+    MEMBERS = [{id: memberId, name: myName, email: $('sYourEmail').value.trim(), wa: $('sYourWa').value.trim(), role: 'admin'}];
+    EXPENSES = [];
+    ALL_TRIPS.unshift({id: tripId, name: name, destination: T.destination, currency: T.currency});
+    saveLocal();
+    setSyncing('ok');
+    initAppUI();
+    toast('Trip created!');
   } catch(e) {
-    setSyncStatus("error");
-    console.error("createTrip error:", e); alert("Could not create trip: " + e.message);
+    console.error(e);
+    setSyncing('err');
+    alert('Could not create trip: ' + e.message);
   }
 }
 
 async function joinByCode() {
-  const code = $("join-code").value.trim();
-  if (!code) { alert("Please paste a trip ID."); return; }
-  await loadTripById(code);
+  const code = $('joinCode').value.trim();
+  if (!code) { alert('Please paste a trip ID.'); return; }
+  await loadTrip(code);
 }
 
-// ── initApp ──────────────────────────────────────────────────────────────────
-function initApp() {
-  if (!S.trip) return;
-  $("sync-bar").style.display = "flex";
-  $("topbar").style.display = "flex";
-  $("main-nav").style.display = "flex";
-  $("topbar-name").textContent = S.trip.name;
-  const parts = [S.trip.destination, [S.trip.start, S.trip.end].filter(Boolean).join(" → ")].filter(Boolean);
-  $("topbar-sub").textContent = parts.join(" · ") + (S.trip.currency ? " · " + S.trip.currency : "");
-  showPage("dashboard");
+// =============================================================================
+// INIT APP UI
+// =============================================================================
+function initAppUI() {
+  $('syncBar').style.display = 'flex';
+  $('topbar').style.display  = 'flex';
+  $('mainNav').style.display = 'flex';
+  $('topbarName').textContent = T.name;
+  const parts = [T.destination, [T.start, T.end].filter(Boolean).join(' → ')].filter(Boolean);
+  $('topbarSub').textContent = parts.join(' · ') + (T.currency ? ' · ' + T.currency : '');
+  showPage('dashboard');
 }
 
-// ── Navigation ───────────────────────────────────────────────────────────────
-let currentPage = "dashboard";
+// =============================================================================
+// NAVIGATION
+// =============================================================================
+let curPage = 'dashboard';
 function showPage(p) {
-  document.querySelectorAll(".page").forEach(el => el.classList.remove("active"));
-  document.querySelectorAll(".nav-btn").forEach(b => b.classList.remove("active"));
-  $("page-" + p).classList.add("active");
-  document.querySelectorAll(".nav-btn").forEach(b => { if ((b.getAttribute("onclick") || "").includes(p)) b.classList.add("active"); });
-  currentPage = p;
-  if (p === "dashboard") renderDashboard();
-  if (p === "expenses") renderExpenses();
-  if (p === "balances") renderBalances();
-  if (p === "members") renderMembers();
-  if (p === "aggregate") renderAggregate();
-  if (p === "chase") renderChase();
+  document.querySelectorAll('.page').forEach(el => el.classList.remove('active'));
+  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+  $('page-' + p).classList.add('active');
+  const nb = $('nb-' + p);
+  if (nb) nb.classList.add('active');
+  curPage = p;
+  const renders = {dashboard: renderDashboard, expenses: renderExpenses, balances: renderBalances, members: renderMembers, summary: renderSummary, chase: renderChase};
+  if (renders[p]) renders[p]();
 }
-function renderCurrentPage() { showPage(currentPage); }
 
-// ── Modals ───────────────────────────────────────────────────────────────────
-function openModal(m) {
-  $("modal-overlay").style.display = "flex";
-  document.querySelectorAll(".modal").forEach(el => el.style.display = "none");
-  if (m === "trip-settings") {
-    $("ts-name").value = S.trip.name; $("ts-start").value = S.trip.start || "";
-    $("ts-end").value = S.trip.end || ""; $("ts-dest").value = S.trip.destination || "";
-    $("ts-currency").value = S.trip.currency || "GBP";
-    $("ts-trip-id").textContent = S.trip.id;
-    $("modal-trip-settings").style.display = "block";
-  }
-  if (m === "add-member") {
-    $("member-modal-title").innerHTML = "<i class="ti ti-user-plus"></i> Add member";
-    $("am-id").value = ""; $("am-name").value = ""; $("am-email").value = ""; $("am-wa").value = ""; $("am-role").value = "member";
-    $("am-btn").textContent = "Add member";
-    $("modal-member").style.display = "block";
-  }
-  if (m === "add-expense") {
-    $("ae-id").value = ""; $("ae-modal-title").innerHTML = "<i class="ti ti-receipt"></i> Add expense";
-    $("ae-save-btn").textContent = "Add expense";
-    $("ae-date").value = new Date().toISOString().slice(0, 10);
-    $("ae-paidby").innerHTML = S.members.map(mb => `<option value="${mb.id}">${mb.name}</option>`).join("");
-    $("ae-split").innerHTML = S.members.map(mb => `<div class="checkbox-row"><input type="checkbox" id="sp-${mb.id}" value="${mb.id}"><label for="sp-${mb.id}">${mb.name}</label></div>`).join("");
-    ["ae-desc", "ae-amount", "ae-location", "ae-notes"].forEach(id => $(id).value = "");
-    const cs = $("ae-currency"); if (cs) cs.value = base();
-    $("fx-preview").style.display = "none"; $("ae-receipt-preview").innerHTML = "";
-    $("modal-add-expense").style.display = "block";
-  }
+// =============================================================================
+// MODAL ENGINE (single modal container, content injected by JS)
+// =============================================================================
+function showModal(html) {
+  $('modalInner').innerHTML = html;
+  $('overlay').style.display = 'flex';
 }
-function closeModal() { $("modal-overlay").style.display = "none"; document.querySelectorAll(".modal").forEach(el => el.style.display = "none"); }
-function overlayClick(e) { if (e.target === $("modal-overlay")) closeModal(); }
+function closeModal() {
+  $('overlay').style.display = 'none';
+  $('modalInner').innerHTML = '';
+}
+function overlayClick(e) { if (e.target === $('overlay')) closeModal(); }
 
-// ── Trip settings ────────────────────────────────────────────────────────────
-async function saveTripSettings() {
-  S.trip.name = $("ts-name").value.trim() || S.trip.name;
-  S.trip.start = $("ts-start").value; S.trip.end = $("ts-end").value;
-  S.trip.destination = $("ts-dest").value.trim(); S.trip.currency = $("ts-currency").value;
-  setSyncStatus("syncing");
+// =============================================================================
+// SETTINGS MODAL
+// =============================================================================
+function openSettingsModal() {
+  showModal(
+    '<div class="modal-handle"></div>' +
+    '<div class="modal-title"><i class="ti ti-settings"></i> Trip settings</div>' +
+    '<div class="form-group"><label>Trip name</label><input id="tsName" value="' + esc(T.name) + '"></div>' +
+    '<div class="row2"><div class="form-group"><label>Start</label><input type="date" id="tsStart" value="' + esc(T.start) + '"></div>' +
+    '<div class="form-group"><label>End</label><input type="date" id="tsEnd" value="' + esc(T.end) + '"></div></div>' +
+    '<div class="form-group"><label>Destination</label><input id="tsDest" value="' + esc(T.destination) + '"></div>' +
+    '<div class="form-group"><label>Currency</label>' + currencySelect('tsCurr', T.currency) + '</div>' +
+    '<div class="info-box blue"><i class="ti ti-share"></i><div><strong>Trip ID:</strong> <span style="font-family:monospace;font-size:11px">' + T.id + '</span><br>Share this with your group so they can join.</div></div>' +
+    '<div class="flex-row" style="justify-content:flex-end;gap:8px;margin-top:8px">' +
+    '<button class="btn" onclick="closeModal()">Cancel</button>' +
+    '<button class="btn primary" onclick="saveSettings()">Save</button></div>'
+  );
+}
+async function saveSettings() {
+  T.name        = $('tsName').value.trim() || T.name;
+  T.start       = $('tsStart').value;
+  T.end         = $('tsEnd').value;
+  T.destination = $('tsDest').value.trim();
+  T.currency    = $('tsCurr').value;
+  setSyncing('busy');
   try {
-    await dbUpdate("trips", { name: S.trip.name, destination: S.trip.destination, start_date: S.trip.start, end_date: S.trip.end, currency: S.trip.currency }, { id: "eq." + S.trip.id });
-    setSyncStatus("ok"); closeModal(); initApp(); toast("Settings saved.");
-  } catch(e) { setSyncStatus("error"); toast("Save failed"); }
+    await dbPatch('trips', {name:T.name, destination:T.destination, start_date:T.start, end_date:T.end, currency:T.currency}, {id:'eq.'+T.id});
+    setSyncing('ok'); closeModal(); initAppUI(); toast('Saved.');
+  } catch(e) { setSyncing('err'); toast('Save failed'); }
 }
 
-// ── FX Rates ─────────────────────────────────────────────────────────────────
+// =============================================================================
+// FX MODAL
+// =============================================================================
 function openFxModal() {
   const b = base();
-  $("fx-base-lbl").textContent = b;
-  $("fx-modal-body").innerHTML = Object.keys(SYMS).filter(c => c !== b).map(c => `
-    <div style="display:flex;align-items:center;justify-content:space-between;padding:8px 0;border-bottom:0.5px solid var(--border);font-size:13px">
-      <label style="color:var(--text);margin:0">1 ${b} = ? ${c} <span style="color:var(--text2);font-size:11px">(${CURNAMES[c] || c})</span></label>
-      <input type="number" id="fxr-${c}" value="${(S.fxRates[c] || 1).toFixed(2)}" min="0" step="0.01" style="width:110px;text-align:right">
-    </div>`).join("");
-  $("modal-overlay").style.display = "flex";
-  document.querySelectorAll(".modal").forEach(el => el.style.display = "none");
-  $("modal-fx").style.display = "block";
-}
-async function saveFxRates() {
-  const b = base();
-  Object.keys(SYMS).filter(c => c !== b).forEach(c => {
-    const v = parseFloat(document.getElementById("fxr-" + c)?.value);
-    if (!isNaN(v) && v > 0) S.fxRates[c] = v;
+  let rows = '';
+  CURRENCIES.filter(c => c !== b).forEach(c => {
+    rows += '<div style="display:flex;align-items:center;justify-content:space-between;padding:8px 0;border-bottom:0.5px solid var(--border);font-size:13px">' +
+      '<span>1 ' + b + ' = ? ' + c + ' <span style="color:var(--text2);font-size:11px">(' + CURNAMES[c] + ')</span></span>' +
+      '<input type="number" id="fx_' + c + '" value="' + (FX[c] || 1).toFixed(2) + '" min="0" step="0.01" style="width:110px;text-align:right"></div>';
   });
-  setSyncStatus("syncing");
+  showModal(
+    '<div class="modal-handle"></div>' +
+    '<div class="modal-title"><i class="ti ti-arrows-exchange"></i> Exchange rates</div>' +
+    '<p style="font-size:13px;color:var(--text2);margin-bottom:10px">1 ' + b + ' = how many of each currency?</p>' +
+    '<div class="info-box amber"><i class="ti ti-bulb"></i> Google "GBP to COP" — enter the number shown, e.g. 5200</div>' +
+    rows +
+    '<div style="display:flex;justify-content:flex-end;gap:8px;margin-top:14px">' +
+    '<button class="btn" onclick="closeModal()">Cancel</button>' +
+    '<button class="btn primary" onclick="saveFx()">Save rates</button></div>'
+  );
+}
+async function saveFx() {
+  const b = base();
+  CURRENCIES.filter(c => c !== b).forEach(c => {
+    const el = $('fx_' + c); if (!el) return;
+    const v = parseFloat(el.value);
+    if (!isNaN(v) && v > 0) FX[c] = v;
+  });
+  setSyncing('busy');
   try {
-    await dbUpdate("trips", { fx_rates: S.fxRates }, { id: "eq." + S.trip.id });
-    setSyncStatus("ok"); closeModal(); toast("Rates saved!");
-  } catch(e) { setSyncStatus("error"); toast("Save failed"); }
+    await dbPatch('trips', {fx_rates: FX}, {id: 'eq.' + T.id});
+    setSyncing('ok'); closeModal(); toast('Rates saved!');
+  } catch(e) { setSyncing('err'); toast('Save failed'); }
 }
 function updateFxPreview() {
-  const amount = parseFloat($("ae-amount").value);
-  const cur = $("ae-currency").value;
-  const box = $("fx-preview"), txt = $("fx-preview-text");
-  if (!cur || cur === base() || isNaN(amount) || amount <= 0) { box.style.display = "none"; return; }
-  const rate = S.fxRates[cur];
-  if (!rate) { box.style.display = "none"; return; }
-  txt.textContent = fmtForeign(amount, cur) + " = " + fmtBase(toBase(amount, cur)) + " (1 " + base() + " = " + rate.toFixed(2) + " " + cur + ")";
-  box.style.display = "flex";
+  const amount = parseFloat($('aeAmount') ? $('aeAmount').value : 0);
+  const cur    = $('aeCurrency') ? $('aeCurrency').value : base();
+  const box    = $('fxPreview');
+  if (!box) return;
+  if (!cur || cur === base() || isNaN(amount) || amount <= 0) { box.style.display = 'none'; return; }
+  const rate = FX[cur];
+  if (!rate) { box.style.display = 'none'; return; }
+  box.style.display = 'flex';
+  box.querySelector('span').textContent = fmtFgn(amount, cur) + ' = ' + fmtBase(toBase(amount, cur)) + '   (1 ' + base() + ' = ' + rate.toFixed(2) + ' ' + cur + ')';
 }
 
-// ── Members ───────────────────────────────────────────────────────────────────
-function openEditMember(id) {
-  const m = S.members.find(mb => mb.id === id); if (!m) return;
-  $("member-modal-title").innerHTML = "<i class="ti ti-edit"></i> Edit member";
-  $("am-id").value = m.id; $("am-name").value = m.name; $("am-email").value = m.email || "";
-  $("am-wa").value = m.wa || ""; $("am-role").value = m.role || "member";
-  $("am-btn").textContent = "Save changes";
-  $("modal-overlay").style.display = "flex";
-  document.querySelectorAll(".modal").forEach(el => el.style.display = "none");
-  $("modal-member").style.display = "block";
+// =============================================================================
+// TRIPS MODAL
+// =============================================================================
+function openTripsModal() {
+  let rows = ALL_TRIPS.length ? ALL_TRIPS.map(tr => {
+    const cur = T && tr.id === T.id;
+    return '<div class="card card-click" style="' + (cur ? 'border-color:var(--blue)' : '') + '" onclick="switchTrip('' + tr.id + '')">' +
+      '<div class="row-between"><div><div style="font-weight:600">' + esc(tr.name) + ' ' + (cur ? '<span class="badge blue" style="font-size:10px">current</span>' : '') + '</div>' +
+      '<div style="font-size:12px;color:var(--text2)">' + esc(tr.destination || '') + ' · ' + (tr.currency || '') + '</div></div>' +
+      (!cur ? '<button class="btn sm danger" onclick="event.stopPropagation();deleteTrip('' + tr.id + '')"><i class="ti ti-trash"></i></button>' : '') +
+      '</div></div>';
+  }).join('') : '<div class="empty" style="padding:20px 0"><i class="ti ti-map-off"></i>No trips</div>';
+
+  showModal(
+    '<div class="modal-handle"></div>' +
+    '<div class="modal-title"><i class="ti ti-map-2"></i> My trips</div>' +
+    rows + '<hr style="margin:14px 0">' +
+    '<button class="btn primary wide" onclick="startNewTrip()"><i class="ti ti-plus"></i> Create new trip</button>'
+  );
 }
-async function saveMember() {
-  const editId = $("am-id").value;
-  const name = $("am-name").value.trim();
-  if (!name) { alert("Please enter a name."); return; }
-  const data = { name, email: $("am-email").value.trim(), whatsapp: $("am-wa").value.trim(), role: $("am-role").value };
-  setSyncStatus("syncing");
+async function switchTrip(id) { closeModal(); await loadTrip(id); }
+async function deleteTrip(id) {
+  const tr = ALL_TRIPS.find(x => x.id === id);
+  if (!confirm('Delete trip "' + (tr ? tr.name : id) + '"? Cannot be undone.')) return;
+  try {
+    await dbDelete('trips', {id: 'eq.' + id});
+    ALL_TRIPS = ALL_TRIPS.filter(x => x.id !== id);
+    saveLocal(); openTripsModal(); toast('Trip deleted.');
+  } catch(e) { toast('Delete failed'); }
+}
+function startNewTrip() {
+  closeModal();
+  T = null; MEMBERS = []; EXPENSES = []; FX = {};
+  $('syncBar').style.display = 'none'; $('topbar').style.display = 'none'; $('mainNav').style.display = 'none';
+  document.querySelectorAll('.page').forEach(el => el.classList.remove('active'));
+  $('page-setup').classList.add('active');
+  ['sName','sDest','sStart','sEnd','sYourName','sYourEmail','sYourWa','joinCode'].forEach(id => { const el=$(id); if(el) el.value=''; });
+}
+
+// =============================================================================
+// MEMBER MODAL
+// =============================================================================
+function openMemberModal(id) {
+  const m = id ? getMember(id) : null;
+  showModal(
+    '<div class="modal-handle"></div>' +
+    '<div class="modal-title"><i class="ti ti-' + (m ? 'edit' : 'user-plus') + '"></i> ' + (m ? 'Edit' : 'Add') + ' member</div>' +
+    '<div class="form-group"><label>Full name</label><input id="amName" value="' + esc(m ? m.name : '') + '" placeholder="Full name"></div>' +
+    '<div class="form-group"><label>Email</label><input type="email" id="amEmail" value="' + esc(m ? m.email : '') + '" placeholder="email@example.com"></div>' +
+    '<div class="form-group"><label>WhatsApp</label><input id="amWa" value="' + esc(m ? m.wa : '') + '" placeholder="+44 7700 000000"></div>' +
+    '<div class="form-group"><label>Role</label><select id="amRole">' +
+    '<option value="member"' + (!m || m.role !== 'admin' ? ' selected' : '') + '>Member</option>' +
+    '<option value="admin"' + (m && m.role === 'admin' ? ' selected' : '') + '>Admin</option></select></div>' +
+    '<div class="flex-row" style="justify-content:flex-end;gap:8px;margin-top:8px">' +
+    '<button class="btn" onclick="closeModal()">Cancel</button>' +
+    '<button class="btn primary" onclick="saveMember('' + (id || '') + '')">' + (m ? 'Save' : 'Add member') + '</button></div>'
+  );
+}
+async function saveMember(editId) {
+  const name = $('amName').value.trim();
+  if (!name) { alert('Please enter a name.'); return; }
+  const data = {name: name, email: $('amEmail').value.trim(), whatsapp: $('amWa').value.trim(), role: $('amRole').value};
+  setSyncing('busy');
   try {
     if (editId) {
-      await dbUpdate("members", data, { id: "eq." + editId });
-      const m = S.members.find(mb => mb.id === editId);
+      await dbPatch('members', data, {id: 'eq.' + editId});
+      const m = MEMBERS.find(x => x.id === editId);
       if (m) { m.name = name; m.email = data.email; m.wa = data.whatsapp; m.role = data.role; }
-      toast("Member updated.");
+      toast('Member updated.');
     } else {
       const newId = uid();
-      await dbInsert("members", { id: newId, trip_id: S.trip.id, ...data });
-      S.members.push({ id: newId, ...data, wa: data.whatsapp });
-      toast("Member added.");
+      await dbPost('members', Object.assign({id: newId, trip_id: T.id}, data));
+      MEMBERS.push({id: newId, name: name, email: data.email, wa: data.whatsapp, role: data.role});
+      toast('Member added.');
     }
-    setSyncStatus("ok"); closeModal(); renderMembers(); renderDashboard();
-  } catch(e) { setSyncStatus("error"); toast("Save failed"); }
+    setSyncing('ok'); closeModal(); renderMembers(); renderDashboard();
+  } catch(e) { setSyncing('err'); toast('Save failed: ' + e.message); }
 }
 async function removeMember(id) {
-  if (!confirm("Remove this member?")) return;
-  setSyncStatus("syncing");
+  if (!confirm('Remove this member?')) return;
+  setSyncing('busy');
   try {
-    await dbDelete("members", { id: "eq." + id });
-    S.members = S.members.filter(m => m.id !== id);
-    setSyncStatus("ok"); renderMembers(); toast("Member removed.");
-  } catch(e) { setSyncStatus("error"); toast("Delete failed"); }
+    await dbDelete('members', {id: 'eq.' + id});
+    MEMBERS = MEMBERS.filter(m => m.id !== id);
+    setSyncing('ok'); renderMembers(); toast('Removed.');
+  } catch(e) { setSyncing('err'); toast('Delete failed'); }
 }
 function renderMembers() {
-  $("members-list").innerHTML = S.members.map((m, i) => `
-    <div class="card">
-      <div class="row-between">
-        <div class="flex-row" style="gap:12px">${avatar(m.name, i, 42)}
-          <div>
-            <div style="font-weight:600">${m.name} <span class="badge ${m.role === "admin" ? "blue" : "gray"}">${m.role}</span></div>
-            <div class="member-detail">
-              <span><i class="ti ti-mail" style="font-size:13px"></i> ${m.email || "<em style=opacity:0.5>no email</em>"}</span>
-              <span><i class="ti ti-brand-whatsapp" style="font-size:13px"></i> ${m.wa || "<em style=opacity:0.5>no WhatsApp</em>"}</span>
-            </div>
-          </div>
-        </div>
-        <div class="flex-row" style="gap:6px;flex-shrink:0">
-          <button class="btn sm" onclick="openEditMember('${m.id}')"><i class="ti ti-edit"></i> Edit</button>
-          ${i > 0 ? `<button class="btn sm danger" onclick="removeMember('${m.id}')"><i class="ti ti-trash"></i></button>` : ""}
-        </div>
-      </div>
-    </div>`).join("") || "<div class="empty"><i class="ti ti-users"></i>No members yet</div>";
+  $('membersList').innerHTML = MEMBERS.map((m, i) =>
+    '<div class="card"><div class="row-between">' +
+    '<div class="flex-row" style="gap:12px">' + avatar(m.name, i, 42) +
+    '<div><div style="font-weight:600">' + esc(m.name) + ' <span class="badge ' + (m.role === 'admin' ? 'blue' : 'gray') + '">' + m.role + '</span></div>' +
+    '<div class="member-meta">' +
+    '<span><i class="ti ti-mail" style="font-size:13px"></i> ' + (m.email || '<em style="opacity:0.5">no email</em>') + '</span>' +
+    '<span><i class="ti ti-brand-whatsapp" style="font-size:13px"></i> ' + (m.wa || '<em style="opacity:0.5">no WhatsApp</em>') + '</span>' +
+    '</div></div></div>' +
+    '<div class="flex-row" style="gap:6px;flex-shrink:0">' +
+    '<button class="btn sm" onclick="openMemberModal('' + m.id + '')"><i class="ti ti-edit"></i> Edit</button>' +
+    (i > 0 ? '<button class="btn sm danger" onclick="removeMember('' + m.id + '')"><i class="ti ti-trash"></i></button>' : '') +
+    '</div></div></div>'
+  ).join('') || '<div class="empty"><i class="ti ti-users"></i>No members yet</div>';
 }
 
-// ── Expenses ───────────────────────────────────────────────────────────────────
-function selAll(v) { document.querySelectorAll("#ae-split input[type=checkbox]").forEach(c => c.checked = v); }
-function previewReceipt() {
-  const f = $("ae-receipt").files[0]; const pv = $("ae-receipt-preview");
-  if (!f) { pv.innerHTML = ""; return; }
-  if (f.type.startsWith("image/")) {
-    const r = new FileReader();
-    r.onload = e => pv.innerHTML = `<img src="${e.target.result}" style="width:80px;height:80px;object-fit:cover;border-radius:var(--radius);border:0.5px solid var(--border)" alt="Receipt">`;
-    r.readAsDataURL(f);
-  }
-}
+// =============================================================================
+// EXPENSE MODAL
+// =============================================================================
+function openExpenseModal(id) {
+  const exp = id ? EXPENSES.find(e => e.id === id) : null;
 
-async function saveExpense() {
-  const editId = $("ae-id").value;
-  const desc = $("ae-desc").value.trim();
-  const rawAmount = parseFloat($("ae-amount").value);
-  if (!desc || isNaN(rawAmount) || rawAmount <= 0) { alert("Please enter a description and valid amount."); return; }
-  const inputCur = $("ae-currency").value || base();
+  let splitHtml = MEMBERS.map(m =>
+    '<div class="chk-row"><input type="checkbox" id="sp_' + m.id + '" value="' + m.id + '"' +
+    (!exp || exp.splits[m.id] ? ' checked' : '') + '>' +
+    '<label for="sp_' + m.id + '">' + esc(m.name) + '</label></div>'
+  ).join('');
+
+  let payerHtml = MEMBERS.map(m =>
+    '<option value="' + m.id + '"' + (exp && exp.paidBy === m.id ? ' selected' : '') + '>' + esc(m.name) + '</option>'
+  ).join('');
+
+  const cats = ['Food & drink','Accommodation','Transport','Activities','Shopping','Other'];
+  let catHtml = cats.map(c =>
+    '<option' + (exp && exp.category === c ? ' selected' : '') + '>' + c + '</option>'
+  ).join('');
+
+  showModal(
+    '<div class="modal-handle"></div>' +
+    '<div class="modal-title"><i class="ti ti-' + (exp ? 'edit' : 'receipt') + '"></i> ' + (exp ? 'Edit' : 'Add') + ' expense</div>' +
+    '<div class="form-group"><label>Description</label><input id="aeDesc" value="' + esc(exp ? exp.desc : '') + '" placeholder="e.g. Dinner at Nobu"></div>' +
+    '<div class="row2">' +
+    '<div class="form-group"><label>Amount</label><input type="number" id="aeAmount" value="' + (exp ? exp.origAmount : '') + '" placeholder="0.00" min="0" step="0.01" oninput="updateFxPreview()"></div>' +
+    '<div class="form-group"><label>Currency paid in</label>' + currencySelect('aeCurrency', exp ? exp.origCur : base(), true) + '</div>' +
+    '</div>' +
+    '<div class="info-box blue" id="fxPreview" style="display:none"><i class="ti ti-arrows-exchange"></i><span></span></div>' +
+    '<div class="form-group"><label>Category</label><select id="aeCat">' + catHtml + '</select></div>' +
+    '<div class="row2">' +
+    '<div class="form-group"><label>Date</label><input type="date" id="aeDate" value="' + esc(exp ? exp.date : new Date().toISOString().slice(0,10)) + '"></div>' +
+    '<div class="form-group"><label>Location</label><input id="aeLoc" value="' + esc(exp ? exp.location : '') + '" placeholder="e.g. Bogota"></div>' +
+    '</div>' +
+    '<div class="form-group"><label>Paid by</label><select id="aePaidBy">' + payerHtml + '</select></div>' +
+    '<div class="form-group"><label>Split between</label>' +
+    '<div style="border:0.5px solid var(--border2);border-radius:var(--radius);padding:4px 10px;max-height:180px;overflow-y:auto">' + splitHtml + '</div>' +
+    '<div class="flex-row" style="margin-top:7px">' +
+    '<button class="btn sm" onclick="selAll(true)">Select all</button>' +
+    '<button class="btn sm" onclick="selAll(false)">Clear all</button></div></div>' +
+    '<div class="form-group"><label>Notes</label><textarea id="aeNotes">' + esc(exp ? exp.notes : '') + '</textarea></div>' +
+    '<div class="flex-row" style="justify-content:flex-end;gap:8px;margin-top:8px">' +
+    '<button class="btn" onclick="closeModal()">Cancel</button>' +
+    '<button class="btn primary" onclick="saveExpense('' + (id || '') + '')">' + (exp ? 'Save changes' : 'Add expense') + '</button></div>'
+  );
+  updateFxPreview();
+}
+function selAll(v) { document.querySelectorAll('.chk-row input[type=checkbox]').forEach(c => c.checked = v); }
+
+async function saveExpense(editId) {
+  const desc      = $('aeDesc').value.trim();
+  const rawAmount = parseFloat($('aeAmount').value);
+  const inputCur  = $('aeCurrency').value;
+  if (!desc || isNaN(rawAmount) || rawAmount <= 0) { alert('Please enter a description and valid amount.'); return; }
+  const splitIds = Array.from(document.querySelectorAll('.chk-row input[type=checkbox]:checked')).map(c => c.value);
+  if (!splitIds.length) { alert('Select at least one person to split with.'); return; }
   const amountBase = toBase(rawAmount, inputCur);
-  const splitIds = Array.from(document.querySelectorAll("#ae-split input[type=checkbox]:checked")).map(c => c.value);
-  if (!splitIds.length) { alert("Select at least one person to split with."); return; }
-  const paidBy = $("ae-paidby").value;
-  const img = $("ae-receipt-preview").querySelector("img");
-
-  let splits = {};
+  const per = amountBase / splitIds.length;
+  const paidBy = $('aePaidBy').value;
+  const splits = {};
   if (editId) {
-    const existing = S.expenses.find(e => e.id === editId);
-    const per = amountBase / splitIds.length;
-    splitIds.forEach(id => { splits[id] = { owed: per, paid: existing?.splits[id]?.paid || false }; });
-    if (splits[paidBy]) splits[paidBy].paid = true;
+    const existing = EXPENSES.find(e => e.id === editId);
+    splitIds.forEach(id => { splits[id] = {owed: per, paid: (existing && existing.splits[id] ? existing.splits[id].paid : false)}; });
   } else {
-    const per = amountBase / splitIds.length;
-    splitIds.forEach(id => splits[id] = { owed: per, paid: false });
-    if (splits[paidBy]) splits[paidBy].paid = true;
+    splitIds.forEach(id => { splits[id] = {owed: per, paid: false}; });
   }
+  if (splits[paidBy]) splits[paidBy].paid = true;
 
   const dbRow = {
-    trip_id: S.trip.id, description: desc,
-    amount: amountBase, original_amount: rawAmount,
-    original_currency: inputCur,
-    fx_rate_used: inputCur === base() ? 1 : (S.fxRates[inputCur] || 1),
-    category: $("ae-cat").value, date: $("ae-date").value,
-    location: $("ae-location").value.trim(), paid_by: paidBy,
-    splits, notes: $("ae-notes").value.trim()
+    trip_id: T.id, description: desc,
+    amount: amountBase, original_amount: rawAmount, original_currency: inputCur,
+    fx_rate_used: inputCur === base() ? 1 : (FX[inputCur] || 1),
+    category: $('aeCat').value, date: $('aeDate').value,
+    location: $('aeLoc').value.trim(), paid_by: paidBy, splits: splits,
+    notes: $('aeNotes').value.trim()
   };
 
-  setSyncStatus("syncing");
+  setSyncing('busy');
   try {
     if (editId) {
-      await dbUpdate("expenses", dbRow, { id: "eq." + editId });
-      const idx = S.expenses.findIndex(e => e.id === editId);
-      if (idx >= 0) S.expenses[idx] = { id: editId, ...dbToExpense({ id: editId, ...dbRow, created_at: new Date().toISOString() }) };
-      toast("Expense updated.");
+      await dbPatch('expenses', dbRow, {id: 'eq.' + editId});
+      const idx = EXPENSES.findIndex(e => e.id === editId);
+      if (idx >= 0) EXPENSES[idx] = rowToExpense(Object.assign({id: editId, created_at: new Date().toISOString()}, dbRow));
+      toast('Expense updated.');
     } else {
       const newId = uid();
       dbRow.id = newId;
-      await dbInsert("expenses", dbRow);
-      S.expenses.unshift(dbToExpense({ ...dbRow, created_at: new Date().toISOString() }));
-      toast("Expense added.");
+      await dbPost('expenses', dbRow);
+      EXPENSES.unshift(rowToExpense(Object.assign({created_at: new Date().toISOString()}, dbRow)));
+      toast('Expense added.');
     }
-    setSyncStatus("ok"); closeModal(); renderDashboard(); renderExpenses();
-  } catch(e) { setSyncStatus("error"); toast("Save failed: " + e.message); }
-}
-
-function openEditExpense(id) {
-  const exp = S.expenses.find(e => e.id === id); if (!exp) return;
-  closeModal();
-  $("modal-overlay").style.display = "flex";
-  document.querySelectorAll(".modal").forEach(el => el.style.display = "none");
-  $("ae-modal-title").innerHTML = "<i class="ti ti-edit"></i> Edit expense";
-  $("ae-save-btn").textContent = "Save changes";
-  $("ae-id").value = exp.id; $("ae-desc").value = exp.desc;
-  $("ae-amount").value = exp.originalAmount || exp.amount;
-  $("ae-location").value = exp.location || ""; $("ae-notes").value = exp.notes || "";
-  $("ae-cat").value = exp.category || "Food & drink"; $("ae-date").value = exp.date || "";
-  const cs = $("ae-currency"); if (cs) cs.value = exp.originalCurrency || base();
-  $("ae-paidby").innerHTML = S.members.map(mb => `<option value="${mb.id}">${mb.name}</option>`).join("");
-  $("ae-paidby").value = exp.paidBy;
-  $("ae-split").innerHTML = S.members.map(mb => `<div class="checkbox-row"><input type="checkbox" id="sp-${mb.id}" value="${mb.id}" ${exp.splits[mb.id] ? "checked" : ""}><label for="sp-${mb.id}">${mb.name}</label></div>`).join("");
-  $("ae-receipt-preview").innerHTML = "";
-  $("fx-preview").style.display = "none";
-  $("modal-add-expense").style.display = "block";
-  updateFxPreview();
+    setSyncing('ok'); closeModal(); renderDashboard(); renderExpenses();
+  } catch(e) { setSyncing('err'); toast('Save failed: ' + e.message); }
 }
 
 async function deleteExpense() {
-  if (!confirm("Delete this expense?")) return;
-  setSyncStatus("syncing");
+  if (!confirm('Delete this expense?')) return;
+  setSyncing('busy');
   try {
-    await dbDelete("expenses", { id: "eq." + S.curExpId });
-    S.expenses = S.expenses.filter(e => e.id !== S.curExpId);
-    setSyncStatus("ok"); closeModal(); renderDashboard(); renderExpenses(); toast("Expense deleted.");
-  } catch(e) { setSyncStatus("error"); toast("Delete failed"); }
+    await dbDelete('expenses', {id: 'eq.' + CUR_EXP_ID});
+    EXPENSES = EXPENSES.filter(e => e.id !== CUR_EXP_ID);
+    setSyncing('ok'); closeModal(); renderDashboard(); renderExpenses(); toast('Deleted.');
+  } catch(e) { setSyncing('err'); toast('Delete failed'); }
 }
 
 async function togglePaid(expId, memberId) {
-  const exp = S.expenses.find(e => e.id === expId); if (!exp || !exp.splits[memberId]) return;
+  const exp = EXPENSES.find(e => e.id === expId);
+  if (!exp || !exp.splits[memberId]) return;
   exp.splits[memberId].paid = !exp.splits[memberId].paid;
-  setSyncStatus("syncing");
+  setSyncing('busy');
   try {
-    await dbUpdate("expenses", { splits: exp.splits }, { id: "eq." + expId });
-    setSyncStatus("ok"); showExpDetail(expId); renderDashboard(); renderExpenses(); renderChase();
-    toast(exp.splits[memberId].paid ? "Marked as paid." : "Marked as unpaid.");
-  } catch(e) { exp.splits[memberId].paid = !exp.splits[memberId].paid; setSyncStatus("error"); toast("Update failed"); }
+    await dbPatch('expenses', {splits: exp.splits}, {id: 'eq.' + expId});
+    setSyncing('ok'); showExpDetail(expId); renderDashboard(); renderExpenses(); renderChase();
+    toast(exp.splits[memberId].paid ? 'Marked paid.' : 'Marked unpaid.');
+  } catch(e) {
+    exp.splits[memberId].paid = !exp.splits[memberId].paid;
+    setSyncing('err'); toast('Update failed');
+  }
 }
 
+// =============================================================================
+// EXPENSE CARD & DETAIL
+// =============================================================================
 function expCard(exp) {
   const payer = getMember(exp.paidBy);
   const n = Object.keys(exp.splits).length;
   const unpaid = Object.values(exp.splits).filter(s => !s.paid && s.owed > 0).length;
   const done = unpaid === 0;
-  return `<div class="card card-clickable" onclick="showExpDetail('${exp.id}')">
-    <div class="row-between">
-      <div class="flex-row" style="gap:11px">
-        <div class="cat-icon"><i class="ti ${CATICON[exp.category] || "ti-receipt"}"></i></div>
-        <div>
-          <div style="font-weight:600;margin-bottom:2px">${exp.desc}</div>
-          <div style="font-size:12px;color:var(--text2)">${[exp.date, exp.location, exp.category].filter(Boolean).join(" · ")}</div>
-          <div style="font-size:12px;color:var(--text2)">Paid by ${payer.name} · ${n} way${n !== 1 ? "s" : ""}</div>
-          ${exp.originalCurrency && exp.originalCurrency !== base() ? `<div style="font-size:11px;color:var(--blue-txt);margin-top:2px"><i class="ti ti-arrows-exchange"></i> ${fmtForeign(exp.originalAmount || exp.amount, exp.originalCurrency)} → ${fmtBase(exp.amount)}</div>` : ""}
-        </div>
-      </div>
-      <div style="text-align:right;flex-shrink:0;margin-left:8px">
-        <div style="font-size:16px;font-weight:600">${fmtBase(exp.amount)}</div>
-        <span class="badge ${done ? "green" : "amber"}">${done ? "Settled" : unpaid + " pending"}</span>
-      </div>
-    </div>
-  </div>`;
-}
-
-function renderExpenses() {
-  const cat = $("f-cat").value, st = $("f-status").value;
-  let exps = S.expenses.slice();
-  if (cat) exps = exps.filter(e => e.category === cat);
-  if (st === "open") exps = exps.filter(e => Object.values(e.splits).some(s => !s.paid));
-  if (st === "settled") exps = exps.filter(e => Object.values(e.splits).every(s => s.paid));
-  $("expenses-list").innerHTML = exps.length ? exps.map(expCard).join("") : "<div class="empty"><i class="ti ti-receipt"></i>No expenses match your filters</div>";
+  const fxLine = (exp.origCur && exp.origCur !== base())
+    ? '<div style="font-size:11px;color:var(--blue-txt);margin-top:2px"><i class="ti ti-arrows-exchange"></i> ' + fmtFgn(exp.origAmount, exp.origCur) + ' → ' + fmtBase(exp.amount) + '</div>'
+    : '';
+  return '<div class="card card-click" onclick="showExpDetail('' + exp.id + '')">' +
+    '<div class="row-between"><div class="flex-row" style="gap:11px">' +
+    '<div class="cat-icon"><i class="ti ' + (CATICON[exp.category] || 'ti-receipt') + '"></i></div>' +
+    '<div><div style="font-weight:600;margin-bottom:2px">' + esc(exp.desc) + '</div>' +
+    '<div style="font-size:12px;color:var(--text2)">' + [exp.date, exp.location, exp.category].filter(Boolean).join(' · ') + '</div>' +
+    '<div style="font-size:12px;color:var(--text2)">Paid by ' + esc(payer.name) + ' · ' + n + ' way' + (n !== 1 ? 's' : '') + '</div>' +
+    fxLine + '</div></div>' +
+    '<div style="text-align:right;flex-shrink:0;margin-left:8px">' +
+    '<div style="font-size:16px;font-weight:600">' + fmtBase(exp.amount) + '</div>' +
+    '<span class="badge ' + (done ? 'green' : 'amber') + '">' + (done ? 'Settled' : unpaid + ' pending') + '</span>' +
+    '</div></div></div>';
 }
 
 function showExpDetail(id) {
-  S.curExpId = id;
-  const exp = S.expenses.find(e => e.id === id); if (!exp) return;
+  CUR_EXP_ID = id;
+  const exp = EXPENSES.find(e => e.id === id); if (!exp) return;
   const payer = getMember(exp.paidBy);
+  const fxInfo = (exp.origCur && exp.origCur !== base())
+    ? '<div class="info-box blue"><i class="ti ti-arrows-exchange"></i>Originally ' + fmtFgn(exp.origAmount, exp.origCur) + ' at 1 ' + base() + ' = ' + exp.fxUsed.toFixed(2) + ' ' + exp.origCur + '</div>'
+    : '';
   const lines = Object.entries(exp.splits).map(([mid, s]) => {
     const mb = getMember(mid); const isPayer = mid === exp.paidBy;
-    return `<div class="split-item">
-      <div class="flex-row" style="gap:8px">${avatar(mb.name, getMemberIdx(mid))}<span>${mb.name}${isPayer ? " <span class="badge gray" style="font-size:10px">payer</span>" : ""}</span></div>
-      <div class="flex-row" style="gap:8px">
-        <span style="font-weight:600">${fmtBase(s.owed)}</span>
-        ${!isPayer ? `<button class="btn sm ${s.paid ? "" : "success"}" onclick="togglePaid('${id}','${mid}')">${s.paid ? "<i class="ti ti-x"></i> Unpay" : "<i class="ti ti-check"></i> Paid"}</button>` : "<span class="badge blue">Payer</span>"}
-      </div>
-    </div>`;
-  }).join("");
-  $("exp-detail-body").innerHTML = `
-    <div class="modal-title">${exp.desc}</div>
-    <div class="row-between" style="margin-bottom:14px">
-      <div><div style="font-size:24px;font-weight:700">${fmtBase(exp.amount)}</div><div style="font-size:12px;color:var(--text2)">${exp.category}</div></div>
-      <div style="text-align:right"><div style="font-size:13px">Paid by <strong>${payer.name}</strong></div><div style="font-size:12px;color:var(--text2)">${[exp.date, exp.location].filter(Boolean).join(" · ")}</div></div>
-    </div>
-    ${exp.originalCurrency && exp.originalCurrency !== base() ? `<div style="background:var(--blue-bg);color:var(--blue-txt);border-radius:8px;padding:8px 12px;font-size:12px;margin-bottom:12px;display:flex;align-items:center;gap:8px"><i class="ti ti-arrows-exchange"></i>Originally ${fmtForeign(exp.originalAmount || exp.amount, exp.originalCurrency)} at 1 ${base()} = ${(exp.fxRateUsed || 1).toFixed(2)} ${exp.originalCurrency}</div>` : ""}
-    ${exp.notes ? `<div style="font-size:13px;color:var(--text2);margin-bottom:14px;font-style:italic;padding:10px;background:var(--bg2);border-radius:var(--radius)">${exp.notes}</div>` : ""}
-    <div style="font-size:13px;font-weight:600;margin-bottom:6px">Split breakdown</div>${lines}`;
-  $("modal-overlay").style.display = "flex";
-  document.querySelectorAll(".modal").forEach(el => el.style.display = "none");
-  $("modal-expense-detail").style.display = "block";
+    return '<div class="split-item">' +
+      '<div class="flex-row" style="gap:8px">' + avatar(mb.name, getMIdx(mid)) + '<span>' + esc(mb.name) + (isPayer ? ' <span class="badge gray" style="font-size:10px">payer</span>' : '') + '</span></div>' +
+      '<div class="flex-row" style="gap:8px"><span style="font-weight:600">' + fmtBase(s.owed) + '</span>' +
+      (!isPayer
+        ? '<button class="btn sm ' + (s.paid ? '' : 'success') + '" onclick="togglePaid('' + id + '','' + mid + '')">' + (s.paid ? '<i class="ti ti-x"></i> Unpay' : '<i class="ti ti-check"></i> Paid') + '</button>'
+        : '<span class="badge blue">Payer</span>') +
+      '</div></div>';
+  }).join('');
+  const notes = exp.notes ? '<div style="font-size:13px;color:var(--text2);margin-bottom:14px;font-style:italic;padding:10px;background:var(--bg2);border-radius:var(--radius)">' + esc(exp.notes) + '</div>' : '';
+  showModal(
+    '<div class="modal-handle"></div>' +
+    '<div class="modal-title">' + esc(exp.desc) + '</div>' +
+    '<div class="row-between" style="margin-bottom:12px">' +
+    '<div><div style="font-size:24px;font-weight:700">' + fmtBase(exp.amount) + '</div><div style="font-size:12px;color:var(--text2)">' + exp.category + '</div></div>' +
+    '<div style="text-align:right"><div style="font-size:13px">Paid by <strong>' + esc(payer.name) + '</strong></div><div style="font-size:12px;color:var(--text2)">' + [exp.date, exp.location].filter(Boolean).join(' · ') + '</div></div>' +
+    '</div>' + fxInfo + notes +
+    '<div style="font-size:13px;font-weight:600;margin-bottom:6px">Split breakdown</div>' + lines +
+    '<div class="flex-row" style="justify-content:flex-end;gap:8px;margin-top:14px">' +
+    '<button class="btn danger sm" onclick="deleteExpense()"><i class="ti ti-trash"></i> Delete</button>' +
+    '<button class="btn sm" onclick="openExpenseModal('' + id + '')"><i class="ti ti-edit"></i> Edit</button>' +
+    '<button class="btn sm" onclick="closeModal()">Close</button></div>'
+  );
 }
 
-// ── Totals ────────────────────────────────────────────────────────────────────
+// =============================================================================
+// TOTALS
+// =============================================================================
 function calcTotals() {
   let total = 0, outstanding = 0;
   const po = {};
-  S.members.forEach(m => { po[m.id] = { owed: 0, paid: 0, expenses: [] }; });
-  S.expenses.forEach(exp => {
+  MEMBERS.forEach(m => { po[m.id] = {owed: 0, paid: 0, expenses: []}; });
+  EXPENSES.forEach(exp => {
     total += exp.amount;
     Object.entries(exp.splits).forEach(([id, s]) => {
       if (id === exp.paidBy) return;
-      if (!po[id]) po[id] = { owed: 0, paid: 0, expenses: [] };
+      if (!po[id]) po[id] = {owed: 0, paid: 0, expenses: []};
       po[id].owed += s.owed;
-      po[id].expenses.push({ desc: exp.desc, amount: s.owed, paid: s.paid });
+      po[id].expenses.push({desc: exp.desc, amount: s.owed, paid: s.paid});
       if (s.paid) po[id].paid += s.owed; else outstanding += s.owed;
     });
   });
-  return { total, outstanding, po };
+  return {total, outstanding, po};
 }
 
-// ── Dashboard ─────────────────────────────────────────────────────────────────
+// =============================================================================
+// RENDER PAGES
+// =============================================================================
+function renderExpenses() {
+  const cat = $('fCat').value, st = $('fStatus').value;
+  let exps = EXPENSES.slice();
+  if (cat) exps = exps.filter(e => e.category === cat);
+  if (st === 'open')    exps = exps.filter(e => Object.values(e.splits).some(s => !s.paid));
+  if (st === 'settled') exps = exps.filter(e => Object.values(e.splits).every(s => s.paid));
+  $('expensesList').innerHTML = exps.length ? exps.map(expCard).join('') : '<div class="empty"><i class="ti ti-receipt"></i>No expenses match</div>';
+}
+
 function renderDashboard() {
-  const { total, outstanding, po } = calcTotals();
+  const {total, outstanding, po} = calcTotals();
   const pct = total > 0 ? Math.round(((total - outstanding) / total) * 100) : 0;
-  $("db-metrics").innerHTML = `
-    <div class="metric"><div class="metric-label">Total spent</div><div class="metric-val">${fmtBase(total)}</div></div>
-    <div class="metric"><div class="metric-label">Outstanding</div><div class="metric-val red">${fmtBase(outstanding)}</div></div>
-    <div class="metric"><div class="metric-label">Settled</div><div class="metric-val green">${fmtBase(total - outstanding)}</div></div>
-    <div class="metric"><div class="metric-label">% settled</div><div class="metric-val ${pct >= 75 ? "green" : pct >= 40 ? "amber" : "red"}">${pct}%</div>
-      <div class="progress-bar"><div class="progress-fill" style="width:${pct}%"></div></div></div>`;
-  const recent = S.expenses.slice(0, 4);
-  $("db-recent").innerHTML = recent.length ? recent.map(expCard).join("") : "<div class="empty"><i class="ti ti-receipt"></i>No expenses yet — tap Add!</div>";
-  $("db-persons").innerHTML = S.members.map((m, i) => {
-    const p = po[m.id] || { owed: 0, paid: 0 }; const unpaid = p.owed - p.paid;
-    return `<div class="card"><div class="row-between">
-      <div class="flex-row" style="gap:10px">${avatar(m.name, i)}<div><div style="font-weight:600">${m.name}</div><div style="font-size:12px;color:var(--text2)">${m.role === "admin" ? "Admin" : "Member"}</div></div></div>
-      <div style="text-align:right"><div style="font-weight:600;color:${unpaid > 0.005 ? "var(--red)" : "var(--green)"}">${unpaid > 0.005 ? fmtBase(unpaid) + " owed" : "All settled"}</div><div style="font-size:12px;color:var(--text2)">${fmtBase(p.owed)} total share</div></div>
-    </div></div>`;
-  }).join("");
+  $('dbMetrics').innerHTML =
+    '<div class="metric"><div class="metric-label">Total spent</div><div class="metric-val">' + fmtBase(total) + '</div></div>' +
+    '<div class="metric"><div class="metric-label">Outstanding</div><div class="metric-val red">' + fmtBase(outstanding) + '</div></div>' +
+    '<div class="metric"><div class="metric-label">Settled</div><div class="metric-val green">' + fmtBase(total - outstanding) + '</div></div>' +
+    '<div class="metric"><div class="metric-label">% settled</div><div class="metric-val ' + (pct >= 75 ? 'green' : pct >= 40 ? 'amber' : 'red') + '">' + pct + '%</div>' +
+    '<div class="progress-bar"><div class="progress-fill" style="width:' + pct + '%"></div></div></div>';
+  $('dbRecent').innerHTML = EXPENSES.slice(0, 4).map(expCard).join('') || '<div class="empty"><i class="ti ti-receipt"></i>No expenses yet — tap Add!</div>';
+  $('dbPersons').innerHTML = MEMBERS.map((m, i) => {
+    const p = po[m.id] || {owed: 0, paid: 0}; const ow = p.owed - p.paid;
+    return '<div class="card"><div class="row-between">' +
+      '<div class="flex-row" style="gap:10px">' + avatar(m.name, i) + '<div><div style="font-weight:600">' + esc(m.name) + '</div><div style="font-size:12px;color:var(--text2)">' + m.role + '</div></div></div>' +
+      '<div style="text-align:right"><div style="font-weight:600;color:' + (ow > 0.005 ? 'var(--red)' : 'var(--green)') + '">' + (ow > 0.005 ? fmtBase(ow) + ' owed' : 'All settled') + '</div>' +
+      '<div style="font-size:12px;color:var(--text2)">' + fmtBase(p.owed) + ' total share</div></div>' +
+      '</div></div>';
+  }).join('');
 }
 
-// ── Balances ──────────────────────────────────────────────────────────────────
 function renderBalances() {
-  const { po } = calcTotals();
-  $("balances-list").innerHTML = S.members.map((m, i) => {
-    const p = po[m.id] || { owed: 0, paid: 0, expenses: [] };
-    const unpaid = p.owed - p.paid;
+  const {po} = calcTotals();
+  $('balancesList').innerHTML = MEMBERS.map((m, i) => {
+    const p = po[m.id] || {owed: 0, paid: 0, expenses: []}; const ow = p.owed - p.paid;
     const items = (p.expenses || []).filter(e => !e.paid && e.amount > 0);
-    return `<div class="card">
-      <div class="row-between" style="margin-bottom:${items.length ? 10 : 0}px">
-        <div class="flex-row" style="gap:10px">${avatar(m.name, i, 38)}<div><div style="font-weight:600">${m.name}</div><div style="font-size:12px;color:var(--text2)">${items.length} outstanding</div></div></div>
-        <div style="font-size:20px;font-weight:700;color:${unpaid > 0.005 ? "var(--red)" : "var(--green)"}">${unpaid > 0.005 ? fmtBase(unpaid) : "Settled"}</div>
-      </div>
-      ${items.length ? `<div style="border-top:0.5px solid var(--border);padding-top:8px">${items.map(e => `<div class="agg-row"><span style="color:var(--text2)">${e.desc}</span><span style="font-weight:600">${fmtBase(e.amount)}</span></div>`).join("")}</div>` : ""}
-    </div>`;
-  }).join("") || "<div class="empty"><i class="ti ti-users"></i>No members yet</div>";
+    return '<div class="card">' +
+      '<div class="row-between" style="margin-bottom:' + (items.length ? 10 : 0) + 'px">' +
+      '<div class="flex-row" style="gap:10px">' + avatar(m.name, i, 38) + '<div><div style="font-weight:600">' + esc(m.name) + '</div><div style="font-size:12px;color:var(--text2)">' + items.length + ' outstanding</div></div></div>' +
+      '<div style="font-size:20px;font-weight:700;color:' + (ow > 0.005 ? 'var(--red)' : 'var(--green)') + '">' + (ow > 0.005 ? fmtBase(ow) : 'Settled') + '</div>' +
+      '</div>' +
+      (items.length ? '<div style="border-top:0.5px solid var(--border);padding-top:8px">' + items.map(e => '<div class="agg-row"><span style="color:var(--text2)">' + esc(e.desc) + '</span><span style="font-weight:600">' + fmtBase(e.amount) + '</span></div>').join('') + '</div>' : '') +
+      '</div>';
+  }).join('') || '<div class="empty"><i class="ti ti-users"></i>No members</div>';
 }
 
-// ── Aggregate ─────────────────────────────────────────────────────────────────
 function setAggTab(t) {
-  S.aggTab = t;
-  document.querySelectorAll(".tab").forEach(b => b.classList.toggle("active", (b.getAttribute("onclick") || "").includes(t)));
-  renderAggregate();
+  AGG_TAB = t;
+  ['person','category','location','date'].forEach(x => { const el = $('tab-' + x); if (el) el.classList.toggle('active', x === t); });
+  renderSummary();
 }
-function renderAggregate() {
-  if (!S.expenses.length) { $("agg-content").innerHTML = "<div class="empty"><i class="ti ti-chart-bar"></i>No expenses yet</div>"; return; }
-  let html = "";
-  if (S.aggTab === "person") {
-    const { po } = calcTotals(); const byPayer = {};
-    S.expenses.forEach(e => { byPayer[e.paidBy] = (byPayer[e.paidBy] || 0) + e.amount; });
-    html = S.members.map((m, i) => {
-      const spent = byPayer[m.id] || 0; const p = po[m.id] || { owed: 0, paid: 0 }; const owes = p.owed - p.paid;
-      return `<div class="card"><div class="row-between"><div class="flex-row" style="gap:9px">${avatar(m.name, i)}<span style="font-weight:600">${m.name}</span></div>
-        <div style="text-align:right;font-size:13px"><div>Paid out: <strong>${fmtBase(spent)}</strong></div><div style="color:${owes > 0.005 ? "var(--red)" : "var(--green)"}">Owes: <strong>${owes > 0.005 ? fmtBase(owes) : "Nothing"}</strong></div></div></div></div>`;
-    }).join("");
+function renderSummary() {
+  if (!EXPENSES.length) { $('aggContent').innerHTML = '<div class="empty"><i class="ti ti-chart-bar"></i>No expenses yet</div>'; return; }
+  let html = '';
+  if (AGG_TAB === 'person') {
+    const {po} = calcTotals(); const byP = {};
+    EXPENSES.forEach(e => { byP[e.paidBy] = (byP[e.paidBy] || 0) + e.amount; });
+    html = MEMBERS.map((m, i) => {
+      const sp = byP[m.id] || 0; const p = po[m.id] || {owed:0,paid:0}; const ow = p.owed - p.paid;
+      return '<div class="card"><div class="row-between">' +
+        '<div class="flex-row" style="gap:9px">' + avatar(m.name, i) + '<span style="font-weight:600">' + esc(m.name) + '</span></div>' +
+        '<div style="text-align:right;font-size:13px"><div>Paid out: <strong>' + fmtBase(sp) + '</strong></div>' +
+        '<div style="color:' + (ow > 0.005 ? 'var(--red)' : 'var(--green)') + '">Owes: <strong>' + (ow > 0.005 ? fmtBase(ow) : 'Nothing') + '</strong></div></div>' +
+        '</div></div>';
+    }).join('');
   }
-  if (S.aggTab === "category") {
-    const cats = {}; S.expenses.forEach(e => { cats[e.category] = (cats[e.category] || 0) + e.amount; });
-    const total = Object.values(cats).reduce((a, b) => a + b, 0);
-    html = Object.entries(cats).sort((a, b) => b[1] - a[1]).map(([cat, amt]) => {
-      const pct = total > 0 ? Math.round((amt / total) * 100) : 0;
-      return `<div class="card"><div class="row-between" style="margin-bottom:6px"><span style="font-weight:600"><i class="ti ${CATICON[cat] || "ti-dots"}" style="margin-right:6px;color:var(--text2)"></i>${cat}</span><span style="font-weight:600">${fmtBase(amt)} <span style="color:var(--text2);font-weight:400">(${pct}%)</span></span></div><div class="progress-bar"><div class="progress-fill" style="width:${pct}%"></div></div></div>`;
-    }).join("");
+  if (AGG_TAB === 'category') {
+    const cats = {}; EXPENSES.forEach(e => { cats[e.category] = (cats[e.category] || 0) + e.amount; });
+    const tot = Object.values(cats).reduce((a,b) => a+b, 0);
+    html = Object.entries(cats).sort((a,b)=>b[1]-a[1]).map(([c,a]) => {
+      const pct = tot > 0 ? Math.round((a/tot)*100) : 0;
+      return '<div class="card"><div class="row-between" style="margin-bottom:6px"><span style="font-weight:600"><i class="ti ' + (CATICON[c]||'ti-dots') + '" style="margin-right:6px;color:var(--text2)"></i>' + c + '</span><span style="font-weight:600">' + fmtBase(a) + ' <span style="color:var(--text2);font-weight:400">(' + pct + '%)</span></span></div><div class="progress-bar"><div class="progress-fill" style="width:' + pct + '%"></div></div></div>';
+    }).join('');
   }
-  if (S.aggTab === "location") {
-    const locs = {}; S.expenses.forEach(e => { const k = e.location || "Unspecified"; locs[k] = (locs[k] || 0) + e.amount; });
-    html = "<div class="card">" + Object.entries(locs).sort((a, b) => b[1] - a[1]).map(([loc, amt]) =>
-      `<div class="agg-row"><span><i class="ti ti-map-pin" style="color:var(--text2);margin-right:6px"></i>${loc}</span><span style="font-weight:600">${fmtBase(amt)}</span></div>`).join("") + "</div>";
+  if (AGG_TAB === 'location') {
+    const locs = {}; EXPENSES.forEach(e => { const k = e.location || 'Unspecified'; locs[k] = (locs[k]||0)+e.amount; });
+    html = '<div class="card">' + Object.entries(locs).sort((a,b)=>b[1]-a[1]).map(([l,a]) =>
+      '<div class="agg-row"><span><i class="ti ti-map-pin" style="color:var(--text2);margin-right:6px"></i>' + esc(l) + '</span><span style="font-weight:600">' + fmtBase(a) + '</span></div>').join('') + '</div>';
   }
-  if (S.aggTab === "date") {
-    const dates = {}; S.expenses.forEach(e => { const k = e.date || "No date"; dates[k] = (dates[k] || 0) + e.amount; });
-    html = "<div class="card">" + Object.entries(dates).sort((a, b) => a[0].localeCompare(b[0])).map(([d, amt]) =>
-      `<div class="agg-row"><span><i class="ti ti-calendar" style="color:var(--text2);margin-right:6px"></i>${d}</span><span style="font-weight:600">${fmtBase(amt)}</span></div>`).join("") + "</div>";
+  if (AGG_TAB === 'date') {
+    const dates = {}; EXPENSES.forEach(e => { const k = e.date || 'No date'; dates[k] = (dates[k]||0)+e.amount; });
+    html = '<div class="card">' + Object.entries(dates).sort((a,b)=>a[0].localeCompare(b[0])).map(([d,a]) =>
+      '<div class="agg-row"><span><i class="ti ti-calendar" style="color:var(--text2);margin-right:6px"></i>' + d + '</span><span style="font-weight:600">' + fmtBase(a) + '</span></div>').join('') + '</div>';
   }
-  $("agg-content").innerHTML = html;
+  $('aggContent').innerHTML = html;
 }
 
-// ── Chase ──────────────────────────────────────────────────────────────────────
 function renderChase() {
-  const { po } = calcTotals();
-  const debtors = S.members.filter(m => (po[m.id]?.owed || 0) - (po[m.id]?.paid || 0) > 0.01);
-  if (!debtors.length) { $("chase-list").innerHTML = "<div class="empty"><i class="ti ti-circle-check" style="color:var(--green);opacity:1"></i>Everyone is settled up!<br><span style="font-size:12px">Nothing to chase 🎉</span></div>"; return; }
-  $("chase-list").innerHTML = debtors.map(m => {
-    const p = po[m.id]; const owes = p.owed - p.paid;
-    const items = (p.expenses || []).filter(e => !e.paid && e.amount > 0);
-    return `<div class="card">
-      <div class="row-between" style="margin-bottom:8px">
-        <div class="flex-row" style="gap:10px">${avatar(m.name, getMemberIdx(m.id))}<div><div style="font-weight:600">${m.name}</div><div style="font-size:12px;color:var(--text2)">${m.email || "no email"} · ${m.wa || "no WhatsApp"}</div></div></div>
-        <div style="font-size:18px;font-weight:700;color:var(--red)">${fmtBase(owes)}</div>
-      </div>
-      <div style="font-size:12px;color:var(--text2);margin-bottom:12px">${items.map(e => e.desc + ": " + fmtBase(e.amount)).join(" · ")}</div>
-      <div class="flex-row" style="flex-wrap:wrap;gap:8px">
-        <button class="btn sm" onclick="openChase('${m.id}','whatsapp')"><i class="ti ti-brand-whatsapp"></i> WhatsApp</button>
-        <button class="btn sm" onclick="openChase('${m.id}','email')"><i class="ti ti-mail"></i> Email</button>
-      </div>
-    </div>`;
-  }).join("");
+  const {po} = calcTotals();
+  const debtors = MEMBERS.filter(m => (po[m.id]?.owed||0)-(po[m.id]?.paid||0) > 0.01);
+  if (!debtors.length) { $('chaseList').innerHTML = '<div class="empty"><i class="ti ti-circle-check" style="color:var(--green);opacity:1"></i>Everyone is settled! 🎉</div>'; return; }
+  $('chaseList').innerHTML = debtors.map(m => {
+    const p = po[m.id]; const ow = p.owed - p.paid;
+    const items = (p.expenses||[]).filter(e => !e.paid && e.amount > 0);
+    return '<div class="card">' +
+      '<div class="row-between" style="margin-bottom:8px">' +
+      '<div class="flex-row" style="gap:10px">' + avatar(m.name, getMIdx(m.id)) + '<div><div style="font-weight:600">' + esc(m.name) + '</div><div style="font-size:12px;color:var(--text2)">' + (m.email||'no email') + ' · ' + (m.wa||'no WhatsApp') + '</div></div></div>' +
+      '<div style="font-size:18px;font-weight:700;color:var(--red)">' + fmtBase(ow) + '</div></div>' +
+      '<div style="font-size:12px;color:var(--text2);margin-bottom:12px">' + items.map(e => esc(e.desc) + ': ' + fmtBase(e.amount)).join(' · ') + '</div>' +
+      '<div class="flex-row" style="flex-wrap:wrap;gap:8px">' +
+      '<button class="btn sm" onclick="openChaseMsg('' + m.id + '','whatsapp')"><i class="ti ti-brand-whatsapp"></i> WhatsApp</button>' +
+      '<button class="btn sm" onclick="openChaseMsg('' + m.id + '','email')"><i class="ti ti-mail"></i> Email</button>' +
+      '</div></div>';
+  }).join('');
 }
-function openChase(memberId, type) {
-  const { po } = calcTotals();
+
+function openChaseMsg(memberId, type) {
+  const {po} = calcTotals();
   const m = getMember(memberId);
-  const p = po[memberId] || { owed: 0, paid: 0, expenses: [] };
-  const owes = p.owed - p.paid;
-  const items = (p.expenses || []).filter(e => !e.paid && e.amount > 0);
-  const lines = items.map(e => "  • " + e.desc + ": " + fmtBase(e.amount)).join("\n");
-  const trip = S.trip?.name || "our trip"; const first = m.name.split(" ")[0];
-  const msg = type === "whatsapp"
-    ? "Hi " + first + "! 👋\n\nJust a friendly nudge about " + trip + " — you still have the following outstanding:\n\n" + lines + "\n\nTotal: " + fmtBase(owes) + "\n\nPlease let me know once you have sent it over. Cheers! 🙏"
-    : "Subject: Payment reminder — " + trip + "\n\nHi " + first + ",\n\nHope you are well! Just following up on outstanding expenses from " + trip + ".\n\nOutstanding:\n" + lines + "\n\nTotal due: " + fmtBase(owes) + "\n\nPlease arrange payment when you can.\n\nMany thanks";
-  $("chase-msg-title").innerHTML = "<i class="ti ti-" + (type === "whatsapp" ? "brand-whatsapp" : "mail") + ""></i> " + (type === "whatsapp" ? "WhatsApp" : "Email") + " for " + m.name;
-  $("chase-msg-body").innerHTML = `<div class="chase-box" id="chase-text">${msg}</div>
-    <div class="flex-row" style="flex-wrap:wrap;gap:8px;margin-top:10px">
-      <button class="btn sm" onclick="copyChase()"><i class="ti ti-copy"></i> Copy</button>
-      ${type === "whatsapp" && m.wa ? `<a href="https://wa.me/${m.wa.replace(/\D/g,"")}" target="_blank" rel="noopener" class="btn sm"><i class="ti ti-brand-whatsapp"></i> Open WhatsApp</a>` : ""}
-      ${type === "email" && m.email ? `<a href="mailto:${m.email}" class="btn sm"><i class="ti ti-mail"></i> Open mail</a>` : ""}
-    </div>`;
-  $("modal-overlay").style.display = "flex";
-  document.querySelectorAll(".modal").forEach(el => el.style.display = "none");
-  $("modal-chase-msg").style.display = "block";
-}
-function copyChase() { navigator.clipboard.writeText($("chase-text").textContent).then(() => toast("Copied!")); }
+  const p = po[memberId] || {owed:0,paid:0,expenses:[]};
+  const ow = p.owed - p.paid;
+  const items = (p.expenses||[]).filter(e => !e.paid && e.amount > 0);
+  const lines = items.map(e => '  • ' + e.desc + ': ' + fmtBase(e.amount)).join('\n');
+  const trip = T ? T.name : 'our trip';
+  const first = m.name.split(' ')[0];
+  const msg = type === 'whatsapp'
+    ? 'Hi ' + first + '! 👋\n\nJust a friendly nudge about ' + trip + ' — you still have outstanding:\n\n' + lines + '\n\nTotal: ' + fmtBase(ow) + '\n\nPlease let me know once sent. Cheers! 🙏'
+    : 'Subject: Payment reminder — ' + trip + '\n\nHi ' + first + ',\n\nFollowing up on outstanding expenses from ' + trip + '.\n\nOutstanding:\n' + lines + '\n\nTotal due: ' + fmtBase(ow) + '\n\nPlease arrange payment when you can.\n\nMany thanks';
 
-// ── Trips manager ─────────────────────────────────────────────────────────────
-function openTripsManager() {
-  $("modal-overlay").style.display = "flex";
-  document.querySelectorAll(".modal").forEach(el => el.style.display = "none");
-  $("trips-list-body").innerHTML = ALL_TRIPS.length ? ALL_TRIPS.map(t => {
-    const isCur = S.trip && t.id === S.trip.id;
-    return `<div class="card card-clickable" style="${isCur ? "border-color:var(--blue)" : ""}" onclick="switchTrip('${t.id}')">
-      <div class="row-between">
-        <div><div style="font-weight:600">${t.name} ${isCur ? "<span class="badge blue" style="font-size:10px">current</span>" : ""}</div>
-          <div style="font-size:12px;color:var(--text2)">${t.destination || ""} · ${t.currency || ""}</div></div>
-        ${!isCur ? `<button class="btn sm danger" onclick="event.stopPropagation();deleteTrip('${t.id}')"><i class="ti ti-trash"></i></button>` : ""}
-      </div>
-    </div>`;
-  }).join("") : "<div class="empty" style="padding:20px 0"><i class="ti ti-map-off"></i>No trips yet</div>";
-  $("modal-trips").style.display = "block";
+  const waLink = (type === 'whatsapp' && m.wa)
+    ? '<a href="https://wa.me/' + m.wa.replace(/\D/g,'') + '" target="_blank" rel="noopener" class="btn sm"><i class="ti ti-brand-whatsapp"></i> Open WhatsApp</a>'
+    : '';
+  const mailLink = (type === 'email' && m.email)
+    ? '<a href="mailto:' + m.email + '" class="btn sm"><i class="ti ti-mail"></i> Open mail</a>'
+    : '';
+
+  showModal(
+    '<div class="modal-handle"></div>' +
+    '<div class="modal-title"><i class="ti ti-' + (type === 'whatsapp' ? 'brand-whatsapp' : 'mail') + '"></i> ' + (type === 'whatsapp' ? 'WhatsApp' : 'Email') + ' for ' + esc(m.name) + '</div>' +
+    '<div class="chase-box" id="chaseText">' + esc(msg) + '</div>' +
+    '<div class="flex-row" style="flex-wrap:wrap;gap:8px;margin-top:10px">' +
+    '<button class="btn sm" onclick="copyChase()"><i class="ti ti-copy"></i> Copy</button>' +
+    waLink + mailLink + '</div>' +
+    '<div class="flex-row" style="justify-content:flex-end;margin-top:12px"><button class="btn" onclick="closeModal()">Close</button></div>'
+  );
 }
-async function switchTrip(tripId) { closeModal(); await loadTripById(tripId); }
-async function deleteTrip(tripId) {
-  const t = ALL_TRIPS.find(x => x.id === tripId);
-  if (!confirm("Delete trip "" + (t?.name || "") + ""? This cannot be undone.")) return;
-  try {
-    await dbDelete("trips", { id: "eq." + tripId });
-    ALL_TRIPS = ALL_TRIPS.filter(x => x.id !== tripId);
-    saveLocalTripList(); openTripsManager(); toast("Trip deleted.");
-  } catch(e) { toast("Delete failed"); }
-}
-function startNewTrip() {
-  closeModal();
-  S = { trip: null, members: [], expenses: [], fxRates: {}, aggTab: "person", curExpId: null };
-  $("sync-bar").style.display = "none"; $("topbar").style.display = "none"; $("main-nav").style.display = "none";
-  document.querySelectorAll(".page").forEach(el => el.classList.remove("active"));
-  $("page-setup").classList.add("active");
-  ["s-name","s-dest","s-start","s-end","s-your-name","s-your-email","s-your-wa","join-code"].forEach(id => { const el = $(id); if(el) el.value = ""; });
+function copyChase() {
+  const el = $('chaseText');
+  if (el) navigator.clipboard.writeText(el.textContent).then(() => toast('Copied!'));
 }
 
-// ── Boot ──────────────────────────────────────────────────────────────────────
-loadLocalTripList();
-const savedCurId = localStorage.getItem("tripApp_cur");
-if (savedCurId) {
-  loadTripById(savedCurId);
+// =============================================================================
+// HELPERS
+// =============================================================================
+function esc(s) {
+  return String(s || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');
+}
+function currencySelect(id, val, onchange) {
+  const options = CURRENCIES.map(c => '<option value="' + c + '"' + (c === val ? ' selected' : '') + '>' + c + ' ' + sym(c) + '</option>').join('');
+  return '<select id="' + id + '"' + (onchange ? ' onchange="updateFxPreview()"' : '') + '>' + options + '</select>';
+}
+
+// =============================================================================
+// BOOT
+// =============================================================================
+loadLocal();
+const savedId = localStorage.getItem('te_cur');
+if (savedId) {
+  loadTrip(savedId);
 } else if (ALL_TRIPS.length) {
-  loadTripById(ALL_TRIPS[0].id);
+  loadTrip(ALL_TRIPS[0].id);
+} else {
+  $('page-setup').classList.add('active');
 }
 </script>
 </body>
