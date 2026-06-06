@@ -596,10 +596,10 @@ function updateFxPreview() {
 function openTripsModal() {
   let rows = ALL_TRIPS.length ? ALL_TRIPS.map(tr => {
     const cur = T && tr.id === T.id;
-    return '<div class="card card-click" style="' + (cur ? 'border-color:var(--blue)' : '') + '" onclick="switchTrip('' + tr.id + '')">' +
+    return '<div class="card card-click" style="' + (cur ? 'border-color:var(--blue)' : '') + '" onclick="switchTrip(\'' + tr.id + '\')">' +
       '<div class="row-between"><div><div style="font-weight:600">' + esc(tr.name) + ' ' + (cur ? '<span class="badge blue" style="font-size:10px">current</span>' : '') + '</div>' +
       '<div style="font-size:12px;color:var(--text2)">' + esc(tr.destination || '') + ' · ' + (tr.currency || '') + '</div></div>' +
-      (!cur ? '<button class="btn sm danger" onclick="event.stopPropagation();deleteTrip('' + tr.id + '')"><i class="ti ti-trash"></i></button>' : '') +
+      (!cur ? '<button class="btn sm danger" onclick="event.stopPropagation();deleteTrip(\'' + tr.id + '\')">' + '<i class="ti ti-trash"></i></button>' : '') +
       '</div></div>';
   }).join('') : '<div class="empty" style="padding:20px 0"><i class="ti ti-map-off"></i>No trips</div>';
 
@@ -645,7 +645,7 @@ function openMemberModal(id) {
     '<option value="admin"' + (m && m.role === 'admin' ? ' selected' : '') + '>Admin</option></select></div>' +
     '<div class="flex-row" style="justify-content:flex-end;gap:8px;margin-top:8px">' +
     '<button class="btn" onclick="closeModal()">Cancel</button>' +
-    '<button class="btn primary" onclick="saveMember('' + (id || '') + '')">' + (m ? 'Save' : 'Add member') + '</button></div>'
+    '<button class="btn primary" onclick="saveMember(\'' + (id || '') + '\')">' + (m ? 'Save' : 'Add member') + '</button></div>'
   );
 }
 async function saveMember(editId) {
@@ -687,8 +687,8 @@ function renderMembers() {
     '<span><i class="ti ti-brand-whatsapp" style="font-size:13px"></i> ' + (m.wa || '<em style="opacity:0.5">no WhatsApp</em>') + '</span>' +
     '</div></div></div>' +
     '<div class="flex-row" style="gap:6px;flex-shrink:0">' +
-    '<button class="btn sm" onclick="openMemberModal('' + m.id + '')"><i class="ti ti-edit"></i> Edit</button>' +
-    (i > 0 ? '<button class="btn sm danger" onclick="removeMember('' + m.id + '')"><i class="ti ti-trash"></i></button>' : '') +
+    '<button class="btn sm" onclick="openMemberModal(\'' + m.id + '\')">' + '<i class="ti ti-edit"></i> Edit</button>' +
+    (i > 0 ? '<button class="btn sm danger" onclick="removeMember(\'' + m.id + '\')">' + '<i class="ti ti-trash"></i></button>' : '') +
     '</div></div></div>'
   ).join('') || '<div class="empty"><i class="ti ti-users"></i>No members yet</div>';
 }
@@ -737,7 +737,7 @@ function openExpenseModal(id) {
     '<div class="form-group"><label>Notes</label><textarea id="aeNotes">' + esc(exp ? exp.notes : '') + '</textarea></div>' +
     '<div class="flex-row" style="justify-content:flex-end;gap:8px;margin-top:8px">' +
     '<button class="btn" onclick="closeModal()">Cancel</button>' +
-    '<button class="btn primary" onclick="saveExpense('' + (id || '') + '')">' + (exp ? 'Save changes' : 'Add expense') + '</button></div>'
+    '<button class="btn primary" onclick="saveExpense(\'' + (id || '') + '\')">' + (exp ? 'Save changes' : 'Add expense') + '</button></div>'
   );
   updateFxPreview();
 }
@@ -825,7 +825,7 @@ function expCard(exp) {
   const fxLine = (exp.origCur && exp.origCur !== base())
     ? '<div style="font-size:11px;color:var(--blue-txt);margin-top:2px"><i class="ti ti-arrows-exchange"></i> ' + fmtFgn(exp.origAmount, exp.origCur) + ' → ' + fmtBase(exp.amount) + '</div>'
     : '';
-  return '<div class="card card-click" onclick="showExpDetail('' + exp.id + '')">' +
+  return '<div class="card card-click" onclick="showExpDetail(\'' + exp.id + '\')">' +
     '<div class="row-between"><div class="flex-row" style="gap:11px">' +
     '<div class="cat-icon"><i class="ti ' + (CATICON[exp.category] || 'ti-receipt') + '"></i></div>' +
     '<div><div style="font-weight:600;margin-bottom:2px">' + esc(exp.desc) + '</div>' +
@@ -851,7 +851,7 @@ function showExpDetail(id) {
       '<div class="flex-row" style="gap:8px">' + avatar(mb.name, getMIdx(mid)) + '<span>' + esc(mb.name) + (isPayer ? ' <span class="badge gray" style="font-size:10px">payer</span>' : '') + '</span></div>' +
       '<div class="flex-row" style="gap:8px"><span style="font-weight:600">' + fmtBase(s.owed) + '</span>' +
       (!isPayer
-        ? '<button class="btn sm ' + (s.paid ? '' : 'success') + '" onclick="togglePaid('' + id + '','' + mid + '')">' + (s.paid ? '<i class="ti ti-x"></i> Unpay' : '<i class="ti ti-check"></i> Paid') + '</button>'
+        ? '<button class="btn sm ' + (s.paid ? '' : 'success') + '" onclick="togglePaid(\'' + id + '\',\'' + mid + '\')">' + (s.paid ? '<i class="ti ti-x"></i> Unpay' : '<i class="ti ti-check"></i> Paid') + '</button>'
         : '<span class="badge blue">Payer</span>') +
       '</div></div>';
   }).join('');
@@ -866,7 +866,7 @@ function showExpDetail(id) {
     '<div style="font-size:13px;font-weight:600;margin-bottom:6px">Split breakdown</div>' + lines +
     '<div class="flex-row" style="justify-content:flex-end;gap:8px;margin-top:14px">' +
     '<button class="btn danger sm" onclick="deleteExpense()"><i class="ti ti-trash"></i> Delete</button>' +
-    '<button class="btn sm" onclick="openExpenseModal('' + id + '')"><i class="ti ti-edit"></i> Edit</button>' +
+    '<button class="btn sm" onclick="openExpenseModal(\'' + id + '\')">' + '<i class="ti ti-edit"></i> Edit</button>' +
     '<button class="btn sm" onclick="closeModal()">Close</button></div>'
   );
 }
@@ -992,8 +992,8 @@ function renderChase() {
       '<div style="font-size:18px;font-weight:700;color:var(--red)">' + fmtBase(ow) + '</div></div>' +
       '<div style="font-size:12px;color:var(--text2);margin-bottom:12px">' + items.map(e => esc(e.desc) + ': ' + fmtBase(e.amount)).join(' · ') + '</div>' +
       '<div class="flex-row" style="flex-wrap:wrap;gap:8px">' +
-      '<button class="btn sm" onclick="openChaseMsg('' + m.id + '','whatsapp')"><i class="ti ti-brand-whatsapp"></i> WhatsApp</button>' +
-      '<button class="btn sm" onclick="openChaseMsg('' + m.id + '','email')"><i class="ti ti-mail"></i> Email</button>' +
+      '<button class="btn sm" onclick="openChaseMsg(\'' + m.id + '\',\'whatsapp\')"><i class="ti ti-brand-whatsapp"></i> WhatsApp</button>' +
+      '<button class="btn sm" onclick="openChaseMsg(\'' + m.id + '\',\'email\')"><i class="ti ti-mail"></i> Email</button>' +
       '</div></div>';
   }).join('');
 }
@@ -1047,15 +1047,17 @@ function currencySelect(id, val, onchange) {
 // =============================================================================
 // BOOT
 // =============================================================================
-loadLocal();
-const savedId = localStorage.getItem('te_cur');
-if (savedId) {
-  loadTrip(savedId);
-} else if (ALL_TRIPS.length) {
-  loadTrip(ALL_TRIPS[0].id);
-} else {
-  $('page-setup').classList.add('active');
-}
+document.addEventListener('DOMContentLoaded', function() {
+  loadLocal();
+  const savedId = localStorage.getItem('te_cur');
+  if (savedId) {
+    loadTrip(savedId);
+  } else if (ALL_TRIPS.length) {
+    loadTrip(ALL_TRIPS[0].id);
+  } else {
+    $('page-setup').classList.add('active');
+  }
+});
 </script>
 </body>
 </html>
