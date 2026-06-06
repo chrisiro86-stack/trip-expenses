@@ -140,18 +140,18 @@
     <div class="topbar-actions">
       <button class="btn sm" onclick="openTripsManager()"><i class="ti ti-map-2"></i> Trips</button>
       <button class="btn sm" onclick="openFxModal()"><i class="ti ti-arrows-exchange"></i> Rates</button>
-      <button class="btn sm" onclick="openModal("trip-settings")"><i class="ti ti-settings"></i></button>
+      <button class="btn sm" onclick="openModal('trip-settings')"><i class="ti ti-settings"></i></button>
     </div>
   </div>
 
   <!-- NAV -->
   <nav class="nav" id="main-nav" style="display:none">
-    <button class="nav-btn active" onclick="showPage("dashboard")"><i class="ti ti-layout-dashboard"></i> Dashboard</button>
-    <button class="nav-btn" onclick="showPage("expenses")"><i class="ti ti-receipt"></i> Expenses</button>
-    <button class="nav-btn" onclick="showPage("balances")"><i class="ti ti-scale"></i> Balances</button>
-    <button class="nav-btn" onclick="showPage("members")"><i class="ti ti-users"></i> Members</button>
-    <button class="nav-btn" onclick="showPage("aggregate")"><i class="ti ti-chart-bar"></i> Summary</button>
-    <button class="nav-btn" onclick="showPage("chase")"><i class="ti ti-bell"></i> Chase</button>
+    <button class="nav-btn active" onclick="showPage('dashboard')"><i class="ti ti-layout-dashboard"></i> Dashboard</button>
+    <button class="nav-btn" onclick="showPage('expenses')"><i class="ti ti-receipt"></i> Expenses</button>
+    <button class="nav-btn" onclick="showPage('balances')"><i class="ti ti-scale"></i> Balances</button>
+    <button class="nav-btn" onclick="showPage('members')"><i class="ti ti-users"></i> Members</button>
+    <button class="nav-btn" onclick="showPage('aggregate')"><i class="ti ti-chart-bar"></i> Summary</button>
+    <button class="nav-btn" onclick="showPage('chase')"><i class="ti ti-bell"></i> Chase</button>
   </nav>
 
   <div class="content">
@@ -210,7 +210,7 @@
       <div class="metric-grid" id="db-metrics"></div>
       <div class="row-between" style="margin-bottom:14px">
         <div class="section-title" style="margin-bottom:0">Recent expenses</div>
-        <button class="btn sm primary" onclick="openModal("add-expense")"><i class="ti ti-plus"></i> Add</button>
+        <button class="btn sm primary" onclick="openModal('add-expense')"><i class="ti ti-plus"></i> Add</button>
       </div>
       <div id="db-recent"></div>
       <div class="section-title" style="margin-top:22px;margin-bottom:14px">Per-person snapshot</div>
@@ -221,7 +221,7 @@
     <div class="page" id="page-expenses">
       <div class="row-between" style="margin-bottom:14px">
         <div class="section-title" style="margin-bottom:0">All expenses</div>
-        <button class="btn sm primary" onclick="openModal("add-expense")"><i class="ti ti-plus"></i> Add</button>
+        <button class="btn sm primary" onclick="openModal('add-expense')"><i class="ti ti-plus"></i> Add</button>
       </div>
       <div class="filter-row">
         <select id="f-cat" onchange="renderExpenses()">
@@ -248,7 +248,7 @@
     <div class="page" id="page-members">
       <div class="row-between" style="margin-bottom:14px">
         <div class="section-title" style="margin-bottom:0">Members</div>
-        <button class="btn sm primary" onclick="openModal("add-member")"><i class="ti ti-plus"></i> Add</button>
+        <button class="btn sm primary" onclick="openModal('add-member')"><i class="ti ti-plus"></i> Add</button>
       </div>
       <div id="members-list"></div>
     </div>
@@ -257,10 +257,10 @@
     <div class="page" id="page-aggregate">
       <div class="section-title">Trip summary</div>
       <div class="tab-row">
-        <button class="tab active" onclick="setAggTab("person")">By person</button>
-        <button class="tab" onclick="setAggTab("category")">By category</button>
-        <button class="tab" onclick="setAggTab("location")">By location</button>
-        <button class="tab" onclick="setAggTab("date")">By date</button>
+        <button class="tab active" onclick="setAggTab('person')">By person</button>
+        <button class="tab" onclick="setAggTab('category')">By category</button>
+        <button class="tab" onclick="setAggTab('location')">By location</button>
+        <button class="tab" onclick="setAggTab('date')">By date</button>
       </div>
       <div id="agg-content"></div>
     </div>
@@ -429,19 +429,22 @@ const SB_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJ
 async function sb(method, table, body, params) {
   let url = SB_URL + "/rest/v1/" + table;
   if (params) url += "?" + new URLSearchParams(params);
+  const headers = {
+    "apikey": SB_KEY,
+    "Authorization": "Bearer " + SB_KEY,
+    "Content-Type": "application/json"
+  };
+  if (method === "POST") headers["Prefer"] = "return=representation";
+  if (method === "GET") headers["Prefer"] = "return=representation";
   const res = await fetch(url, {
     method,
-    headers: {
-      "apikey": SB_KEY,
-      "Authorization": "Bearer " + SB_KEY,
-      "Content-Type": "application/json",
-      "Prefer": method === "POST" ? "return=representation" : "return=representation"
-    },
+    headers,
     body: body ? JSON.stringify(body) : undefined
   });
   if (!res.ok) {
-    const err = await res.text();
-    throw new Error(err);
+    const errText = await res.text();
+    console.error("Supabase error:", method, table, errText);
+    throw new Error(errText);
   }
   const text = await res.text();
   return text ? JSON.parse(text) : null;
@@ -452,9 +455,7 @@ const dbSelect = (table, params) => sb("GET", table, null, params);
 const dbInsert = (table, body) => sb("POST", table, body);
 const dbUpdate = (table, body, params) => sb("PATCH", table, body, params);
 const dbDelete = (table, params) => sb("DELETE", table, null, params);
-const dbUpsert = (table, body) => sb("POST", table, body).catch(() =>
-  sb("PATCH", table, body, {id: "eq." + body.id})
-);
+const dbUpsert = (table, body) => sb("POST", table, body);
 
 // ── Constants ────────────────────────────────────────────────────────────────
 const AVATARBG=["#E6F1FB","#E1F5EE","#FAEEDA","#FCEBEB","#EEEDFE","#FBEAF0","#d4f1e4","#F1EFE8"];
@@ -619,7 +620,7 @@ async function createTrip() {
     initApp();
   } catch(e) {
     setSyncStatus("error");
-    alert("Could not create trip. Check your connection and try again.");
+    console.error("createTrip error:", e); alert("Could not create trip: " + e.message);
   }
 }
 
