@@ -431,7 +431,7 @@ function rowToExpense(r) {
     fxUsed: +(r.fx_rate_used || 1),
     category: r.category || 'Other', date: r.date || '',
     location: r.location || '', paidBy: r.paid_by,
-    splits: r.splits || {}, notes: r.notes || '',
+    splits: r.splits || {}, notes: r.notes || '', receiptData: r.receipt_data || null,
     createdAt: new Date(r.created_at).getTime()
   };
 }
@@ -735,11 +735,29 @@ function openExpenseModal(id) {
     '<button class="btn sm" onclick="selAll(true)">Select all</button>' +
     '<button class="btn sm" onclick="selAll(false)">Clear all</button></div></div>' +
     '<div class="form-group"><label>Notes</label><textarea id="aeNotes">' + esc(exp ? exp.notes : '') + '</textarea></div>' +
+    '<div class="form-group">' +
+    '<label>Receipt / evidence (photo)</label>' +
+    '<input type="file" id="aeReceipt" accept="image/*" style="font-size:13px;width:100%" onchange="previewReceipt()">' +
+    (exp && exp.receiptData ? '<div style="margin-top:8px"><img src="' + exp.receiptData + '" style="max-width:100%;max-height:140px;border-radius:var(--radius);border:0.5px solid var(--border)" alt="Receipt"><div style="font-size:11px;color:var(--text2);margin-top:3px">Current receipt — upload new to replace</div></div>' : '') +
+    '<div id="aeReceiptPreview" style="margin-top:8px"></div>' +
+    '</div>' +
     '<div class="flex-row" style="justify-content:flex-end;gap:8px;margin-top:8px">' +
     '<button class="btn" onclick="closeModal()">Cancel</button>' +
     '<button class="btn primary" onclick="saveExpense(\'' + (id || '') + '\')">' + (exp ? 'Save changes' : 'Add expense') + '</button></div>'
   );
   updateFxPreview();
+}
+function previewReceipt() {
+  const f = $('aeReceipt') ? $('aeReceipt').files[0] : null;
+  const pv = $('aeReceiptPreview');
+  if (!f || !pv) return;
+  if (f.type.startsWith('image/')) {
+    const r = new FileReader();
+    r.onload = e => { pv.innerHTML = '<img src="' + e.target.result + '" style="max-width:100%;max-height:140px;border-radius:var(--radius);border:0.5px solid var(--border)" alt="Preview">'; };
+    r.readAsDataURL(f);
+  } else {
+    pv.innerHTML = '<span style="font-size:12px;color:var(--text2)">Selected: ' + esc(f.name) + '</span>';
+  }
 }
 function selAll(v) { document.querySelectorAll('.chk-row input[type=checkbox]').forEach(c => c.checked = v); }
 
@@ -768,8 +786,21 @@ async function saveExpense(editId) {
     fx_rate_used: inputCur === base() ? 1 : (FX[inputCur] || 1),
     category: $('aeCat').value, date: $('aeDate').value,
     location: $('aeLoc').value.trim(), paid_by: paidBy, splits: splits,
-    notes: $('aeNotes').value.trim()
+    notes: $('aeNotes').value.trim(),
+    receipt_data: null // filled below
   };
+  // Read receipt if selected
+  const receiptFile = $('aeReceipt') ? $('aeReceipt').files[0] : null;
+  if (receiptFile && receiptFile.type.startsWith('image/')) {
+    await new Promise(resolve => {
+      const r = new FileReader();
+      r.onload = e => { dbRow.receipt_data = e.target.result; resolve(); };
+      r.readAsDataURL(receiptFile);
+    });
+  } else if (editId) {
+    const existing = EXPENSES.find(e => e.id === editId);
+    if (existing) dbRow.receipt_data = existing.receiptData;
+  }
 
   setSyncing('busy');
   try {
@@ -827,7 +858,7 @@ function expCard(exp) {
     : '';
   return '<div class="card card-click" onclick="showExpDetail(\'' + exp.id + '\')">' +
     '<div class="row-between"><div class="flex-row" style="gap:11px">' +
-    '<div class="cat-icon"><i class="ti ' + (CATICON[exp.category] || 'ti-receipt') + '"></i></div>' +
+    '<div class="cat-icon">' + (exp.receiptData ? '<img src="' + exp.receiptData + '" style="width:48px;height:48px;object-fit:cover" alt="Receipt">' : '<i class="ti ' + (CATICON[exp.category] || 'ti-receipt') + '"></i>') + '</div>' +
     '<div><div style="font-weight:600;margin-bottom:2px">' + esc(exp.desc) + '</div>' +
     '<div style="font-size:12px;color:var(--text2)">' + [exp.date, exp.location, exp.category].filter(Boolean).join(' · ') + '</div>' +
     '<div style="font-size:12px;color:var(--text2)">Paid by ' + esc(payer.name) + ' · ' + n + ' way' + (n !== 1 ? 's' : '') + '</div>' +
@@ -859,6 +890,7 @@ function showExpDetail(id) {
   showModal(
     '<div class="modal-handle"></div>' +
     '<div class="modal-title">' + esc(exp.desc) + '</div>' +
+    (exp.receiptData ? '<img src="' + exp.receiptData + '" style="width:100%;max-height:200px;object-fit:cover;border-radius:var(--radius);border:0.5px solid var(--border);margin-bottom:14px" alt="Receipt">' : '') +
     '<div class="row-between" style="margin-bottom:12px">' +
     '<div><div style="font-size:24px;font-weight:700">' + fmtBase(exp.amount) + '</div><div style="font-size:12px;color:var(--text2)">' + exp.category + '</div></div>' +
     '<div style="text-align:right"><div style="font-size:13px">Paid by <strong>' + esc(payer.name) + '</strong></div><div style="font-size:12px;color:var(--text2)">' + [exp.date, exp.location].filter(Boolean).join(' · ') + '</div></div>' +
@@ -876,19 +908,34 @@ function showExpDetail(id) {
 // =============================================================================
 function calcTotals() {
   let total = 0, outstanding = 0;
-  const po = {};
-  MEMBERS.forEach(m => { po[m.id] = {owed: 0, paid: 0, expenses: []}; });
+  const po = {}; // per-person owed/paid
+  const cr = {}; // per-person credited (others owe them)
+  // owesTo[debtorId][creditorId] = amount outstanding
+  const owesTo = {};
+  MEMBERS.forEach(m => {
+    po[m.id] = {owed: 0, paid: 0, expenses: []};
+    cr[m.id] = 0;
+    owesTo[m.id] = {};
+  });
   EXPENSES.forEach(exp => {
     total += exp.amount;
     Object.entries(exp.splits).forEach(([id, s]) => {
       if (id === exp.paidBy) return;
       if (!po[id]) po[id] = {owed: 0, paid: 0, expenses: []};
+      if (!owesTo[id]) owesTo[id] = {};
       po[id].owed += s.owed;
-      po[id].expenses.push({desc: exp.desc, amount: s.owed, paid: s.paid});
-      if (s.paid) po[id].paid += s.owed; else outstanding += s.owed;
+      po[id].expenses.push({desc: exp.desc, amount: s.owed, paid: s.paid, paidBy: exp.paidBy});
+      if (s.paid) {
+        po[id].paid += s.owed;
+      } else {
+        outstanding += s.owed;
+        // Track who this debtor owes to
+        owesTo[id][exp.paidBy] = (owesTo[id][exp.paidBy] || 0) + s.owed;
+        cr[exp.paidBy] = (cr[exp.paidBy] || 0) + s.owed;
+      }
     });
   });
-  return {total, outstanding, po};
+  return {total, outstanding, po, cr, owesTo};
 }
 
 // =============================================================================
@@ -904,7 +951,7 @@ function renderExpenses() {
 }
 
 function renderDashboard() {
-  const {total, outstanding, po} = calcTotals();
+  const {total, outstanding, po, owesTo} = calcTotals();
   const pct = total > 0 ? Math.round(((total - outstanding) / total) * 100) : 0;
   $('dbMetrics').innerHTML =
     '<div class="metric"><div class="metric-label">Total spent</div><div class="metric-val">' + fmtBase(total) + '</div></div>' +
@@ -917,23 +964,66 @@ function renderDashboard() {
     const p = po[m.id] || {owed: 0, paid: 0}; const ow = p.owed - p.paid;
     return '<div class="card"><div class="row-between">' +
       '<div class="flex-row" style="gap:10px">' + avatar(m.name, i) + '<div><div style="font-weight:600">' + esc(m.name) + '</div><div style="font-size:12px;color:var(--text2)">' + m.role + '</div></div></div>' +
-      '<div style="text-align:right"><div style="font-weight:600;color:' + (ow > 0.005 ? 'var(--red)' : 'var(--green)') + '">' + (ow > 0.005 ? fmtBase(ow) + ' owed' : 'All settled') + '</div>' +
+      '<div style="text-align:right">' +
+      '<div style="font-weight:600;color:' + (ow > 0.005 ? 'var(--red)' : 'var(--green)') + '">' + (ow > 0.005 ? fmtBase(ow) + ' owed' : 'All settled') + '</div>' +
+      (ow > 0.005 ? '<div style="font-size:11px;color:var(--text2)">' + Object.entries(owesTo[m.id] || {}).filter(([,a])=>a>0.005).map(([cid,a])=>'→ ' + getMember(cid).name + ' ' + fmtBase(a)).join(', ') + '</div>' : '') +
       '<div style="font-size:12px;color:var(--text2)">' + fmtBase(p.owed) + ' total share</div></div>' +
       '</div></div>';
   }).join('');
 }
 
 function renderBalances() {
-  const {po} = calcTotals();
+  const {po, cr, owesTo} = calcTotals();
   $('balancesList').innerHTML = MEMBERS.map((m, i) => {
-    const p = po[m.id] || {owed: 0, paid: 0, expenses: []}; const ow = p.owed - p.paid;
+    const p = po[m.id] || {owed: 0, paid: 0, expenses: []};
+    const ow = p.owed - p.paid;
+    const credited = cr[m.id] || 0; // others owe this person
     const items = (p.expenses || []).filter(e => !e.paid && e.amount > 0);
+
+    // Build owes-to breakdown
+    const owesToEntries = Object.entries(owesTo[m.id] || {}).filter(([, amt]) => amt > 0.005);
+    const owesToHtml = owesToEntries.map(([creditorId, amt]) => {
+      const creditor = getMember(creditorId);
+      const cidx = getMIdx(creditorId);
+      return '<div style="display:flex;align-items:center;justify-content:space-between;padding:6px 0;border-bottom:0.5px solid var(--border);font-size:13px">' +
+        '<div style="display:flex;align-items:center;gap:8px">' +
+        '<i class="ti ti-arrow-right" style="color:var(--red);font-size:14px"></i>' +
+        avatar(creditor.name, cidx, 24) +
+        '<span>Pay <strong>' + esc(creditor.name) + '</strong></span></div>' +
+        '<span style="font-weight:700;color:var(--red)">' + fmtBase(amt) + '</span>' +
+        '</div>';
+    }).join('');
+
+    // Build owed-by breakdown (others owe this person)
+    const owedByEntries = MEMBERS.filter(other => other.id !== m.id && (owesTo[other.id] || {})[m.id] > 0.005);
+    const owedByHtml = owedByEntries.map(other => {
+      const amt = owesTo[other.id][m.id];
+      const oidx = getMIdx(other.id);
+      return '<div style="display:flex;align-items:center;justify-content:space-between;padding:6px 0;border-bottom:0.5px solid var(--border);font-size:13px">' +
+        '<div style="display:flex;align-items:center;gap:8px">' +
+        '<i class="ti ti-arrow-left" style="color:var(--green);font-size:14px"></i>' +
+        avatar(other.name, oidx, 24) +
+        '<span><strong>' + esc(other.name) + '</strong> owes you</span></div>' +
+        '<span style="font-weight:700;color:var(--green)">' + fmtBase(amt) + '</span>' +
+        '</div>';
+    }).join('');
+
+    const hasBreakdown = owesToHtml || owedByHtml;
+
     return '<div class="card">' +
-      '<div class="row-between" style="margin-bottom:' + (items.length ? 10 : 0) + 'px">' +
-      '<div class="flex-row" style="gap:10px">' + avatar(m.name, i, 38) + '<div><div style="font-weight:600">' + esc(m.name) + '</div><div style="font-size:12px;color:var(--text2)">' + items.length + ' outstanding</div></div></div>' +
-      '<div style="font-size:20px;font-weight:700;color:' + (ow > 0.005 ? 'var(--red)' : 'var(--green)') + '">' + (ow > 0.005 ? fmtBase(ow) : 'Settled') + '</div>' +
-      '</div>' +
-      (items.length ? '<div style="border-top:0.5px solid var(--border);padding-top:8px">' + items.map(e => '<div class="agg-row"><span style="color:var(--text2)">' + esc(e.desc) + '</span><span style="font-weight:600">' + fmtBase(e.amount) + '</span></div>').join('') + '</div>' : '') +
+      '<div class="row-between" style="margin-bottom:' + (hasBreakdown ? 10 : 0) + 'px">' +
+      '<div class="flex-row" style="gap:10px">' + avatar(m.name, i, 38) +
+      '<div><div style="font-weight:600">' + esc(m.name) + '</div>' +
+      '<div style="font-size:12px;color:var(--text2)">' +
+      (ow > 0.005 ? 'Owes ' + fmtBase(ow) : 'Nothing owed') +
+      (credited > 0.005 ? ' · Is owed ' + fmtBase(credited) : '') +
+      '</div></div></div>' +
+      '<div style="text-align:right">' +
+      (ow > 0.005 ? '<div style="font-size:20px;font-weight:700;color:var(--red)">' + fmtBase(ow) + '</div><div style="font-size:11px;color:var(--text2)">to pay</div>' : '') +
+      (credited > 0.005 && ow <= 0.005 ? '<div style="font-size:20px;font-weight:700;color:var(--green)">' + fmtBase(credited) + '</div><div style="font-size:11px;color:var(--text2)">to receive</div>' : '') +
+      (ow <= 0.005 && credited <= 0.005 ? '<span class="badge green">Settled</span>' : '') +
+      '</div></div>' +
+      (hasBreakdown ? '<div style="border-top:0.5px solid var(--border);padding-top:6px">' + owesToHtml + owedByHtml + '</div>' : '') +
       '</div>';
   }).join('') || '<div class="empty"><i class="ti ti-users"></i>No members</div>';
 }
@@ -947,14 +1037,16 @@ function renderSummary() {
   if (!EXPENSES.length) { $('aggContent').innerHTML = '<div class="empty"><i class="ti ti-chart-bar"></i>No expenses yet</div>'; return; }
   let html = '';
   if (AGG_TAB === 'person') {
-    const {po} = calcTotals(); const byP = {};
+    const {po, owesTo} = calcTotals(); const byP = {};
     EXPENSES.forEach(e => { byP[e.paidBy] = (byP[e.paidBy] || 0) + e.amount; });
     html = MEMBERS.map((m, i) => {
       const sp = byP[m.id] || 0; const p = po[m.id] || {owed:0,paid:0}; const ow = p.owed - p.paid;
       return '<div class="card"><div class="row-between">' +
         '<div class="flex-row" style="gap:9px">' + avatar(m.name, i) + '<span style="font-weight:600">' + esc(m.name) + '</span></div>' +
         '<div style="text-align:right;font-size:13px"><div>Paid out: <strong>' + fmtBase(sp) + '</strong></div>' +
-        '<div style="color:' + (ow > 0.005 ? 'var(--red)' : 'var(--green)') + '">Owes: <strong>' + (ow > 0.005 ? fmtBase(ow) : 'Nothing') + '</strong></div></div>' +
+        '<div style="color:' + (ow > 0.005 ? 'var(--red)' : 'var(--green)') + '">Owes: <strong>' + (ow > 0.005 ? fmtBase(ow) : 'Nothing') + '</strong>' +
+        (ow > 0.005 ? ' <span style="font-size:11px;font-weight:400">(' + Object.entries(owesTo[m.id]||{}).filter(([,a])=>a>0.005).map(([cid,a])=>getMember(cid).name+' '+fmtBase(a)).join(', ') + ')</span>' : '') +
+        '</div></div>' +
         '</div></div>';
     }).join('');
   }
