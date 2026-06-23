@@ -951,7 +951,7 @@ function renderExpenses() {
 }
 
 function renderDashboard() {
-  const {total, outstanding, po, owesTo} = calcTotals();
+  const {total, outstanding, po, cr, owesTo} = calcTotals();
   const pct = total > 0 ? Math.round(((total - outstanding) / total) * 100) : 0;
   $('dbMetrics').innerHTML =
     '<div class="metric"><div class="metric-label">Total spent</div><div class="metric-val">' + fmtBase(total) + '</div></div>' +
@@ -961,12 +961,18 @@ function renderDashboard() {
     '<div class="progress-bar"><div class="progress-fill" style="width:' + pct + '%"></div></div></div>';
   $('dbRecent').innerHTML = EXPENSES.slice(0, 4).map(expCard).join('') || '<div class="empty"><i class="ti ti-receipt"></i>No expenses yet — tap Add!</div>';
   $('dbPersons').innerHTML = MEMBERS.map((m, i) => {
-    const p = po[m.id] || {owed: 0, paid: 0}; const ow = p.owed - p.paid;
+    const p = po[m.id] || {owed: 0, paid: 0};
+    const ow = p.owed - p.paid;
+    const credited = cr[m.id] || 0;
+    const net = credited - ow; // positive = net owed to them, negative = net they owe
+    const owesToLine = Object.entries(owesTo[m.id] || {}).filter(([,a])=>a>0.005).map(([cid,a])=>'→ ' + getMember(cid).name + ' ' + fmtBase(a)).join(', ');
     return '<div class="card"><div class="row-between">' +
       '<div class="flex-row" style="gap:10px">' + avatar(m.name, i) + '<div><div style="font-weight:600">' + esc(m.name) + '</div><div style="font-size:12px;color:var(--text2)">' + m.role + '</div></div></div>' +
       '<div style="text-align:right">' +
-      '<div style="font-weight:600;color:' + (ow > 0.005 ? 'var(--red)' : 'var(--green)') + '">' + (ow > 0.005 ? fmtBase(ow) + ' owed' : 'All settled') + '</div>' +
-      (ow > 0.005 ? '<div style="font-size:11px;color:var(--text2)">' + Object.entries(owesTo[m.id] || {}).filter(([,a])=>a>0.005).map(([cid,a])=>'→ ' + getMember(cid).name + ' ' + fmtBase(a)).join(', ') + '</div>' : '') +
+      (Math.abs(net) > 0.005
+        ? '<div style="font-weight:600;color:' + (net > 0 ? 'var(--green)' : 'var(--red)') + '">' + fmtBase(Math.abs(net)) + ' ' + (net > 0 ? 'to receive' : 'to pay') + '</div>'
+        : '<div style="font-weight:600;color:var(--green)">All settled</div>') +
+      (ow > 0.005 && owesToLine ? '<div style="font-size:11px;color:var(--text2)">' + owesToLine + '</div>' : '') +
       '<div style="font-size:12px;color:var(--text2)">' + fmtBase(p.owed) + ' total share</div></div>' +
       '</div></div>';
   }).join('');
