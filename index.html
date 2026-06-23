@@ -1009,19 +1009,22 @@ function renderBalances() {
     }).join('');
 
     const hasBreakdown = owesToHtml || owedByHtml;
+    const net = credited - ow; // positive = net owed to them, negative = net they owe
 
     return '<div class="card">' +
       '<div class="row-between" style="margin-bottom:' + (hasBreakdown ? 10 : 0) + 'px">' +
       '<div class="flex-row" style="gap:10px">' + avatar(m.name, i, 38) +
       '<div><div style="font-weight:600">' + esc(m.name) + '</div>' +
       '<div style="font-size:12px;color:var(--text2)">' +
-      (ow > 0.005 ? 'Owes ' + fmtBase(ow) : 'Nothing owed') +
-      (credited > 0.005 ? ' · Is owed ' + fmtBase(credited) : '') +
+      (ow > 0.005 ? 'Owes ' + fmtBase(ow) : '') +
+      (ow > 0.005 && credited > 0.005 ? ' · ' : '') +
+      (credited > 0.005 ? 'Is owed ' + fmtBase(credited) : '') +
+      (ow <= 0.005 && credited <= 0.005 ? 'Nothing owed' : '') +
       '</div></div></div>' +
       '<div style="text-align:right">' +
-      (ow > 0.005 ? '<div style="font-size:20px;font-weight:700;color:var(--red)">' + fmtBase(ow) + '</div><div style="font-size:11px;color:var(--text2)">to pay</div>' : '') +
-      (credited > 0.005 && ow <= 0.005 ? '<div style="font-size:20px;font-weight:700;color:var(--green)">' + fmtBase(credited) + '</div><div style="font-size:11px;color:var(--text2)">to receive</div>' : '') +
-      (ow <= 0.005 && credited <= 0.005 ? '<span class="badge green">Settled</span>' : '') +
+      (Math.abs(net) > 0.005
+        ? '<div style="font-size:20px;font-weight:700;color:' + (net > 0 ? 'var(--green)' : 'var(--red)') + '">' + fmtBase(Math.abs(net)) + '</div><div style="font-size:11px;color:var(--text2)">' + (net > 0 ? 'to receive' : 'to pay') + '</div>'
+        : '<span class="badge green">Settled</span>') +
       '</div></div>' +
       (hasBreakdown ? '<div style="border-top:0.5px solid var(--border);padding-top:6px">' + owesToHtml + owedByHtml + '</div>' : '') +
       '</div>';
