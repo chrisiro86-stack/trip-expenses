@@ -195,9 +195,12 @@ hr{border:none;border-top:0.5px solid var(--border);margin:14px 0}
 
 <div class="page" id="page-dashboard">
   <div class="metric-grid" id="dbMetrics"></div>
-  <div class="row-between" style="margin-bottom:14px">
+  <div class="row-between" style="margin-bottom:14px;flex-wrap:wrap;gap:8px">
     <div class="section-title" style="margin-bottom:0">Recent expenses</div>
-    <button class="btn sm primary" onclick="openExpenseModal(null)"><i class="ti ti-plus"></i> Add</button>
+    <div class="flex-row" style="gap:6px">
+      <button class="btn sm" onclick="openPaymentModal(null)"><i class="ti ti-cash"></i> Record payment</button>
+      <button class="btn sm primary" onclick="openExpenseModal(null)"><i class="ti ti-plus"></i> Add expense</button>
+    </div>
   </div>
   <div id="dbRecent"></div>
   <div class="section-title" style="margin-top:22px;margin-bottom:14px">Per-person snapshot</div>
@@ -225,8 +228,12 @@ hr{border:none;border-top:0.5px solid var(--border);margin:14px 0}
 </div>
 
 <div class="page" id="page-balances">
-  <div class="section-title">Who owes what</div>
+  <div class="row-between" style="margin-bottom:14px">
+    <div class="section-title" style="margin-bottom:0">Who owes what</div>
+    <button class="btn sm primary" onclick="openPaymentModal(null)"><i class="ti ti-cash"></i> Record payment</button>
+  </div>
   <div id="balancesList"></div>
+  <div id="paymentsLog"></div>
 </div>
 
 <div class="page" id="page-members">
@@ -290,6 +297,7 @@ let FX = {};           // fx rates: 1 base = X foreign
 let AGG_TAB = 'person';
 let CUR_EXP_ID = null;
 let ALL_TRIPS = [];    // local list [{id,name,destination,currency}]
+let PAYMENTS = [];     // ad-hoc payments: [{id, from, to, amount, origAmount, origCur, fxUsed, date, notes, createdAt}]
 
 // =============================================================================
 // UTILS
@@ -393,12 +401,14 @@ async function loadTrip(tripId) {
     T = { id: r.id, name: r.name, destination: r.destination || '', start: r.start_date || '', end: r.end_date || '', currency: r.currency || 'GBP' };
     FX = r.fx_rates || {};
     initFx();
-    const [mRows, eRows] = await Promise.all([
+    const [mRows, eRows, pRows] = await Promise.all([
       dbGet('members', {trip_id: 'eq.' + tripId, order: 'created_at.asc'}),
-      dbGet('expenses', {trip_id: 'eq.' + tripId, order: 'created_at.desc'})
+      dbGet('expenses', {trip_id: 'eq.' + tripId, order: 'created_at.desc'}),
+      dbGet('payments', {trip_id: 'eq.' + tripId, order: 'created_at.desc'}).catch(() => [])
     ]);
     MEMBERS  = (mRows || []).map(rowToMember);
     EXPENSES = (eRows || []).map(rowToExpense);
+    PAYMENTS = (pRows || []).map(rowToPayment);
     if (!ALL_TRIPS.find(x => x.id === tripId)) {
       ALL_TRIPS.unshift({id: T.id, name: T.name, destination: T.destination, currency: T.currency});
     }
@@ -432,6 +442,16 @@ function rowToExpense(r) {
     category: r.category || 'Other', date: r.date || '',
     location: r.location || '', paidBy: r.paid_by,
     splits: r.splits || {}, notes: r.notes || '', receiptData: r.receipt_data || null,
+    createdAt: new Date(r.created_at).getTime()
+  };
+}
+function rowToPayment(r) {
+  return {
+    id: r.id, from: r.from_member, to: r.to_member, amount: +r.amount,
+    origAmount: +(r.original_amount || r.amount),
+    origCur: r.original_currency || base(),
+    fxUsed: +(r.fx_rate_used || 1),
+    date: r.date || '', notes: r.notes || '',
     createdAt: new Date(r.created_at).getTime()
   };
 }
@@ -904,38 +924,144 @@ function showExpDetail(id) {
 }
 
 // =============================================================================
+// AD-HOC PAYMENTS (for partial/random amounts not tied to one specific expense)
+// =============================================================================
+function openPaymentModal(id) {
+  const pay = id ? PAYMENTS.find(p => p.id === id) : null;
+  const fromOptions = MEMBERS.map(m =>
+    '<option value="' + m.id + '"' + (pay && pay.from === m.id ? ' selected' : '') + '>' + esc(m.name) + '</option>'
+  ).join('');
+  const toOptions = MEMBERS.map(m =>
+    '<option value="' + m.id + '"' + (pay && pay.to === m.id ? ' selected' : '') + '>' + esc(m.name) + '</option>'
+  ).join('');
+  showModal(
+    '<div class="modal-handle"></div>' +
+    '<div class="modal-title"><i class="ti ti-cash"></i> ' + (pay ? 'Edit' : 'Record') + ' payment</div>' +
+    '<p style="font-size:13px;color:var(--text2);margin-bottom:14px">Use this for direct payments between members that do not match a specific expense exactly — it will reduce their overall balance.</p>' +
+    '<input type="hidden" id="payId" value="' + (id || '') + '">' +
+    '<div class="form-group"><label>Who paid</label><select id="payFrom">' + fromOptions + '</select></div>' +
+    '<div class="form-group"><label>Who received it</label><select id="payTo">' + toOptions + '</select></div>' +
+    '<div class="row2">' +
+    '<div class="form-group"><label>Amount</label><input type="number" id="payAmount" value="' + (pay ? pay.origAmount : '') + '" placeholder="0.00" min="0" step="0.01" oninput="updatePayFxPreview()"></div>' +
+    '<div class="form-group"><label>Currency</label>' + currencySelect('payCurrency', pay ? pay.origCur : base(), true).replace('updateFxPreview()', 'updatePayFxPreview()') + '</div>' +
+    '</div>' +
+    '<div class="info-box blue" id="payFxPreview" style="display:none"><i class="ti ti-arrows-exchange"></i><span></span></div>' +
+    '<div class="form-group"><label>Date</label><input type="date" id="payDate" value="' + (pay ? esc(pay.date) : new Date().toISOString().slice(0,10)) + '"></div>' +
+    '<div class="form-group"><label>Notes (optional)</label><input id="payNotes" value="' + (pay ? esc(pay.notes) : '') + '" placeholder="e.g. Bank transfer, cash handed over"></div>' +
+    '<div class="flex-row" style="justify-content:flex-end;gap:8px;margin-top:8px">' +
+    '<button class="btn" onclick="closeModal()">Cancel</button>' +
+    '<button class="btn primary" onclick="savePayment(\'' + (id || '') + '\')">' + (pay ? 'Save changes' : 'Record payment') + '</button></div>'
+  );
+  updatePayFxPreview();
+}
+function updatePayFxPreview() {
+  const amtEl = $('payAmount'), curEl = $('payCurrency'), box = $('payFxPreview');
+  if (!amtEl || !curEl || !box) return;
+  const amount = parseFloat(amtEl.value);
+  const cur = curEl.value;
+  if (!cur || cur === base() || isNaN(amount) || amount <= 0) { box.style.display = 'none'; return; }
+  const rate = FX[cur];
+  if (!rate) { box.style.display = 'none'; return; }
+  box.style.display = 'flex';
+  box.querySelector('span').textContent = fmtFgn(amount, cur) + ' = ' + fmtBase(toBase(amount, cur)) + '   (1 ' + base() + ' = ' + rate.toFixed(2) + ' ' + cur + ')';
+}
+async function savePayment(editId) {
+  const from = $('payFrom').value;
+  const to = $('payTo').value;
+  if (from === to) { alert('The payer and receiver must be different people.'); return; }
+  const rawAmount = parseFloat($('payAmount').value);
+  if (isNaN(rawAmount) || rawAmount <= 0) { alert('Please enter a valid amount.'); return; }
+  const cur = $('payCurrency').value;
+  const amountBase = toBase(rawAmount, cur);
+  const dbRow = {
+    trip_id: T.id, from_member: from, to_member: to,
+    amount: amountBase, original_amount: rawAmount, original_currency: cur,
+    fx_rate_used: cur === base() ? 1 : (FX[cur] || 1),
+    date: $('payDate').value, notes: $('payNotes').value.trim()
+  };
+  setSyncing('busy');
+  try {
+    if (editId) {
+      await dbPatch('payments', dbRow, {id: 'eq.' + editId});
+      const idx = PAYMENTS.findIndex(p => p.id === editId);
+      if (idx >= 0) PAYMENTS[idx] = rowToPayment(Object.assign({id: editId, created_at: new Date().toISOString()}, dbRow));
+      toast('Payment updated.');
+    } else {
+      const newId = uid();
+      dbRow.id = newId;
+      await dbPost('payments', dbRow);
+      PAYMENTS.unshift(rowToPayment(Object.assign({created_at: new Date().toISOString()}, dbRow)));
+      toast('Payment recorded.');
+    }
+    setSyncing('ok'); closeModal();
+    renderDashboard();
+    if (curPage === 'balances') renderBalances();
+    if (curPage === 'chase') renderChase();
+    if (curPage === 'summary') renderSummary();
+  } catch(e) { setSyncing('err'); toast('Save failed: ' + e.message); }
+}
+async function deletePayment(id) {
+  if (!confirm('Delete this payment record? The balance will revert.')) return;
+  setSyncing('busy');
+  try {
+    await dbDelete('payments', {id: 'eq.' + id});
+    PAYMENTS = PAYMENTS.filter(p => p.id !== id);
+    setSyncing('ok'); renderBalances(); renderDashboard(); toast('Payment deleted.');
+  } catch(e) { setSyncing('err'); toast('Delete failed'); }
+}
+
+// =============================================================================
 // TOTALS
 // =============================================================================
 function calcTotals() {
-  let total = 0, outstanding = 0;
-  const po = {}; // per-person owed/paid
-  const cr = {}; // per-person credited (others owe them)
-  // owesTo[debtorId][creditorId] = amount outstanding
-  const owesTo = {};
+  let total = 0;
+  const po = {}; // per-person gross owed/paid (from expense splits only — for 'total share' stat)
+  // rawOwesTo[debtorId][creditorId] = gross amount outstanding from unpaid expense splits
+  const rawOwesTo = {};
   MEMBERS.forEach(m => {
     po[m.id] = {owed: 0, paid: 0, expenses: []};
-    cr[m.id] = 0;
-    owesTo[m.id] = {};
+    rawOwesTo[m.id] = {};
   });
   EXPENSES.forEach(exp => {
     total += exp.amount;
     Object.entries(exp.splits).forEach(([id, s]) => {
       if (id === exp.paidBy) return;
       if (!po[id]) po[id] = {owed: 0, paid: 0, expenses: []};
-      if (!owesTo[id]) owesTo[id] = {};
+      if (!rawOwesTo[id]) rawOwesTo[id] = {};
       po[id].owed += s.owed;
       po[id].expenses.push({desc: exp.desc, amount: s.owed, paid: s.paid, paidBy: exp.paidBy});
       if (s.paid) {
         po[id].paid += s.owed;
       } else {
-        outstanding += s.owed;
-        // Track who this debtor owes to
-        owesTo[id][exp.paidBy] = (owesTo[id][exp.paidBy] || 0) + s.owed;
-        cr[exp.paidBy] = (cr[exp.paidBy] || 0) + s.owed;
+        rawOwesTo[id][exp.paidBy] = (rawOwesTo[id][exp.paidBy] || 0) + s.owed;
       }
     });
   });
-  return {total, outstanding, po, cr, owesTo};
+
+  // Apply ad-hoc payments on top of raw expense debt (from -> to reduces that debt)
+  PAYMENTS.forEach(p => {
+    if (!rawOwesTo[p.from]) rawOwesTo[p.from] = {};
+    rawOwesTo[p.from][p.to] = (rawOwesTo[p.from][p.to] || 0) - p.amount;
+  });
+
+  // Net every pair so debt only shows in one direction (handles overpayment flipping the debt)
+  const owesTo = {}; // FINAL netted, post-payment matrix — single source of truth
+  const cr = {};      // FINAL: total each person is owed
+  const owed = {};    // FINAL: total each person owes
+  MEMBERS.forEach(m => { owesTo[m.id] = {}; cr[m.id] = 0; owed[m.id] = 0; });
+  for (let i = 0; i < MEMBERS.length; i++) {
+    for (let j = i + 1; j < MEMBERS.length; j++) {
+      const A = MEMBERS[i].id, B = MEMBERS[j].id;
+      const aToB = (rawOwesTo[A] && rawOwesTo[A][B]) || 0;
+      const bToA = (rawOwesTo[B] && rawOwesTo[B][A]) || 0;
+      const net = aToB - bToA;
+      if (net > 0.005) { owesTo[A][B] = net; owed[A] += net; cr[B] += net; }
+      else if (net < -0.005) { owesTo[B][A] = -net; owed[B] += -net; cr[A] += -net; }
+    }
+  }
+  const outstanding = Object.values(owed).reduce((a, b) => a + b, 0);
+
+  return {total, outstanding, po, cr, owed, owesTo};
 }
 
 // =============================================================================
@@ -951,7 +1077,7 @@ function renderExpenses() {
 }
 
 function renderDashboard() {
-  const {total, outstanding, po, cr, owesTo} = calcTotals();
+  const {total, outstanding, po, cr, owed, owesTo} = calcTotals();
   const pct = total > 0 ? Math.round(((total - outstanding) / total) * 100) : 0;
   $('dbMetrics').innerHTML =
     '<div class="metric"><div class="metric-label">Total spent</div><div class="metric-val">' + fmtBase(total) + '</div></div>' +
@@ -962,7 +1088,7 @@ function renderDashboard() {
   $('dbRecent').innerHTML = EXPENSES.slice(0, 4).map(expCard).join('') || '<div class="empty"><i class="ti ti-receipt"></i>No expenses yet — tap Add!</div>';
   $('dbPersons').innerHTML = MEMBERS.map((m, i) => {
     const p = po[m.id] || {owed: 0, paid: 0};
-    const ow = p.owed - p.paid;
+    const ow = owed[m.id] || 0;
     const credited = cr[m.id] || 0;
     const net = credited - ow; // positive = net owed to them, negative = net they owe
     const owesToLine = Object.entries(owesTo[m.id] || {}).filter(([,a])=>a>0.005).map(([cid,a])=>'→ ' + getMember(cid).name + ' ' + fmtBase(a)).join(', ');
@@ -979,12 +1105,10 @@ function renderDashboard() {
 }
 
 function renderBalances() {
-  const {po, cr, owesTo} = calcTotals();
+  const {po, cr, owed, owesTo} = calcTotals();
   $('balancesList').innerHTML = MEMBERS.map((m, i) => {
-    const p = po[m.id] || {owed: 0, paid: 0, expenses: []};
-    const ow = p.owed - p.paid;
+    const ow = owed[m.id] || 0;
     const credited = cr[m.id] || 0; // others owe this person
-    const items = (p.expenses || []).filter(e => !e.paid && e.amount > 0);
 
     // Build owes-to breakdown
     const owesToEntries = Object.entries(owesTo[m.id] || {}).filter(([, amt]) => amt > 0.005);
@@ -1035,6 +1159,27 @@ function renderBalances() {
       (hasBreakdown ? '<div style="border-top:0.5px solid var(--border);padding-top:6px">' + owesToHtml + owedByHtml + '</div>' : '') +
       '</div>';
   }).join('') || '<div class="empty"><i class="ti ti-users"></i>No members</div>';
+  renderPaymentsLog();
+}
+
+function renderPaymentsLog() {
+  const el = $('paymentsLog');
+  if (!el) return;
+  if (!PAYMENTS.length) { el.innerHTML = ''; return; }
+  el.innerHTML = '<div class="section-title" style="margin-top:22px">Payment history</div>' +
+    PAYMENTS.map(p => {
+      const fromM = getMember(p.from), toM = getMember(p.to);
+      const fxNote = (p.origCur && p.origCur !== base()) ? ' (' + fmtFgn(p.origAmount, p.origCur) + ')' : '';
+      return '<div class="card" style="padding:12px 15px"><div class="row-between">' +
+        '<div class="flex-row" style="gap:10px">' +
+        '<div class="cat-icon" style="width:38px;height:38px"><i class="ti ti-cash" style="font-size:16px"></i></div>' +
+        '<div><div style="font-size:13px"><strong>' + esc(fromM.name) + '</strong> paid <strong>' + esc(toM.name) + '</strong></div>' +
+        '<div style="font-size:11px;color:var(--text2)">' + (p.date || '') + (p.notes ? ' · ' + esc(p.notes) : '') + '</div></div></div>' +
+        '<div style="text-align:right;display:flex;align-items:center;gap:8px">' +
+        '<div><div style="font-weight:600">' + fmtBase(p.amount) + '</div>' + (fxNote ? '<div style="font-size:10px;color:var(--text2)">' + fxNote + '</div>' : '') + '</div>' +
+        '<button class="btn sm danger" onclick="deletePayment(\'' + p.id + '\')"><i class="ti ti-trash"></i></button>' +
+        '</div></div></div>';
+    }).join('');
 }
 
 function setAggTab(t) {
@@ -1046,10 +1191,10 @@ function renderSummary() {
   if (!EXPENSES.length) { $('aggContent').innerHTML = '<div class="empty"><i class="ti ti-chart-bar"></i>No expenses yet</div>'; return; }
   let html = '';
   if (AGG_TAB === 'person') {
-    const {po, owesTo} = calcTotals(); const byP = {};
+    const {po, owed, owesTo} = calcTotals(); const byP = {};
     EXPENSES.forEach(e => { byP[e.paidBy] = (byP[e.paidBy] || 0) + e.amount; });
     html = MEMBERS.map((m, i) => {
-      const sp = byP[m.id] || 0; const p = po[m.id] || {owed:0,paid:0}; const ow = p.owed - p.paid;
+      const sp = byP[m.id] || 0; const ow = owed[m.id] || 0;
       return '<div class="card"><div class="row-between">' +
         '<div class="flex-row" style="gap:9px">' + avatar(m.name, i) + '<span style="font-weight:600">' + esc(m.name) + '</span></div>' +
         '<div style="text-align:right;font-size:13px"><div>Paid out: <strong>' + fmtBase(sp) + '</strong></div>' +
@@ -1081,17 +1226,17 @@ function renderSummary() {
 }
 
 function renderChase() {
-  const {po} = calcTotals();
-  const debtors = MEMBERS.filter(m => (po[m.id]?.owed||0)-(po[m.id]?.paid||0) > 0.01);
+  const {po, owed, owesTo} = calcTotals();
+  const debtors = MEMBERS.filter(m => (owed[m.id]||0) > 0.01);
   if (!debtors.length) { $('chaseList').innerHTML = '<div class="empty"><i class="ti ti-circle-check" style="color:var(--green);opacity:1"></i>Everyone is settled! 🎉</div>'; return; }
   $('chaseList').innerHTML = debtors.map(m => {
-    const p = po[m.id]; const ow = p.owed - p.paid;
-    const items = (p.expenses||[]).filter(e => !e.paid && e.amount > 0);
+    const ow = owed[m.id] || 0;
+    const owesToLine = Object.entries(owesTo[m.id] || {}).filter(([,a])=>a>0.005).map(([cid,a])=>'Pay ' + getMember(cid).name + ': ' + fmtBase(a)).join(' · ');
     return '<div class="card">' +
       '<div class="row-between" style="margin-bottom:8px">' +
       '<div class="flex-row" style="gap:10px">' + avatar(m.name, getMIdx(m.id)) + '<div><div style="font-weight:600">' + esc(m.name) + '</div><div style="font-size:12px;color:var(--text2)">' + (m.email||'no email') + ' · ' + (m.wa||'no WhatsApp') + '</div></div></div>' +
       '<div style="font-size:18px;font-weight:700;color:var(--red)">' + fmtBase(ow) + '</div></div>' +
-      '<div style="font-size:12px;color:var(--text2);margin-bottom:12px">' + items.map(e => esc(e.desc) + ': ' + fmtBase(e.amount)).join(' · ') + '</div>' +
+      '<div style="font-size:12px;color:var(--text2);margin-bottom:12px">' + owesToLine + '</div>' +
       '<div class="flex-row" style="flex-wrap:wrap;gap:8px">' +
       '<button class="btn sm" onclick="openChaseMsg(\'' + m.id + '\',\'whatsapp\')"><i class="ti ti-brand-whatsapp"></i> WhatsApp</button>' +
       '<button class="btn sm" onclick="openChaseMsg(\'' + m.id + '\',\'email\')"><i class="ti ti-mail"></i> Email</button>' +
@@ -1100,17 +1245,17 @@ function renderChase() {
 }
 
 function openChaseMsg(memberId, type) {
-  const {po} = calcTotals();
+  const {owed, owesTo} = calcTotals();
   const m = getMember(memberId);
-  const p = po[memberId] || {owed:0,paid:0,expenses:[]};
-  const ow = p.owed - p.paid;
-  const items = (p.expenses||[]).filter(e => !e.paid && e.amount > 0);
-  const lines = items.map(e => '  • ' + e.desc + ': ' + fmtBase(e.amount)).join('\n');
+  const ow = owed[memberId] || 0;
+  const breakdown = Object.entries(owesTo[memberId] || {}).filter(([,a])=>a>0.005);
+  const lines = breakdown.map(([cid, a]) => '  • Pay ' + getMember(cid).name + ': ' + fmtBase(a)).join('\n');
+  const paidNote = PAYMENTS.some(p => p.from === memberId) ? '\n(This already reflects any payments you have made — thank you!)' : '';
   const trip = T ? T.name : 'our trip';
   const first = m.name.split(' ')[0];
   const msg = type === 'whatsapp'
-    ? 'Hi ' + first + '! 👋\n\nJust a friendly nudge about ' + trip + ' — you still have outstanding:\n\n' + lines + '\n\nTotal: ' + fmtBase(ow) + '\n\nPlease let me know once sent. Cheers! 🙏'
-    : 'Subject: Payment reminder — ' + trip + '\n\nHi ' + first + ',\n\nFollowing up on outstanding expenses from ' + trip + '.\n\nOutstanding:\n' + lines + '\n\nTotal due: ' + fmtBase(ow) + '\n\nPlease arrange payment when you can.\n\nMany thanks';
+    ? 'Hi ' + first + '! 👋\n\nJust a friendly nudge about ' + trip + ' — you still have outstanding:\n\n' + lines + '\n\nTotal: ' + fmtBase(ow) + paidNote + '\n\nPlease let me know once sent. Cheers! 🙏'
+    : 'Subject: Payment reminder — ' + trip + '\n\nHi ' + first + ',\n\nFollowing up on outstanding expenses from ' + trip + '.\n\nOutstanding:\n' + lines + '\n\nTotal due: ' + fmtBase(ow) + paidNote + '\n\nPlease arrange payment when you can.\n\nMany thanks';
 
   const waLink = (type === 'whatsapp' && m.wa)
     ? '<a href="https://wa.me/' + m.wa.replace(/\D/g,'') + '" target="_blank" rel="noopener" class="btn sm"><i class="ti ti-brand-whatsapp"></i> Open WhatsApp</a>'
